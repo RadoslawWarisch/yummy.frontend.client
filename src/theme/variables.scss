@@ -1,79 +1,71 @@
-// Ionic Variables and Theming. For more info, please see:
-// http://ionicframework.com/docs/v2/theming/
 $font-path: "../assets/fonts";
 
 @import "ionic.globals";
 
+// //Colors
 
-// Shared Variables
-// --------------------------------------------------
-// To customize the look and feel of this app, you can override
-// the Sass variables found in Ionic's source scss files.
-// To view all the possible Ionic variables, see:
-// http://ionicframework.com/docs/v2/theming/overriding-ionic-variables/
+// Default
 
 $text-color:        #000;
 $background-color:  #fff;
 
-
-// Named Color Variables
-// --------------------------------------------------
-// Named colors makes it easy to reuse colors on various components.
-// It's highly recommended to change the default colors
-// to match your app's branding. Ionic uses a Sass map of
-// colors so you can add, rename and remove colors as needed.
-// The "primary" color is the only required color in the map.
-
 $colors: (
-  primary:    #488aff,
-  secondary:  #32db64,
-  danger:     #f53d3d,
-  light:      #f4f4f4,
-  dark:       #222
+  primary:    #E92F44,
+  secondary:  #E92F44,
+  tetriary:     #000000,
+  tetriary-blank:  rgb(153, 153, 153)
 );
 
+// App
 
-// App iOS Variables
-// --------------------------------------------------
-// iOS only Sass variables can go here
+$primary: #FFFFFF;
+$secondary: #E92F44;
+$tetriary: #000000;
+$tetriary-blank: rgb(153, 153, 153);
 
+// // Dimensions
 
+// Global
 
+$fontSmall: 1.2rem;
+$fontMedium: 1.5rem;
+$fontLarge: 1.8rem;
+$fontLogo: 2.4rem;
 
-// App Material Design Variables
-// --------------------------------------------------
-// Material Design only Sass variables can go here
+$iconLogo: 2.4rem;
+$borderWidth: 0.55px;
+$headerHeight: 54px;
 
+// Welcome Page
 
+$welcomePadding: 12px;
+$welcomeRadius: $welcomePadding * 2;
 
+// // Keyframes
 
-// App Windows Variables
-// --------------------------------------------------
-// Windows only Sass variables can go here
+@keyframes animatedBackground {
+  from { background-position: 0 0; }
+  to { background-position: 100% 0; }
+}
 
+@keyframes rotate {
+  0%    { transform: rotate(0deg);  }
+  100%  { transform: rotate(360deg);  }
+}
 
+@keyframes rotateShift {
+  0%    { transform: rotate(360deg);  }
+  100%  { transform: rotate(0deg);  }
+}
 
+// // Font
 
-// App Theme
-// --------------------------------------------------
-// Ionic apps can have different themes applied, which can
-// then be future customized. This import comes last
-// so that the above variables are used and Ionic's
-// default are overridden.
+@font-face {
+  font-family: "Ubuntu";
+  src: url("../assets/fonts/ubuntu/Ubuntu-L.ttf");
+}
 
 @import "ionic.theme.default";
-
-
-// Ionicons
-// --------------------------------------------------
-// The premium icon font for Ionic. For more info, please see:
-// http://ionicframework.com/docs/v2/ionicons/
-
 @import "ionic.ionicons";
-
-
-// Fonts
-// --------------------------------------------------
-
 @import "roboto";
 @import "noto-sans";

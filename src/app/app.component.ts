@@ -1,89 +1,221 @@
-import { Component, ViewChild } from '@angular/core';
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { StatusBar } from '@ionic-native/status-bar';
-import { TranslateService } from '@ngx-translate/core';
-import { Config, Nav, Platform } from 'ionic-angular';
-
-import { FirstRunPage } from '../pages/pages';
-import { Settings } from '../providers/providers';
+import { Component, ViewChild } from "@angular/core";
+import { SplashScreen } from "@ionic-native/splash-screen";
+import { StatusBar } from "@ionic-native/status-bar";
+import { TranslateService } from "@ngx-translate/core";
+import {
+  Config,
+  Nav,
+  Platform,
+  ToastController,
+  LoadingController,
+  ModalController
+} from "ionic-angular";
+import { Settings } from "../core/providers/settings/settings";
+import { _Modal, _ModalType } from "../core/models/_modal";
+import { Store } from "@ngrx/store";
+import { AppState } from "../core/app-state";
+import { _Route } from "../core/models/_route";
+import { fromPromise } from "rxjs/observable/fromPromise";
+import { Observable } from "rxjs";
+import { _Loader } from "../core/models/_loader";
+import { _Toast } from "../core/models/_toast";
+import { SignupModalComponent } from "../components/signup-modal/signup-modal";
+import { GeolocationProvider } from "../core/providers/geolocation/geolocation-provider";
+import * as fromGeolocationActions from '../core/actions/geolocation.actions';
+import { GeolocationItem } from "../core/models/geolocation";
 
 @Component({
-  template: `<ion-menu [content]="content">
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Pages</ion-title>
-      </ion-toolbar>
-    </ion-header>
-
-    <ion-content>
-      <ion-list>
-        <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
-          {{p.title}}
-        </button>
-      </ion-list>
-    </ion-content>
-
-  </ion-menu>
-  <ion-nav #content [root]="rootPage"></ion-nav>`
+  template: `
+    <ion-menu [content]="content">
+      <user-panel></user-panel>
+    </ion-menu>
+    <ion-nav #content [root]="rootPage">
+    </ion-nav>
+  `
 })
-export class MyApp {
-  rootPage = FirstRunPage;
+export class YummyApp {
+  public rootPage = "list";
+  public toast: any;
+  public loader: any;
+  public modal: any;
+  @ViewChild(Nav) private nav: Nav;
 
-  @ViewChild(Nav) nav: Nav;
-
-  pages: any[] = [
-    { title: 'Tutorial', component: 'TutorialPage' },
-    { title: 'Welcome', component: 'WelcomePage' },
-    { title: 'Tabs', component: 'TabsPage' },
-    { title: 'Cards', component: 'CardsPage' },
-    { title: 'Content', component: 'ContentPage' },
-    { title: 'Login', component: 'LoginPage' },
-    { title: 'Signup', component: 'SignupPage' },
-    { title: 'Master Detail', component: 'ListMasterPage' },
-    { title: 'Menu', component: 'MenuPage' },
-    { title: 'Settings', component: 'SettingsPage' },
-    { title: 'Search', component: 'SearchPage' }
-  ]
-
-  constructor(private translate: TranslateService, platform: Platform, settings: Settings, private config: Config, private statusBar: StatusBar, private splashScreen: SplashScreen) {
+  constructor(
+    private translate: TranslateService,
+    platform: Platform,
+    settings: Settings,
+    private config: Config,
+    private statusBar: StatusBar,
+    private splashScreen: SplashScreen,
+    private store: Store<AppState>,
+    private toastCtrl: ToastController,
+    private loaderCtrl: LoadingController,
+    private modalCtrl: ModalController,
+    private geolocationProvider: GeolocationProvider
+  ) {
+    this.toast = null;
+    this.loader = null;
+    this.modal = null;
     platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      this.subscribeLoader();
+      this.subscribeRoute();
+      this.subscribeToaster();
+      this.subscribeModal();
+      this.geolocationProvider.initWatch();
     });
     this.initTranslate();
   }
 
   initTranslate() {
-    // Set the default language for translation strings, and the current language.
-    this.translate.setDefaultLang('en');
-    const browserLang = this.translate.getBrowserLang();
+    this.translate.setDefaultLang("pl");
+    this.translate.use("pl");
 
-    if (browserLang) {
-      if (browserLang === 'zh') {
-        const browserCultureLang = this.translate.getBrowserCultureLang();
-
-        if (browserCultureLang.match(/-CN|CHS|Hans/i)) {
-          this.translate.use('zh-cmn-Hans');
-        } else if (browserCultureLang.match(/-TW|CHT|Hant/i)) {
-          this.translate.use('zh-cmn-Hant');
-        }
-      } else {
-        this.translate.use(this.translate.getBrowserLang());
-      }
-    } else {
-      this.translate.use('en'); // Set your language here
-    }
-
-    this.translate.get(['BACK_BUTTON_TEXT']).subscribe(values => {
-      this.config.set('ios', 'backButtonText', values.BACK_BUTTON_TEXT);
+    this.translate.get(["BACK_BUTTON_TEXT"]).subscribe((values) => {
+      this.config.set("ios", "backButtonText", values.BACK_BUTTON_TEXT);
     });
   }
 
-  openPage(page) {
-    // Reset the content nav to have just this page
-    // we wouldn't want the back button to show in this scenario
-    this.nav.setRoot(page.component);
+  subscribeGeo(): void {
+    this.geolocationProvider.geo$.asObservable().subscribe((geo: GeolocationItem) => {
+      this.store.dispatch(new fromGeolocationActions.Set({
+        data: geo
+      }))
+    });
+  }
+
+  subscribeRoute(): void {
+    this.store
+      .select((state) => state._route.data)
+      .pairwise()
+      .mergeMap(([prevRoutes, currRoutes]) => {
+        return currRoutes.length === 1
+          ? this.setRoot(currRoutes[currRoutes.length - 1])
+          : currRoutes.length > prevRoutes.length
+            ? this.pushPage(currRoutes[currRoutes.length - 1])
+            : this.popPage();
+      })
+      .subscribe();
+  }
+
+  subscribeLoader(): void {
+    this.store
+      .select((state) => state._loader.data)
+      .pairwise()
+      .mergeMap(([prevLoader, currLoader]) => {
+        return this.handleUIDisplay(
+          prevLoader,
+          currLoader,
+          () => this.showLoader(currLoader),
+          () => this.hideLoader()
+        );
+      })
+      .subscribe();
+  }
+
+  subscribeToaster(): void {
+    this.store
+      .select((state) => state._toast.data)
+      .pairwise()
+      .mergeMap(([prevToast, currToast]) => {
+        return this.handleUIDisplay(
+          prevToast,
+          currToast,
+          () => this.showToast(currToast),
+          () => this.hideToast()
+        );
+      })
+      .subscribe();
+  }
+
+  subscribeModal(): void {
+    this.store
+      .select((state) => state._modal.data)
+      .pairwise()
+      .mergeMap(([prevModal, currModal]) => {
+        return this.handleUIDisplay(
+          prevModal,
+          currModal,
+          () => this.showModal(currModal),
+          () => this.hideModal()
+        );
+      })
+      .subscribe();
+  }
+
+  handleUIDisplay(
+    prevState: _Toast | _Loader | _Modal,
+    currState: _Toast | _Loader | _Modal,
+    shownFn: Function,
+    hideFn: Function
+  ): Observable<any> {
+    let obs: Observable<any>;
+    if (!prevState.isShown && !currState.isShown) {
+      obs = Observable.of(null);
+    } else if (prevState.isShown && !currState.isShown) {
+      obs = fromPromise(hideFn());
+    } else if (!prevState.isShown && currState.isShown) {
+      obs = fromPromise(shownFn());
+    } else {
+      obs = fromPromise(hideFn()).switchMap(() => fromPromise(shownFn()));
+    }
+    return obs;
+  }
+
+  setRoot(route: _Route): Promise<any> {
+    return this.nav.setRoot(route.name, route.params);
+  }
+
+  pushPage(route: _Route): Promise<any> {
+    return this.nav.push(route.name, route.params);
+  }
+
+  popPage(): Promise<any> {
+    return this.nav.pop();
+  }
+
+  showToast(toast: _Toast): Promise<any> {
+    this.toast = this.toastCtrl.create({
+      message: toast.label,
+      position: "bottom",
+      duration: 4000
+    });
+    return this.toast.present();
+  }
+
+  hideToast(): Promise<any> {
+    return this.toast.dismiss();
+  }
+
+  showLoader(loader: _Loader): Promise<any> {
+    this.loader = this.loaderCtrl.create({
+      content: loader.label
+    });
+    return this.loader.present();
+  }
+
+  hideLoader(): Promise<any> {
+    return this.loader.dismiss();
+  }
+
+  selectModalMode(modalMode: _ModalType): any {
+    switch (modalMode) {
+      case _ModalType.SIGN_UP:
+      default:
+        return SignupModalComponent;
+    }
+  }
+
+  showModal(modal: _Modal): Promise<any> {
+    this.modal = this.modalCtrl.create(
+      this.selectModalMode(modal.mode),
+      modal.meta
+    );
+    return this.modal.present();
+  }
+
+  hideModal(): Promise<any> {
+    return this.modal.dismiss();
   }
 }

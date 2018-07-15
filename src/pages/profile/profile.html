@@ -1,0 +1,29 @@
+<side-header
+  (closeEmitter)="close()"
+  [label]="'PROFIL'"
+  [iconPath]="'assets/icon/profile.svg'">
+</side-header>
+
+<ion-content>
+  <div class="profile__badge">
+    <img class="badge__image" [src]="'assets/icon/user.svg'" />
+    <div class="badge__title medium bold">DANE KONTAKTOWE</div>
+  </div>
+  <div class="profile__form">
+    <ion-item class="form__item" no-lines>
+      <ion-label class="item__label">numer telefonu</ion-label>
+      <ion-input (ionChange)="detectChanges('phone', $event)" class="item__input" type="tel" placeholder="numer telefonu">{{ (user$ | async)?.phone }}</ion-input>
+    </ion-item>
+    <ion-item class="form__item" no-lines>
+      <ion-label class="item__label">email</ion-label>
+      <ion-input (ionChange)="detectChanges('email', $event)" class="item__input" type="email" placeholder="email">{{ (user$ | async)?.email }}</ion-input>
+    </ion-item>
+  </div>
+  <button 
+    (click)="submit()" 
+    class="form__button bold large" 
+    color="secondary" 
+    ion-button full>
+    ZAPISZ
+  </button>
+</ion-content>

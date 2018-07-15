@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg version="1.0" id="Warstwa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="44px" height="44px" viewBox="0 0 44 44" enable-background="new 0 0 44 44" xml:space="preserve">
+<g>
+	<g>
+		<defs>
+			<rect id="SVGID_1_" width="44" height="44"/>
+		</defs>
+		<clipPath id="SVGID_2_">
+			<use xlink:href="#SVGID_1_"  overflow="visible"/>
+		</clipPath>
+		<path clip-path="url(#SVGID_2_)" fill="#E6E7E8" d="M22,42c11.045,0,20-8.953,20-20c0-11.045-8.955-20-20-20
+			C10.953,2,2,10.955,2,22C2,33.047,10.953,42,22,42"/>
+		<path clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFFFF" stroke-width="4" d="M22,42c11.045,0,20-8.953,20-20
+			c0-11.045-8.955-20-20-20C10.953,2,2,10.955,2,22C2,33.047,10.953,42,22,42"/>
+	</g>
+	<polygon fill="#FFFFFF" points="15.188,24.012 33.151,6.046 37.131,10.546 19.43,28.255 11.195,32.273 	"/>
+	<polygon fill="#FFFFFF" points="13.998,29.94 11.195,32.273 38.057,32.273 39.557,29.94 	"/>
+</g>
+</svg>

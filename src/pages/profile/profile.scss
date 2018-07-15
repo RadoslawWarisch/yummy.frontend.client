@@ -1,0 +1,32 @@
+page-profile {
+  .content {
+    top: $headerHeight * 1.5;
+  }
+  .profile__badge {
+    display: grid;
+    padding: $headerHeight / 4 0;
+    margin: $headerHeight / 4 $headerHeight / 2;
+    border-bottom: 1px dotted $tetriary;
+  }
+  .badge__image {
+    height: $headerHeight * 1.8;
+    justify-self: center;
+  }
+  .profile__form {
+    padding: $headerHeight / 4 0;
+    margin: $headerHeight / 4 $headerHeight / 2;
+  }
+  .form__item {
+    padding: $headerHeight / 8 0;
+  }
+  .item__label {
+    width: 40%;
+  }
+  .item__input {
+    border-bottom: 1px solid $tetriary-blank;
+  }
+  .form__button {
+    position: absolute;
+    bottom: $headerHeight * 1.4;
+  }
+}

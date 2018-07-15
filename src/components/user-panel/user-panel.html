@@ -1,0 +1,42 @@
+<div
+  class="user-panel__badge">
+  <div></div>
+  <img [src]="'assets/icon/user.svg'" />
+  <div></div>
+  <div
+    class="badge__info">
+    <span class="small bold">{{ (user$ | async)?.login }}</span>
+  </div>
+</div>
+<div
+  tappable
+  (click)="navigate('profile')"
+  menuClose
+  class="user-panel__tab bold">
+  <img [src]="'assets/icon/profile.svg'" />
+  Profil
+</div>
+<!-- <div
+  tappable
+  (click)="navigate('favourites')"
+  menuClose
+  class="user-panel__tab bold">
+  <img [src]="'assets/icon/like.svg'" />
+  Ulubione
+</div>
+<div
+  tappable
+  (click)="navigate('settings')"
+  menuClose
+  class="user-panel__tab bold">
+  <img [src]="'assets/icon/settings.svg'" />
+  Ustawienia
+</div> -->
+<div
+  tappable
+  (click)="navigate('support')"
+  menuClose
+  class="user-panel__tab bold">
+  <img [src]="'assets/icon/help.svg'" />
+  Pomoc
+</div>

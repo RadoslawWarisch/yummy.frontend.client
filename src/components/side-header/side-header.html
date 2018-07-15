@@ -1,0 +1,20 @@
+<ion-header no-border>
+  <div class="side-header__content">
+    <div
+      class="content__close">
+      <button 
+        (click)="closeEmitter.next()"
+        class="close__button"
+        outline
+        ion-button
+        icon-only>
+        <ion-icon
+          class="bold"
+          name="close">
+        </ion-icon>
+      </button>
+    </div>
+    <img [src]="iconPath" />
+    <span class="right medium bold">{{ label }}</span>
+  </div>
+</ion-header>

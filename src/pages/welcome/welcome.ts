@@ -1,26 +1,30 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController } from 'ionic-angular';
+import { IonicPage } from 'ionic-angular';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../core/app-state';
+import * as fromModalAction from '../../core/actions/_modal.actions';
+import { _ModalType } from '../../core/models/_modal';
 
-/**
- * The Welcome Page is a splash page that quickly describes the app,
- * and then directs the user to create an account or log in.
- * If you'd like to immediately put the user onto a login/signup page,
- * we recommend not using the Welcome page.
-*/
-@IonicPage()
+@IonicPage({
+  name: 'welcome'
+})
 @Component({
   selector: 'page-welcome',
   templateUrl: 'welcome.html'
 })
 export class WelcomePage {
 
-  constructor(public navCtrl: NavController) { }
+  constructor(
+    private store: Store<AppState>
+  ) { }
 
-  login() {
-    this.navCtrl.push('LoginPage');
+  public signUp(): void {
+    this.store.dispatch(new fromModalAction.Show({
+      mode: _ModalType.SIGN_UP,
+      meta: {
+        id: null
+      }
+    }));
   }
 
-  signup() {
-    this.navCtrl.push('SignupPage');
-  }
 }

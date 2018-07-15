@@ -1,46 +1,44 @@
 page-welcome {
-  .splash-bg {
-    position: relative;
-    background: url('../assets/img/splashbg.png') no-repeat transparent;
-    background-size: cover;
-    height: 45%;
-    z-index: 1;
-    background-repeat: repeat-x;
-    animation: animatedBackground 40s linear infinite;
-  }
-
-  @keyframes animatedBackground {
-    from { background-position: 0 0; }
-    to { background-position: 100% 0; }
-  }
-
-  .splash-info {
-    position: relative;
-    z-index: 2;
-    margin-top: -64px;
-    text-align: center;
-  }
-  .splash-logo {
-    margin: auto;
-    background: url('../assets/img/appicon.png') repeat transparent;
-    background-size: 100%;
-    width: 128px;
-    height: 128px;
-  }
-  .splash-intro {
-    font-size: 18px;
-    font-weight: bold;
-    max-width: 80%;
-    margin: auto;
-  }
-  button.login {
-    margin-top: 25px;
-    background-color: white;
-    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
-    color: #333;
-
-    &.activated {
-      background-color: rgb(220, 220, 220);
+  .scroll-content {
+    display: grid;
+    align-content: center;
+    .splash-bg {
+      position: absolute;
+      background: url('../assets/img/noodles.jpg') no-repeat transparent;
+      background-size: cover;
+      height: 100%;
+      width: 100%;
+      z-index: -1;
+      background-repeat: repeat-x;
+      filter: blur(5px);
+    }
+    .login {
+      display: grid;
+      grid-template-rows: repeat(4, auto);
+      grid-row-gap: $welcomePadding;
+      width: 80%;
+      margin: auto;
+      padding: $welcomePadding*2 $welcomePadding;
+      border-radius: $welcomeRadius;
+      .login__logo {
+        text-align: center;
+        color: $tetriary-blank;
+        .logo__icon {
+          font-size: $iconLogo;
+        }
+        .logo__title {
+          font-size: $fontLogo;
+        }
+      }
+    }
+    .signup__button {
+      background-color: $tetriary-blank;
+      position: fixed;
+      bottom: 0;
+      margin-bottom: 0;
     }
   }
+
+
+
 }
