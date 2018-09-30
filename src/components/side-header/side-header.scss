@@ -22,9 +22,9 @@ side-header {
   .close__button {
     border: 0;
     color: $secondary;
-    margin-right: - ($headerHeight / 2);
+    margin-right: - ($headerHeight / 4);
     margin-bottom: - ($headerHeight / 8);
-    font-size: $fontLogo;
+    font-size: $fontLarge;
   }
   .close__button:active {
     background-color: $secondary;

@@ -1,0 +1,73 @@
+offer-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 40vw 1fr 1fr;
+  align-items: center;
+  box-shadow: $bottomShadow;
+  .item__photo {
+    display: flex;
+    overflow: hidden;
+    grid-row: 1/4;
+    .photo__placeholder {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      font-size: $fontLogo;
+      color: $primary;
+    }
+    .photo__image {
+      width: 40vw;
+      height: 100%;
+      max-height: 150px;
+      max-width: 225px;
+    }
+  }
+  .item__title, 
+  .item__button, 
+  .item__order-details, 
+  .item__price {
+    margin-left: $headerHeight / 4;
+  }
+  .item__title {
+    margin-top: $headerHeight / 6;
+    grid-column: 2/4;
+    border-bottom: 1px dotted black;
+    width: 75%;
+  }
+  .item__button {
+    margin-bottom: $headerHeight / 6;
+    display: flex;
+    justify-content: center;
+    grid-column: 3/4;
+    grid-row: 3/4;
+  }
+  .item__order-details, .item__price {
+    max-height: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .item__order-details {
+    grid-column: 2/4;
+  }
+  .item__price {
+    grid-column: 2/3;
+    margin-bottom: $headerHeight / 6;
+  }
+  .button__fab {
+    background: $primary;
+    color: $secondary;
+    box-shadow: $roundShadow;
+  }
+  .item__badge {
+    position: absolute;
+    height: $headerHeight / 2;
+    width: $headerHeight / 2;
+    line-height: $headerHeight / 2;
+    border-radius: $headerHeight / 4;
+    bottom: $headerHeight / 8;
+    left: $headerHeight / 8;
+    z-index: 3;
+    background: $secondary;
+  }
+}

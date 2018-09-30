@@ -1,0 +1,18 @@
+<ion-content>
+  <div class="splash-bg welcome"></div>
+  <ion-slides
+    (ionSlideDidChange)="slideChanged()"
+    [pager]="!isWelcomeSlide">
+    <ion-slide>
+      <slide-first></slide-first>
+    </ion-slide>
+    <ion-slide>
+      <slide-second></slide-second>
+    </ion-slide>
+    <ion-slide>
+      <slide-third></slide-third>
+    </ion-slide>
+    <ion-slide>
+    </ion-slide>
+  </ion-slides>
+</ion-content>

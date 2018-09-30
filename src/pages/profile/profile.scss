@@ -1,6 +1,6 @@
 page-profile {
   .content {
-    top: $headerHeight * 1.5;
+    top: $headerHeight * 2;
   }
   .profile__badge {
     display: grid;
@@ -26,7 +26,16 @@ page-profile {
     border-bottom: 1px solid $tetriary-blank;
   }
   .form__button {
-    position: absolute;
-    bottom: $headerHeight * 1.4;
+    float: right;
+    width: 50%;
+    background-color: $primary;
+    color: $tetriary;
+    border: 1px solid $tetriary-blank;
+    border-radius: 0;
+    margin-right: $headerHeight / 2;
+  }
+  .form__button:active {
+    color: $primary;
+    background-color: $tetriary-blank;
   }
 }

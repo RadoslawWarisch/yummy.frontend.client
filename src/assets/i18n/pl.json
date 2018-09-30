@@ -1,6 +1,6 @@
 {
   "NAME": "Imię",
-  "PASSWORD": "Hasło",
+  "PASSWORD": "hasło",
   "EMAIL": "Email",
   "LOGIN": "Zaloguj",
   "SIGNUP": "Zarejestruj się",
@@ -19,7 +19,7 @@
 
   "WELCOME_INTRO": "Yummy!",
 
-  "LOGIN_TITLE": "Login",
+  "LOGIN_TITLE": "login",
   "LOGIN_ERROR": "Nie udało się zalogować. Sprawdź raz jeszcze dane swoje konta i spróbuj ponownie.",
   "LOGIN_BUTTON": "Zaloguj",
   "SIGNUP_TITLE": "Zarejestruj",

@@ -11,29 +11,27 @@ declare let sessionStorage;
 
 @Injectable()
 export class LoginProvider {
-  constructor(
-    private rest: Rest,
-    private settings: Settings
-  ) {}
+  constructor(private rest: Rest, private settings: Settings) {}
 
   loginUser(loginForm: LoginForm): Observable<string | HttpErrorResponse> {
-    return this.rest.loginUser(this.parseForm(loginForm))
-      .mergeMap((data) => this.saveAuth(data))
+    return (loginForm.isSign
+      ? this.rest.createUser(this.parseForm(loginForm))
+      : this.rest.loginUser(this.parseForm(loginForm))
+    )
+      .mergeMap(
+        (data) => (loginForm.isSign ? Observable.of(null) : this.saveAuth(data))
+      )
       .catch((err) => Observable.of(err));
   }
 
   saveAuth({ Authorization }): Observable<void> {
-    return Observable.of(null)
-      .do(() => sessionStorage.__th = Authorization);
+    return Observable.of(null).do(() => (sessionStorage.__th = Authorization));
   }
 
   parseForm(loginForm: LoginForm): LoginUserBody {
-    return Object.assign(
-      {},
-      {
-        email: loginForm.login,
-        password: loginForm.password
-      }
-    );
+    return {
+      email: loginForm.login,
+      password: loginForm.password
+    };
   }
 }

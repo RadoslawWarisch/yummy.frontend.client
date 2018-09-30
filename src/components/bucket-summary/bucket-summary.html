@@ -1,0 +1,22 @@
+<div
+  class="summary__count right">
+  <span class="medium light">liczba produktów:</span>
+  <br>
+  <span class="medium secondary-color uppercased bold">
+    {{ count }}
+  </span>
+</div>
+<div
+  class="summary__price right">
+  <span class="medium light">suma:</span>
+  <br>
+  <span class="medium secondary-color uppercased bold">
+    {{ price | currency: 'PLN ' }} 
+  </span>
+</div>
+<button 
+  (click)="submit()"
+  class="summary__button bold large" 
+  ion-button>
+  zapłać
+</button>

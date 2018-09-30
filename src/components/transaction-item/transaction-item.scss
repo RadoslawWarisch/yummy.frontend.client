@@ -1,0 +1,9 @@
+transaction-item {
+  display: grid;
+  width: 100vw;
+  box-shadow: $bottomShadow;
+  padding: $headerHeight / 4;
+  .transaction__code, .transaction__price {
+    padding: $headerHeight / 12 0;
+  }
+}

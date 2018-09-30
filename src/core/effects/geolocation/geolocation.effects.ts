@@ -16,14 +16,17 @@ export class GeolocationEffects {
 
   @Effect()
   public triggerFetch$ = this.actions$
-    .ofType(fromActions.SET)
+    .ofType(fromActions.FOCUS)
     .pluck("payload")
     .do((payload: GeolocationState) => {
       this.store.dispatch(new fromPlaceActions.FetchPlaces({
-        coordinates: payload.data,
+        coordinates: {
+          lat: payload.data.focusLat,
+          lng: payload.data.focusLng
+        },
         page: 0,
         size: 12
       }))
     })
-    .map((payload: GeolocationState) => new fromActions.SetSucc(payload));
+    .map((payload: GeolocationState) => new fromActions.FocusSucc(payload));
 }

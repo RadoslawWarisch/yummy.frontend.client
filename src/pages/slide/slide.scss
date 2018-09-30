@@ -1,0 +1,94 @@
+page-slide {
+  .splash-bg {
+    position: fixed;
+    background-size: cover !important;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    filter: blur(3px);
+    &.welcome {
+      background: url('../assets/img/welcome.jpg') no-repeat transparent;
+      z-index: -2;
+      filter: blur(5px);
+    }
+  }
+  .splash-darken {
+    margin-top: -12vh;
+    height: 100vh;
+    width: 100vw;
+    z-index: -1;
+    position: absolute;
+    opacity: 0.65;
+    background: $tetriary;
+  }
+  .swiper-pagination-bullet:last-child {
+    display: none;
+  }
+  .swiper-pagination-bullet {
+    width: $welcomePadding;
+    height: $welcomePadding;
+    margin: 0 $welcomePadding * 1.4 !important;
+    background: $tetriary-blank;
+    opacity: 1;
+  }
+  .swiper-pagination-bullet-active {
+    background: $secondary;
+  }
+  .slide__label {
+    margin: $welcomePadding / 1.7 $welcomePadding;
+    padding: $welcomePadding / 1.7 0;
+    border-bottom: 1px dotted $primary;
+    color: $primary;
+    width: 80%;
+    text-align: left;
+    &.no-dots {
+      border-bottom: 0;
+    }
+    &.center {
+      text-align: center;
+    }
+    img {
+      width: 60%;
+      height: auto;
+      margin: $welcomePadding / 1.7 auto;
+    }
+  }
+  slide-first, slide-second, slide-third {
+    height: 76vh;
+    top: 12vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    .last {
+      position: absolute;
+      bottom: $welcomePadding * 3;
+      margin: 0;
+      .icon {
+        margin: $welcomePadding / 1.4;
+      }
+    }
+  }
+  .slide__button {
+    margin: $welcomePadding auto;
+    padding: $welcomePadding * 2;
+    width: 88%;
+    background-color: $primary;
+    border-radius: $welcomePadding * 3;
+    border: 2px solid $tetriary-blank;
+    color: $tetriary;
+    &.activated, &:hover {
+      background-color: $primary !important;
+    }
+    span.secondary-color {
+      margin-right: $fontMedium / 3;
+    }
+  }
+  .arrow {
+    color: $secondary;
+    &::before {
+      transform: rotate(90deg) !important;
+    }
+  }
+}

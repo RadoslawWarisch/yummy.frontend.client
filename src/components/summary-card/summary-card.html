@@ -1,0 +1,57 @@
+<div
+  class="card__title">
+  <span class="medium bold uppercased">
+    Twój kod
+  </span>
+  <br>
+  <div class="monster bold secondary-color uppercased">
+    {{ paymentCode }}
+  </div>
+</div>
+<div
+  class="card__guide">
+  <span class="small bold center uppercased">
+    Dziękujemy za skorzystanie z 
+    <span class="secondary-color">
+      Yummy!
+    </span>
+  </span>
+  <br>
+  <span class="small center light">
+    Udaj się do wybranego lokalu w celu odebrania swojego zamówienia. 
+    <br>
+    Przy kasie okaż ten kod zamówienia.
+  </span>
+</div>
+<div
+  class="card__place">
+  <div
+    class="place__info">
+    <span class="small secondary-color">lokal:</span>
+    <br>
+    <span class="medium bold uppercased">{{ restaurant?.name }}</span>
+    <br>
+    <span class="small">{{ restaurant?.address }}</span>
+    <button 
+      (click)="trackRestaurant()"
+      class="button__fab" 
+      ion-fab>
+      <ion-icon 
+        name="pin">
+      </ion-icon>
+    </button>
+  </div>
+  <!-- <div
+    class="place__info">
+    <span class="small secondary-color">czas odbioru:</span>
+    <br><br>
+    <span class="small"></span>
+    <span class="small"></span>
+  </div> -->
+  <div
+    class="place__info last">
+    <span class="small secondary-color">cena:</span>
+    <br>
+    <span class="medium bold uppercased">{{ price | currency: "PLN " }}</span>
+  </div>
+</div>

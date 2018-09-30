@@ -1,7 +1,6 @@
-import { Component } from "@angular/core";
+import { Component, Output, EventEmitter } from "@angular/core";
 
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ChangeDetectionStrategy } from "@angular/core";
 import { UpdateForm, SubmitForm } from "../../core/actions/login-form.actions";
 import { AppState } from "../../core/app-state";
 import { Store } from "@ngrx/store";
@@ -9,10 +8,10 @@ import { LoginForm } from "../../core/models/login-form";
 
 @Component({
   selector: "login-form",
-  templateUrl: "login-form.html",
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: "login-form.html"
 })
 export class LoginFormComponent {
+  @Output() public signUpEmitter: EventEmitter<void>;
   form: FormGroup;
   form$: LoginForm | any;
 
@@ -20,11 +19,12 @@ export class LoginFormComponent {
     private store: Store<AppState>,
     private formBuilder: FormBuilder
   ) {
+    this.signUpEmitter = new EventEmitter<void>();
     this.initForm();
   }
 
   ngOnInit(): void {
-    this.observeChanges();
+    //this.observeChanges();
     this.store.select((state) => state.loginForm.data);
   }
 
@@ -36,15 +36,15 @@ export class LoginFormComponent {
     });
   }
 
-  observeChanges(): void {
-    this.form.valueChanges.subscribe((state) => {
-      this.dispatchChanges(state);
-    });
-  }
+  // observeChanges(): void {
+  //   this.form.valueChanges.subscribe((state) => {
+  //     this.dispatchChanges(state);
+  //   });
+  // }
 
-  dispatchChanges(state: LoginForm): void {
-    this.store.dispatch(new UpdateForm({ data: state }));
-  }
+  // dispatchChanges(state: LoginForm): void {
+  //   this.store.dispatch(new UpdateForm({ data: state }));
+  // }
 
   submit(): void {
     this.store.dispatch(new SubmitForm({ data: this.form.value }));

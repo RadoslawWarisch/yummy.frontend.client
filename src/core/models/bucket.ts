@@ -8,4 +8,5 @@ export class Bucket {
   public offers: Offer[];
   public count?: number;
   public price?: number;
+  public restaurantId?: string | number;
 }

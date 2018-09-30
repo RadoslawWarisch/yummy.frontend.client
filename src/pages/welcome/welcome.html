@@ -4,16 +4,17 @@
   <ion-card
     class="login">
     <ion-item
-      class="login__logo">
+      class="login__logo"
+      *ngIf="isLoginMode">
       <img src="assets/icon/yummy-logo.png" />
     </ion-item>
-    <login-form>
+    <login-form 
+      *ngIf="isLoginMode"
+      (signUpEmitter)="switchLoginMode(false)">
     </login-form>
+    <signup-form
+      *ngIf="!isLoginMode"
+      (loginEmitter)="switchLoginMode(true)">
+    </signup-form>
   </ion-card>
-  <button
-    class="signup__button uppercased bold medium"
-    ion-button block full
-    (click)="signUp()">
-    {{ 'SIGNUP' | translate }}
-  </button>
 </ion-content>

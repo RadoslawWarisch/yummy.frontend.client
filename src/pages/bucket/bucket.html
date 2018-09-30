@@ -1,4 +1,24 @@
-<yummy-header></yummy-header>
-<ion-content padding>
-
+<ion-content>
+  <ion-item>
+    <span class="large bold center uppercased">
+      Koszyk
+    </span>
+  </ion-item>
+  <lazy-scroll
+    [isLoading]="false"
+    (pullDown)="pullDown()">
+    <offer-item
+      *ngFor="let offer of offers$ | async"
+      [offer]="offer"
+      [isBucket]="true">
+    </offer-item>
+    <no-items
+      *ngIf="(offers$ | async).length === 0">
+    </no-items>
+  </lazy-scroll>
 </ion-content>
+<bucket-summary
+  *ngIf="(count$ | async) > 0"
+  [price]="price$ | async"
+  [count]="count$ | async">
+</bucket-summary>

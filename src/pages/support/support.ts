@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage } from 'ionic-angular';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../core/app-state';
+import * as fromRouteActions from '../../core/actions/_route.actions';
 
 @IonicPage({
   name: 'support'
@@ -10,10 +13,12 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class SupportPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
+  constructor(
+    private store: Store<AppState>
+  ) {}
 
-  ionViewDidLoad() {
+  public close(): void {
+    this.store.dispatch(new fromRouteActions.Pop());
   }
 
 }

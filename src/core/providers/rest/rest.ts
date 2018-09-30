@@ -17,6 +17,14 @@ export interface GetPlacesBody {
   size: number;
 }
 
+export interface SubmitBucketBody {
+  transactions: {
+    offerId: number | string;
+    count: number;
+  }[];
+  receiveTimestamp: Date;
+}
+
 @Injectable()
 export class Rest extends Api {
   private config: any;
@@ -26,18 +34,47 @@ export class Rest extends Api {
     this.config = AppConfig.rest;
   }
 
-  parseUrl(endpoint: string): string {
+  private parseUrl(endpoint: string): string {
     let { rootUrl: root } = this.config;
 
     return `${root}/${endpoint}`;
   }
 
-  loginUser(body: LoginUserBody): Observable<any> {
+  public checkBearer(): Observable<any> {
+    return this.get(this.parseUrl("user/bearer"));
+  }
+
+  public loginUser(body: LoginUserBody): Observable<any> {
     return this.post(this.parseUrl("login"), body);
   }
 
-  getPlaces(body: GetPlacesBody): Observable<any> {
+  public createUser(body: LoginUserBody): Observable<any> {
+    return this.post(this.parseUrl("user/create"), body);
+  }
+
+  public getUserInfo(): Observable<any> {
+    return this.get(this.parseUrl("userInfo"));
+  }
+
+  public getPlaces(body: GetPlacesBody): Observable<any> {
     return this.post(this.parseUrl("restaurants/nearest"), body);
   }
 
+  public getOffers(id: string): Observable<any> {
+    return this.get(this.parseUrl(`offers${id ? "?id=" + id : ''}`));
+  }
+
+  public submitBucket(body: SubmitBucketBody): Observable<any> {
+    return this.post(this.parseUrl("transaction"), body);
+  }
+
+  public getTransactions(
+    page: number = 0,
+    size: number = 8
+  ): Observable<any> {
+    return this.get(this.parseUrl("orders"), {
+      page: page,
+      size: size
+    });
+  }
 }

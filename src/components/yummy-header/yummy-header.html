@@ -1,16 +1,60 @@
-<ion-header no-border>
+<ion-header 
+  [hidden]="!(routeName !== 'slide' && routeName !== 'profile' && routeName !== 'welcome' && routeName !== 'support' && routeName !== 'transactions')"
+  no-border>
   <ion-navbar>
-    <ion-buttons start class="buttons-start">
-      <button class="header-button button-start" ion-button icon-only round menuToggle>
-        <ion-icon name="menu"></ion-icon>
+    <ion-buttons 
+      start 
+      class="buttons-start">
+      <button
+        (click)="backOrMenu()"
+        class="header-button button-start short" 
+        ion-button 
+        icon-only 
+        round>
+        <list-mode-icon [mode]="routeName === 'code' || routeName === 'initial' || routeName === 'map' || routeName === 'list' || routeName === 'offers' || !routeName ? 'MENU' : 'BACK'"></list-mode-icon>
+      </button>
+      <button 
+        (click)="switchPage('list')"
+        class="header-button button-start long" 
+        ion-button 
+        icon-only 
+        round>
+        <list-mode-icon [mode]="'PLACES'"></list-mode-icon>
       </button>
     </ion-buttons>
     <ion-title>
-      <img class="logo" src="assets/icon/yummy-logo.png" />
+      <button
+        (click)="switchPage('map')"
+        class="header-button title-button"
+        ion-button 
+        icon-only 
+        round>
+        <list-mode-icon [mode]="'MAP'"></list-mode-icon>
+      </button>
     </ion-title>
-    <ion-buttons end>
-      <button class="header-button button-end" ion-button icon-only round>
-        <ion-icon name="cart"></ion-icon>
+    <ion-buttons
+      class="buttons-end"
+      end>
+      <button 
+        (click)="switchPage('offers')"
+        class="header-button button-end long" 
+        ion-button 
+        icon-only 
+        round>
+        <list-mode-icon [mode]="'OFFERS'"></list-mode-icon>
+      </button>
+      <button 
+        (click)="goToBucket()"
+        class="header-button button-end short" 
+        ion-button 
+        icon-only 
+        round>
+        <ion-badge
+          [hidden]="(bucketCount$ | async) === 0"
+          class="bucket__badge">
+          {{ bucketCount$ | async }}
+        </ion-badge>
+        <list-mode-icon [mode]="'CART'"></list-mode-icon>
       </button>
     </ion-buttons>
   </ion-navbar>

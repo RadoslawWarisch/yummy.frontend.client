@@ -1,0 +1,9 @@
+<ion-infinite-scroll
+  (ionInfinite)="pullDown$.next()"
+  [enabled]="!isLoading">
+  <ng-content>
+  </ng-content>
+  <ion-spinner
+    [hidden]="!isLoading">
+  </ion-spinner>
+</ion-infinite-scroll>

@@ -1,60 +1,92 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { GeolocationItem } from '../../core/models/geolocation';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../core/app-state';
-import * as fromGeolocationActions from '../../core/actions/geolocation.actions';
-import { Place } from '../../core/models/place';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  ApplicationRef
+} from "@angular/core";
+import { Subscription, Subject, Observable } from "rxjs";
+import { GeolocationItem } from "../../core/models/geolocation";
+import { Store } from "@ngrx/store";
+import { AppState } from "../../core/app-state";
+import * as fromGeolocationActions from "../../core/actions/geolocation.actions";
+import * as fromRouteActions from "../../core/actions/_route.actions";
+import { Place } from "../../core/models/place";
+import { NavParams, ToastController } from "ionic-angular";
+import { of } from "rxjs/observable/of";
 
 declare let L;
 
-const defaultGeo: GeolocationItem = {
-  lat: 50.067,
-  lng: 19.945
-}
-
 interface MapConfig {
-  center: number[],
-  minZoom: number,
-  zoom: number
+  center: number[];
+  minZoom: number;
+  zoom: number;
 }
 
 @Component({
-  selector: 'map-container',
-  templateUrl: 'map-container.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "map-container",
+  templateUrl: "map-container.html"
 })
 export class MapContainerComponent {
   private map: any;
   private placesSub: Subscription;
+  private dragSub: Subscription;
   private places: Place[];
+  private drag$: Subject<void>;
   private markers: any[];
+  private mapToast: any;
 
   constructor(
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private navParams: NavParams,
+    private toastCtrl: ToastController
   ) {
     this.places = [];
     this.markers = [];
+    this.drag$ = new Subject<void>();
   }
 
   ngOnInit() {
-    this.initMap('map', {
-      center: [defaultGeo.lat, defaultGeo.lng],
-      minZoom: 10,
-      zoom: 14
-    });
-    this.initLayer();
-    this.initEvents();
-    this.subscribePlaces();
+    this.initFocusPoint().subscribe(
+      ({ lat, lng, focusLat, focusLng, zoom }) => {
+        this.initMap("map", {
+          center: [focusLat, focusLng],
+          minZoom: 11,
+          zoom: zoom
+        });
+        this.initLayer();
+        this.initEvents();
+        this.addUserMarker(lat, lng);
+        this.subscribePlaces();
+        this.subscribeDrag();
+        this.switchGeo();
+      }
+    );
   }
 
   ngOnDestroy(): void {
-    this.map.off('dragend', this.handleEvent.bind(this));
+    this.unsubscribePlaces();
+    this.unsubscribeDrag();
   }
 
   private subscribePlaces(): void {
-    this.placesSub = this.store.select((state) => state.place.data)
+    this.placesSub = this.store
+      .select((state) => state.place.data)
       .subscribe((places: Place[]) => this.handlePlacesBatch(places));
+  }
+
+  private unsubscribePlaces(): void {
+    this.placesSub.unsubscribe();
+  }
+
+  private subscribeDrag(): void {
+    this.dragSub = this.drag$
+      .asObservable()
+      .filter(() => !this.mapToast)
+      .debounceTime(750)
+      .subscribe(this.askForSwitch.bind(this));
+  }
+
+  private unsubscribeDrag(): void {
+    this.dragSub.unsubscribe();
   }
 
   private initMap(id: string, config: MapConfig): void {
@@ -62,20 +94,79 @@ export class MapContainerComponent {
   }
 
   private initLayer(): void {
-    L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      subdomains: ['a','b','c']
-    }).addTo(this.map);
+    L.tileLayer(
+      "https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager/{z}/{x}/{y}.png",
+      {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        subdomains: ["a", "b", "c"]
+      }
+    ).addTo(this.map);
   }
 
   private initEvents(): void {
-    this.map.on('dragend', this.handleEvent.bind(this));
+    this.map.on("dragend", () => this.drag$.next());
   }
 
-  private handleEvent(): void {
-    this.store.dispatch(new fromGeolocationActions.Set({
-      data: this.getMapCenter()
-    }));
+  private askForSwitch(): void {
+    this.mapToast = this.toastCtrl.create({
+      message: "Wyszukaj w tym obszarze",
+      cssClass: "map-toast",
+      position: "bottom",
+      showCloseButton: true,
+      dismissOnPageChange: true
+    });
+
+    this.mapToast.onDidDismiss(() => {
+      this.switchGeo();
+      this.mapToast = null;
+    });
+
+    this.mapToast.present();
+  }
+
+  private switchGeo(): void {
+    this.store.dispatch(
+      new fromGeolocationActions.Focus({
+        data: {
+          focusLat: this.getMapCenter().lat,
+          focusLng: this.getMapCenter().lng
+        }
+      })
+    );
+  }
+
+  private initFocusPoint(): Observable<GeolocationItem> {
+    const focusId: string = this.navParams.get("restaurantId");
+
+    const getPlacePoint = (): Observable<GeolocationItem> => {
+      const lat = this.navParams.get("restaurantLat");
+      const lng = this.navParams.get("restaurantLng");
+
+      return of(
+        new GeolocationItem({
+          focusLat: lat,
+          focusLng: lng
+        })
+      ).mergeMap(
+        () =>
+          this.store
+            .select("geolocation")
+            .pluck("data")
+            .take(1),
+        (focusGeo, storeGeo) => ({
+          ...storeGeo,
+          ...focusGeo
+        })
+      );
+    };
+    const getUserPoint = (): Observable<GeolocationItem> =>
+      this.store
+        .select("geolocation")
+        .pluck("data")
+        .take(1);
+
+    return focusId ? getPlacePoint() : getUserPoint();
   }
 
   private setMapCenter(center: GeolocationItem): void {
@@ -87,48 +178,138 @@ export class MapContainerComponent {
   }
 
   private handlePlacesBatch(places: Place[]): void {
-    places.forEach((place: Place) => {
-      if (!this.checkIfMarkerAdded(place.id)) {
-        this.places = [...this.places, place];
-        this.addMarker(place);
-      } 
-    });
+    places
+      .filter((place: Place) => {
+        return (
+          this.places.findIndex(
+            (currentPlace: Place) => currentPlace.id === place.id
+          ) === -1
+        );
+      })
+      .forEach((place: Place) => {
+        if (!this.checkIfMarkerAdded(place.id)) {
+          this.places = [...this.places, place];
+          this.addPlaceMarker(place);
+        }
+      });
   }
 
   private checkIfMarkerAdded(id: string): boolean {
     return this.markers.findIndex((marker: any) => marker.alt === id) !== -1;
   }
 
-  private addMarker(place: Place): void {
-    const getIcon = () => L.icon({
-      iconUrl: 'assets/img/yummy-pin.png',
-      iconSize: [32, 50]
-    });
-    
-    const marker = L.marker([
-      place.lat || place.latitude,
-      place.lng || place.longtitude
-    ], {
+  private addUserMarker(lat: number, lng: number): void {
+    const getIcon = () =>
+      L.icon({
+        iconUrl: "assets/icon/geouser.svg",
+        iconSize: [20, 20]
+      });
+
+    const marker = L.marker([lat, lng], {
       icon: getIcon(),
-      autoPan: true,
-      title: place.name,
-      alt: place.id
+      autoPan: true
     });
 
     marker.addTo(this.map);
-    marker.on('mouseover', this.handleMarkerClick.bind(this));
   }
 
-  private removeMarker(id: string) {
-    const marker = this.markers.find((marker: any) => marker.alt === id);
-    
-    marker.off('mouseover', this.handleMarkerClick.bind(this));
-    marker.removeFrom(this.map);
+  private addPlaceMarker(place: Place): void {
+    const getIcon = () =>
+      L.icon({
+        iconUrl: "assets/icon/pin.svg",
+        iconSize: [40, 50]
+      });
+
+    const marker = L.marker(
+      [place.lat || place.latitude, place.lng || place.longtitude],
+      {
+        icon: getIcon(),
+        title: place.name,
+        alt: place.id
+      }
+    );
+
+    marker.addTo(this.map);
+
+    const popup: any = this.addPlacePopup({
+      marker,
+      place: place.name,
+      address: place.address,
+      image: place.image,
+      distance: place.distance
+    });
+
+    marker.on("mouseover", () =>
+      this.openPopup({ popup, marker, id: place.id })
+    );
+    this.markers = [...this.markers, marker];
   }
 
-  private handleMarkerClick({ sourceTarget: marker }) {
-    console.log()
-    marker.bindPopup('BBB').openPopup();
+  private addPlacePopup({ marker, place, address, image, distance }): any {
+    const popup = marker
+      .bindPopup(
+        `<div class="map__popup">
+          <div
+            class="item__photo">
+          ${
+            image
+              ? "<img src= " + image + " />"
+              : '<div class="photo__placeholder"><ion-icon name="image"></ion-icon></div>'
+          }
+          </div>
+          <span class="medium center uppercased bold">${place}</span>
+          <br>
+          <span class="small uppercased bold secondary-color">${distance}</span>
+          <br>
+          <span class="small uppercased italic">${address}</span>
+        </div>`
+      )
+      .getPopup();
+
+    return popup;
   }
 
+  private openPopup({ popup, marker, id }): void {
+    marker.openPopup().openPopup();
+
+    const { _container: container } = popup;
+
+    container.addEventListener("click", () =>
+      this.handlePopupClick(popup, container, { alt: id })
+    );
+  }
+
+  // private removeMarker(id: string) {
+  //   const marker = this.markers.find((marker: any) => marker.alt === id);
+
+  //   marker.off("mouseover", this.openPopup.bind(this));
+  //   marker.removeFrom(this.map);
+  // }
+
+  private handlePopupClick(popup: any, container: any, options: any): void {
+    this.goToPlace(options.alt);
+    container.removeEventListener("click", () =>
+      this.handlePopupClick(popup, container, options)
+    );
+    this.closePopup(popup);
+  }
+
+  private goToPlace(id: string): void {
+    const choosenPlace: Place = this.places.find(
+      (place: Place) => place.id === id
+    );
+
+    this.store.dispatch(
+      new fromRouteActions.Push({
+        name: "place",
+        params: {
+          place: choosenPlace
+        }
+      })
+    );
+  }
+
+  private closePopup(popup: any): void {
+    popup.remove();
+  }
 }

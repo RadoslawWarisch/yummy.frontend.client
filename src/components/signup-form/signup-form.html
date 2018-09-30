@@ -1,15 +1,52 @@
 <form
-  class='sign-up__form'
+  class='login__form'
   [connectForm]="form$ | async"
   [formGroup]="form"
   (ngSubmit)="submit()">
-  <ion-item>
-    <ion-label color="primary" stacked>Stacked Label</ion-label>
-    <ion-input type="email" placeholder="Email Input"></ion-input>
+  <div
+    class="login__label bold uppercased">
+    rejestracja
+  </div>
+  <ion-item
+    class="login__field">
+    <ion-input
+      class="login__input medium"
+      formControlName="login"
+      [placeholder]="'email'"
+      type="text"
+      clearInput>
+      </ion-input>
   </ion-item>
-
-  <ion-item>
-    <ion-label color="primary" stacked>Stacked Label</ion-label>
-    <ion-input type="password" placeholder="Password Input"></ion-input>
+  <ion-item
+    class="login__field">
+    <ion-input
+      class="login__input medium"
+      formControlName="password"
+      [placeholder]="'PASSWORD' | translate"
+      type="password"
+      clearInput>
+    </ion-input>
   </ion-item>
+  <ion-item
+    class="login__field">
+    <ion-input
+      class="login__input medium"
+      formControlName="passwordConfirm"
+      [placeholder]="'powtórz hasło'"
+      type="password"
+      clearInput>
+    </ion-input>
+  </ion-item>
+  <button
+    class="login__button uppercased bold medium"
+    ion-button
+    type="submit">
+    zarejestruj się
+  </button>
+  <div
+    (click)="loginEmitter.next()"
+    tappable
+    class="login__label bold center">
+    wróć do panelu logowania
+  </div>
 </form>

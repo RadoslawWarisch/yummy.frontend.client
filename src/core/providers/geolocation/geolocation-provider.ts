@@ -14,6 +14,7 @@ export class GeolocationProvider {
 
   public initWatch(): void {
     this.watchSub = this.geolocation.watchPosition()
+      .catch(() => undefined)
       .filter((geo: Geoposition) => geo !== undefined)
       .filter((geo: Geoposition) => geo.coords !== undefined)
       .subscribe((geo: Geoposition) => {

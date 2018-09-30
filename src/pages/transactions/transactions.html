@@ -1,0 +1,15 @@
+<side-header
+  (closeEmitter)="close()"
+  [label]="'ZAMÓWIENIA'"
+  [iconPath]="'assets/icon/like.svg'">
+</side-header>
+<ion-content>
+  <lazy-scroll
+    [isLoading]="isLoading$ | async"
+    (pullDown)="pullDown()">
+    <transaction-item
+      *ngFor="let transaction of transactions$ | async"
+      [transaction]="transaction">
+    </transaction-item>
+  </lazy-scroll>
+</ion-content>

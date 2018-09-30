@@ -1,14 +1,14 @@
 import { _Route } from "../../models/_route";
 import * as fromActions from "../../actions/_route.actions";
 
+declare const localStorage;
+
 export interface _RouteState {
   data: _Route[];
 }
 
 const initialState: any = {
-  data: [
-    new _Route('welcome', {})
-  ]
+  data: [new _Route()]
 };
 
 export const _routeReducer = (
@@ -19,17 +19,23 @@ export const _routeReducer = (
     case fromActions.ROOT:
       return {
         ...state,
-        data: [action.payload]
+        data: [new _Route(action.payload.name, action.payload.params)]
       };
     case fromActions.PUSH:
       return {
         ...state,
-        data: [...state.data, action.payload]
+        data:
+          state.data[state.data.length - 1].name === action.payload.name
+            ? [...state.data]
+            : [
+                ...state.data,
+                new _Route(action.payload.name, action.payload.params)
+              ]
       };
     case fromActions.POP:
       return {
         ...state,
-        data: [...state.data.splice(-1,1)]
+        data: [...state.data.slice(0, state.data.length - 1)]
       };
     default:
       return state;

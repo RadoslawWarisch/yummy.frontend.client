@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Warstwa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="300px" height="109.932px" viewBox="0 0 300 109.932" enable-background="new 0 0 300 109.932" xml:space="preserve">
+<g>
+	<defs>
+		<rect id="SVGID_1_" width="300" height="109.932"/>
+	</defs>
+	<clipPath id="SVGID_2_">
+		<use xlink:href="#SVGID_1_"  overflow="visible"/>
+	</clipPath>
+	<path clip-path="url(#SVGID_2_)" fill="#EE5159" d="M285.449,4.528c-3.514,0-6.118,1.123-7.96,3.431
+		c-3.006,3.77-3.062,9.714-2.425,11.915c1.307,4.502,6.875,14.961,9.957,20.585c3.106-5.609,8.703-16.041,9.917-20.547
+		c0.637-2.354,0.567-8.586-2.475-12.334C290.796,5.527,288.5,4.528,285.449,4.528 M284.995,50l-2.073-3.654
+		c-0.427-0.752-10.466-18.495-12.431-25.267c-0.82-2.832-1.107-10.434,3.223-15.864C276.438,1.804,280.494,0,285.449,0
+		c4.49,0,8.21,1.662,10.765,4.806c4.367,5.382,4.121,13.263,3.32,16.236c-1.842,6.829-12.014,24.565-12.445,25.317L284.995,50z"/>
+	<path clip-path="url(#SVGID_2_)" fill="#EE5159" d="M289.753,18.854c0,2.507-2.129,4.539-4.756,4.539
+		c-2.625,0-4.754-2.032-4.754-4.539c0-2.506,2.129-4.536,4.754-4.536C287.625,14.317,289.753,16.348,289.753,18.854"/>
+	<path clip-path="url(#SVGID_2_)" fill="#EE5159" d="M15,50c8.284,0,15-6.716,15-15s-6.716-15-15-15S0,26.716,0,35S6.716,50,15,50"
+		/>
+	
+		<path clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-miterlimit="10" stroke-dasharray="15.344,15.344" d="
+		M32.608,59.267c64.886,64.887,169.897,64.887,234.783,0"/>
+</g>
+</svg>

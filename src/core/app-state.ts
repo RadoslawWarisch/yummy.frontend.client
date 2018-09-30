@@ -6,6 +6,9 @@ import { LoginFormState } from "./reducers/login-form/login-form.reducer";
 import { GeolocationState } from "./reducers/geolocation/geolocation.reducer";
 import { PlaceState } from "./reducers/place/place.reducer";
 import { UserState } from "./reducers/user/user.reducer";
+import { OfferState } from "./reducers/offer/offer.reducer";
+import { BucketState } from "./reducers/bucket/bucket.reducer";
+import { TransactionState } from "./reducers/transaction/transaction.reducer";
 
 export interface AppState {
   _route: _RouteState,
@@ -15,5 +18,8 @@ export interface AppState {
   loginForm: LoginFormState,
   geolocation: GeolocationState,
   place: PlaceState,
-  user: UserState
+  user: UserState,
+  offer: OfferState,
+  bucket: BucketState,
+  transaction: TransactionState
 }

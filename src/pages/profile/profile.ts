@@ -24,13 +24,11 @@ export class ProfilePage {
   }
 
   public detectChanges(key: string, { _value: value }: { _value: string }): void {
-    this.store.dispatch(new fromActions.UpdateUser({
-      [key]: value
-    }));
+    
   }
 
   public submit(): void {
-
+    
   }
 
   public close(): void {

@@ -22,6 +22,11 @@ $primary: #FFFFFF;
 $secondary: #E92F44;
 $tetriary: #000000;
 $tetriary-blank: rgb(153, 153, 153);
+$fourth: rgb(94, 110, 129);
+
+$topShadow: 0px -3px 5px 0px $tetriary-blank;
+$bottomShadow: 0px 3px 5px 0px $tetriary-blank;
+$roundShadow: 0px 0px 13px 0px $tetriary-blank;
 
 // // Dimensions
 
@@ -34,7 +39,8 @@ $fontLogo: 2.4rem;
 
 $iconLogo: 2.4rem;
 $borderWidth: 0.55px;
-$headerHeight: 54px;
+$headerHeight: 9.7vh;
+$bucketSummaryHeight: 12vh;
 
 // Welcome Page
 

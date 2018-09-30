@@ -3,24 +3,23 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HttpHeaders,
   HttpErrorResponse
 } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { Store } from "@ngrx/store";
 import { AppState } from "../../app-state";
-import * as fromToastActions from '../../actions/_toast.actions';
-import * as fromRouteActions from '../../actions/_route.actions';
+import * as fromToastActions from "../../actions/_toast.actions";
+import * as fromRouteActions from "../../actions/_route.actions";
 import { _Route } from "../../models/_route";
+import { AppConfig, Env } from "../../../app/app.config";
+import { SubmitForm } from "../../actions/login-form.actions";
 
 declare let sessionStorage;
 
 @Injectable()
 export class HttpInterceptorProvider implements HttpInterceptor {
-  constructor(
-    private store: Store<AppState>
-  ) {}
+  constructor(private store: Store<AppState>) {}
 
   intercept(
     req: HttpRequest<any>,
@@ -59,7 +58,12 @@ export class HttpInterceptorProvider implements HttpInterceptor {
   checkIfAuthError(err: any): boolean {
     if (!err.url) {
       return false;
-    } else if ((err instanceof HttpErrorResponse) && !err.url.includes('login')) {
+    } else if (
+      err instanceof HttpErrorResponse &&
+      !err.url.includes("login") &&
+      !err.url.includes("bearer") &&
+      !err.url.includes("create")
+    ) {
       return err.status === 401 || err.status === 403;
     } else {
       return false;
@@ -67,13 +71,13 @@ export class HttpInterceptorProvider implements HttpInterceptor {
   }
 
   handleAuthError(): void {
-    this.store.dispatch(new fromToastActions.Show(
-      'Błąd autoryzacji, przekierowanie do strony logowania...'
-    ));
+    this.store.dispatch(
+      new fromToastActions.Show(
+        "Błąd autoryzacji, przekierowanie do strony logowania..."
+      )
+    );
     setTimeout(() => {
-      this.store.dispatch(
-        new fromRouteActions.Root(new _Route('welcome'))
-      );
+      this.store.dispatch(new fromRouteActions.Root(new _Route("welcome")));
     }, 4000);
   }
 

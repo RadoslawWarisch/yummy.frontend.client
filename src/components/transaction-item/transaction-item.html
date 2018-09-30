@@ -1,0 +1,8 @@
+<div
+  class="transaction__code small uppercased bold">
+  KOD: <span class="secondary-color">{{ transaction?.paymentCode }}</span>
+</div>
+<div
+  class="transaction__price small bold">
+  {{ transaction?.price | currency: "PLN " }}
+</div>

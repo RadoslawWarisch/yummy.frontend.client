@@ -1,5 +1,18 @@
-<yummy-header>
-  
-</yummy-header>
-<ion-content padding>
+<ion-content>
+  <lazy-scroll
+    [isLoading]="isLoading$ | async"
+    (pullDown)="pullDown()">
+    <ion-item>
+      <span class="large bold center uppercased">
+        Restauracje
+      </span>
+    </ion-item>
+    <restaurant-item
+      *ngFor="let place of places$ | async"
+      [restaurant]="place">
+    </restaurant-item>
+    <no-items
+      *ngIf="(places$ | async).length === 0 && !(isLoading$ | async)">
+    </no-items>
+  </lazy-scroll>
 </ion-content>

@@ -1,0 +1,30 @@
+bucket-summary {
+  box-shadow: $topShadow;
+  z-index: 5;
+  background: $primary;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: $headerHeight * 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  padding: 0 $headerHeight / 6;
+  .summary__button, .summary__title {
+    grid-column: 1/3;
+  }
+  .summary__price, .summary__count {
+    border-bottom: 2px dotted $tetriary;
+  }
+  .summary__count {
+    padding-top: $headerHeight / 6;
+    margin-left: $headerHeight / 6;
+  }
+  .summary__price {
+    padding-top: $headerHeight / 6;
+    margin-right: $headerHeight / 6;
+  }
+  .summary__button {
+    margin: $headerHeight / 6 0;
+  }
+}

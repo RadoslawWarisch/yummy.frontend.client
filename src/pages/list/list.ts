@@ -1,20 +1,33 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component } from "@angular/core";
+import { IonicPage } from "ionic-angular";
+import { Observable } from "rxjs";
+import { Place } from "../../core/models/place";
+import { Store } from "@ngrx/store";
+import { AppState } from "../../core/app-state";
 
 @IonicPage({
-  name: 'list'
+  name: "list"
 })
 @Component({
-  selector: 'page-list',
-  templateUrl: 'list.html',
+  selector: "page-list",
+  templateUrl: "list.html"
 })
 export class ListPage {
+  public places$: Observable<Place[]>;
+  public isLoading$: Observable<boolean>;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(
+    private store: Store<AppState>
+  ) {
+    this.subscribePlaces();
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ListPage');
+  private subscribePlaces(): void {
+    this.places$ = this.store.select("place").pluck("data");
+    this.isLoading$ = this.store.select("place").pluck("isFetching");
   }
 
+  public pullDown(): void {
+    console.log('pull up')
+  }
 }

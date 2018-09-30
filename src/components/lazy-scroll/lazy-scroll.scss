@@ -1,0 +1,12 @@
+lazy-scroll {
+  .spinner {
+    width: 100%;
+    margin-top: $headerHeight;
+    svg {
+      height: 3rem;
+    }
+    circle {
+      stroke: $secondary;
+    }
+  }
+}

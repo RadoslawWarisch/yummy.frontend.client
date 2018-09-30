@@ -1,0 +1,16 @@
+<ion-icon
+  [ngClass]="(mode === 'CART' ||  mode === 'MENU' || mode === 'BACK') ? '' : 'border'"
+  [name]="(mode === 'MAP') ? 'pin' : (mode === 'PLACES') ? 'home' : (mode === 'OFFERS') ? 'restaurant' : (mode === 'CART') ? 'cart' : ''">
+  <div
+    [ngClass]="(mode === 'MAP' || mode === 'CART' ||  mode === 'MENU' || mode === 'BACK') ? 'red' : 'gray'"
+    class="bckg">
+  </div>
+  <div 
+    [hidden]="!(mode === 'MENU' || mode === 'BACK')"
+    [class.active]="mode === 'BACK'"
+    class="con">
+    <div class="bar arrow-top-r"></div>
+    <div class="bar arrow-middle-r"></div>
+    <div class="bar arrow-bottom-r"></div>
+  </div>
+</ion-icon>

@@ -1,0 +1,54 @@
+summary-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: $headerHeight / 2;
+  .card__title {
+    .monster {
+      margin: $headerHeight / 1.4 0;
+    }
+  }
+  .card__guide {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: $headerHeight / 6 0;
+    border-bottom: 2px dotted $tetriary;
+  }
+  .card__buttons {
+    display: flex;
+    flex-wrap: nowrap;
+    button {
+      width: 45vw;
+      .button-inner {
+        justify-content: space-between;
+      }
+    }
+  }
+  .card__place {
+    display: flex;
+    flex-direction: column;
+    padding: $headerHeight / 6 0;
+    .place__info {
+      position: relative;
+      width: 70vw;
+      flex: 1;
+      padding: $headerHeight / 6 0;
+      border-bottom: 1px dotted $tetriary;
+      &.last {
+        border-bottom: 0;
+      }
+      .button__fab {
+        position: absolute;
+        right: 0;
+        bottom: $headerHeight / 6;
+        background: $primary;
+        color: $secondary;
+        box-shadow: $roundShadow;
+      }
+    }
+    
+  }
+}

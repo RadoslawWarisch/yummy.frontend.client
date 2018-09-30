@@ -1,0 +1,83 @@
+<div
+  tappable
+  (click)="goToPlace()"
+  class="item__photo">
+  <img 
+    *ngIf="restaurant?.image"
+    [src]="restaurant?.image"
+    class="photo__image" 
+  />
+  <div
+    *ngIf="!restaurant?.image"
+    class="photo__placeholder">
+    <ion-icon
+      name="image">
+    </ion-icon>
+  </div>
+</div>
+<div
+  class="item__meta">
+  <div
+    tappable
+    (click)="goToPlace()"
+    class="meta__title"
+    [class.--dotted]="!isBadge">
+    <span class="medium bold">
+      {{ restaurant?.name }}
+    </span>
+    <br>
+    <span 
+      *ngIf="isBadge"
+      class="small italic">
+      {{ restaurant?.description }}
+    </span>
+  </div>
+  <div
+    tappable
+    (click)="goToPlace()"
+    class="meta__availability"
+    [class.--dotted]="!isBadge">
+    <br>
+    <span 
+      class="small bold"
+      [class.tetriary-color]="!restaurant?.isOpen">
+      {{ restaurant?.isOpen ? 'OTWARTE' : 'ZAMKNIĘTE' }}
+    </span>
+  </div>
+  <div
+    tappable
+    (click)="goToPlace()"
+    class="meta__address">
+    <span class="small bold">
+      {{ restaurant?.street }}
+    </span>
+    <br>
+    <span class="small bold">
+      {{ restaurant?.postalCode }}
+    </span>
+    <br>
+    <span class="small bold">
+      {{ restaurant?.city }}
+    </span>
+  </div>
+  <div
+    tappable
+    (click)="goToPlace()"
+    class="meta__distance">
+    <br *ngIf="!isBadge">
+    <span class="small">odległość:</span>
+    <br>
+    <span class="small bold">{{ restaurant?.distance }}</span>
+  </div>
+  <div
+    class="meta__button">
+    <button 
+      (click)="displayOnMap()"
+      class="button__fab" 
+      ion-fab>
+      <ion-icon 
+        [name]="'pin'">
+      </ion-icon>
+    </button>
+  </div>
+</div>

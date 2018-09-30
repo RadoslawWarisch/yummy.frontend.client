@@ -6,7 +6,13 @@ export interface GeolocationState {
 }
 
 const initialState: any = {
-  data: new GeolocationItem({})
+  data: new GeolocationItem({
+    lat: 50.067,
+    lng: 19.945,
+    zoom: 14,
+    focusLat: 50.067,
+    focusLng: 19.945
+  })
 };
 
 export const geolocationReducer = (
@@ -14,10 +20,13 @@ export const geolocationReducer = (
   action: fromActions.GeolocationActions
 ) => {
   switch (action.type) {
-    case fromActions.SET_SUCC:
+    case fromActions.FOCUS_SUCC:
       return {
         ...state,
-        data: new GeolocationItem(action.payload.data)
+        data: {
+          ...state.data,
+          ...action.payload.data
+        }
       };
     default:
       return state;

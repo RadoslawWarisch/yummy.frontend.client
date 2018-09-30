@@ -1,6 +1,33 @@
+//Global fixes
 
+.ion-page {
+  background-color: #fff;
+}
+
+.header-ios {
+  top: 10px !important;
+}
+
+// Buttons Fab Global 
+
+.button__fab {
+  width: $headerHeight / 1.3;
+  height: $headerHeight / 1.3;
+}
 
 // Fonts global
+
+.primary-color {
+  color: $primary;
+}
+
+.secondary-color {
+  color: $secondary;
+}
+
+.tetriary-color {
+  color: $tetriary;
+}
 
 .center {
   text-align: center;
@@ -12,6 +39,10 @@
 
 .uppercased {
   text-transform: uppercase;
+}
+
+.light {
+  font-weight: 200;
 }
 
 .bold {
@@ -28,4 +59,16 @@
 
 .large {
   font-size: $fontLarge;
+}
+
+.monster {
+  font-size: 10vw;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.crossed {
+  text-decoration: line-through;
 }

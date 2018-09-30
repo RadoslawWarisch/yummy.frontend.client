@@ -8,7 +8,8 @@ import {
   Platform,
   ToastController,
   LoadingController,
-  ModalController
+  ModalController,
+  MenuController
 } from "ionic-angular";
 import { Settings } from "../core/providers/settings/settings";
 import { _Modal, _ModalType } from "../core/models/_modal";
@@ -19,26 +20,28 @@ import { fromPromise } from "rxjs/observable/fromPromise";
 import { Observable } from "rxjs";
 import { _Loader } from "../core/models/_loader";
 import { _Toast } from "../core/models/_toast";
-import { SignupModalComponent } from "../components/signup-modal/signup-modal";
 import { GeolocationProvider } from "../core/providers/geolocation/geolocation-provider";
-import * as fromGeolocationActions from '../core/actions/geolocation.actions';
+import * as fromGeolocationActions from "../core/actions/geolocation.actions";
 import { GeolocationItem } from "../core/models/geolocation";
+import { Startup } from "./app.startup";
 
 @Component({
-  template: `
-    <ion-menu [content]="content">
+  template: ` 
+    <ion-menu [content]="content" swipeEnabled="false">
       <user-panel></user-panel>
     </ion-menu>
+    <yummy-header></yummy-header>
     <ion-nav #content [root]="rootPage">
     </ion-nav>
   `
 })
 export class YummyApp {
-  public rootPage = "list";
+  public rootPage = this.startup.startPage;
   public toast: any;
   public loader: any;
   public modal: any;
-  @ViewChild(Nav) private nav: Nav;
+  @ViewChild(Nav)
+  private nav: Nav;
 
   constructor(
     private translate: TranslateService,
@@ -51,7 +54,8 @@ export class YummyApp {
     private toastCtrl: ToastController,
     private loaderCtrl: LoadingController,
     private modalCtrl: ModalController,
-    private geolocationProvider: GeolocationProvider
+    private geolocationProvider: GeolocationProvider,
+    private startup: Startup
   ) {
     this.toast = null;
     this.loader = null;
@@ -78,23 +82,32 @@ export class YummyApp {
   }
 
   subscribeGeo(): void {
-    this.geolocationProvider.geo$.asObservable().subscribe((geo: GeolocationItem) => {
-      this.store.dispatch(new fromGeolocationActions.Set({
-        data: geo
-      }))
-    });
+    this.geolocationProvider.geo$
+      .asObservable()
+      .subscribe((geo: GeolocationItem) => {
+        this.store.dispatch(
+          new fromGeolocationActions.Focus({
+            data: geo
+          })
+        );
+      });
   }
 
   subscribeRoute(): void {
     this.store
       .select((state) => state._route.data)
       .pairwise()
+      .filter(
+        ([prevRoutes, currRoutes]) =>
+          prevRoutes[prevRoutes.length - 1].name !==
+          currRoutes[currRoutes.length - 1].name
+      )
       .mergeMap(([prevRoutes, currRoutes]) => {
         return currRoutes.length === 1
           ? this.setRoot(currRoutes[currRoutes.length - 1])
-          : currRoutes.length > prevRoutes.length
-            ? this.pushPage(currRoutes[currRoutes.length - 1])
-            : this.popPage();
+          : currRoutes.length < prevRoutes.length
+            ? this.popPage()
+            : this.pushPage(currRoutes[currRoutes.length - 1]);
       })
       .subscribe();
   }
@@ -164,7 +177,9 @@ export class YummyApp {
   }
 
   setRoot(route: _Route): Promise<any> {
-    return this.nav.setRoot(route.name, route.params);
+    return this.nav.setRoot(route.name, route.params, {
+      animate: false
+    });
   }
 
   pushPage(route: _Route): Promise<any> {
@@ -199,20 +214,8 @@ export class YummyApp {
     return this.loader.dismiss();
   }
 
-  selectModalMode(modalMode: _ModalType): any {
-    switch (modalMode) {
-      case _ModalType.SIGN_UP:
-      default:
-        return SignupModalComponent;
-    }
-  }
-
   showModal(modal: _Modal): Promise<any> {
-    this.modal = this.modalCtrl.create(
-      this.selectModalMode(modal.mode),
-      modal.meta
-    );
-    return this.modal.present();
+    return Promise.resolve();
   }
 
   hideModal(): Promise<any> {

@@ -3,6 +3,10 @@
   [connectForm]="form$ | async"
   [formGroup]="form"
   (ngSubmit)="submit()">
+  <div
+    class="login__label bold uppercased">
+    logowanie
+  </div>
   <ion-item
     class="login__field">
     <ion-input
@@ -12,21 +16,27 @@
       type="text"
       clearInput>
       </ion-input>
-    </ion-item>
-    <ion-item
-      class="login__field">
-      <ion-input
-        class="login__input medium"
-        formControlName="password"
-        [placeholder]="'PASSWORD' | translate"
-        type="password"
-        clearInput>
-      </ion-input>
-    </ion-item>
-    <button
-      class="login__button uppercased bold medium"
-      ion-button
-      type="submit">
-      {{ 'LOGIN' | translate }}
-    </button>
+  </ion-item>
+  <ion-item
+    class="login__field">
+    <ion-input
+      class="login__input medium"
+      formControlName="password"
+      [placeholder]="'PASSWORD' | translate"
+      type="password"
+      clearInput>
+    </ion-input>
+  </ion-item>
+  <button
+    class="login__button uppercased bold medium"
+    ion-button
+    type="submit">
+    {{ 'LOGIN' | translate }}
+  </button>
+  <div
+    (click)="signUpEmitter.next()"
+    tappable
+    class="login__label bold center">
+    Nie masz konta? <span class="secondary-color">Zarejestruj się</span>
+  </div>
 </form>

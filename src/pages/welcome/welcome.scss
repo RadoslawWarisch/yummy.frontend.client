@@ -4,11 +4,11 @@ page-welcome {
     align-content: center;
     .splash-bg {
       position: absolute;
-      background: url('../assets/img/noodles.jpg') no-repeat transparent;
+      background: url('../assets/img/welcome.jpg') no-repeat transparent;
       background-size: cover;
       height: 100%;
       width: 100%;
-      z-index: -1;
+      z-index: -2;
       background-repeat: repeat-x;
       filter: blur(5px);
     }
@@ -29,6 +29,34 @@ page-welcome {
         .logo__title {
           font-size: $fontLogo;
         }
+        img {
+          max-height: 10vh;
+          width: auto;
+          margin: auto;
+        }
+      }
+      .login__label {
+        margin: $welcomePadding / 1.4 $welcomePadding;
+        padding: $welcomePadding / 1.4 0;
+        border-bottom: 1px dotted $tetriary;
+      }
+      .login__field {
+        padding: $welcomePadding;
+        &.input-has-focus .login__input {
+          border-bottom: $borderWidth solid $secondary;
+        }
+        .login__input {
+          border-bottom: $borderWidth solid $tetriary-blank;
+        }
+      }
+      .login__button {
+        margin: 15px auto;
+        width: 90%;
+        left: 5%;
+        background-color: $primary;
+        border-radius: $welcomePadding * 2;
+        border: 2px solid $tetriary-blank;
+        color: $secondary;
       }
     }
     .signup__button {

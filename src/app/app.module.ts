@@ -3,7 +3,13 @@ import {
   HttpClientModule,
   HTTP_INTERCEPTORS
 } from "@angular/common/http";
-import { ErrorHandler, NgModule, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
+import {
+  ErrorHandler,
+  NgModule,
+  CUSTOM_ELEMENTS_SCHEMA,
+  NO_ERRORS_SCHEMA,
+  APP_INITIALIZER
+} from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { Camera } from "@ionic-native/camera";
 import { SplashScreen } from "@ionic-native/splash-screen";
@@ -24,9 +30,15 @@ import { Effects } from "../core/effects/effects";
 import { Settings } from "../core/providers/settings/settings";
 import { Providers } from "../core/providers/providers";
 import { HttpInterceptorProvider } from "../core/providers/http-interceptor/http-interceptor";
-import { SignupModalComponent } from "../components/signup-modal/signup-modal";
 import { Geolocation } from "@ionic-native/geolocation";
 import { UserPanelComponent } from "../components/user-panel/user-panel";
+import { DirectivesModule } from "../directives/directives.module";
+import { YummyHeaderModule } from "../components/yummy-header/yummy-header.module";
+import { Startup } from "./app.startup";
+
+export function startupFactory(startupProvider: Startup): Function {
+  return () => startupProvider.init();
+}
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
@@ -37,11 +49,7 @@ export function provideSettings(storage: Storage) {
 }
 
 @NgModule({
-  declarations: [
-    YummyApp,
-    SignupModalComponent,
-    UserPanelComponent
-  ],
+  declarations: [YummyApp, UserPanelComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -52,19 +60,23 @@ export function provideSettings(storage: Storage) {
         deps: [HttpClient]
       }
     }),
-    IonicModule.forRoot(YummyApp),
+    IonicModule.forRoot(YummyApp, {
+      platforms: {
+        ios: {
+          menuType: "overlay"
+        }
+      }
+    }),
     IonicStorageModule.forRoot(),
     StoreModule.forRoot(Reducers),
     EffectsModule.forRoot(Effects),
     ReactiveFormsModule,
-    LeafletModule.forRoot()
+    DirectivesModule,
+    LeafletModule.forRoot(),
+    YummyHeaderModule
   ],
   bootstrap: [IonicApp],
-  entryComponents: [
-    YummyApp,
-    SignupModalComponent,
-    UserPanelComponent
-  ],
+  entryComponents: [YummyApp, UserPanelComponent],
   providers: [
     ...Providers,
     Geolocation,
@@ -77,8 +89,15 @@ export function provideSettings(storage: Storage) {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpInterceptorProvider,
       multi: true
-    }
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: startupFactory,
+      deps: [Startup],
+      multi: true
+    },
+    Startup
   ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })
 export class AppModule {}

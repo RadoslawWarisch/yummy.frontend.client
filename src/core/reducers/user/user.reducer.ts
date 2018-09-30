@@ -16,8 +16,11 @@ export const userReducer = (
   action: fromActions.UserActions
 ) => {
   switch (action.type) {
-    case fromActions.UPDATE_USER:
-      return Object.assign({}, state, action.payload);
+    case fromActions.FETCH_USER_SUCC:
+      return {
+        ...state,
+        data: action.payload
+      }
     default:
       return state;
   }

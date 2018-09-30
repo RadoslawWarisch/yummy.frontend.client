@@ -1,13 +1,11 @@
-import { NavOptions } from "ionic-angular";
-
 export class _Route {
 
   public name: string;
-  public params: NavOptions;
+  public params?: any;
 
   constructor(
-    name: string = 'welcome',
-    params: NavOptions = {}
+    name: string = "initial",
+    params: any = {}
   ) {
     this.name = name;
     this.params = params;

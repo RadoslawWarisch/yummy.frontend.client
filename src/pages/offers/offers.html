@@ -1,0 +1,18 @@
+<ion-content>
+  <lazy-scroll
+    [isLoading]="isLoading$ | async"
+    (pullDown)="pullDown()">
+    <ion-item>
+      <span class="large bold center uppercased">
+        Najblizsze Oferty
+      </span>
+    </ion-item>
+    <offer-item
+      *ngFor="let offer of offers$ | async"
+      [offer]="offer">
+    </offer-item>
+    <no-items
+      *ngIf="(offers$ | async).length === 0 && !(isLoading$ | async)">
+    </no-items>
+  </lazy-scroll>
+</ion-content>

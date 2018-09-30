@@ -10,7 +10,6 @@ import { IonicPage } from 'ionic-angular';
 })
 export class MapPage {
 
-  constructor() {
-  }
+  constructor() {}
 
 }

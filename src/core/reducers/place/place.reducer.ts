@@ -25,7 +25,7 @@ export const placeReducer: ActionReducer<PlaceState> = (
     case fromAction.FETCH_PLACES_SUCC:
       return {
         ...state,
-        data: action.payload,
+        data: action.payload.map((place: Place) => new Place(place)),
         isFetching: false
       };
     case fromAction.FETCH_PLACES_FAIL:

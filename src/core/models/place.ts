@@ -1,7 +1,6 @@
 import { GeolocationItem } from "./geolocation";
 
 export class Place extends GeolocationItem {
-  
   constructor(place: Place) {
     super({
       lat: place.latitude,
@@ -14,11 +13,16 @@ export class Place extends GeolocationItem {
   public name: string;
   public address: string;
   public description: string;
+  public distance: number | string;
   public website?: string;
   public image?: string;
   public openHours: OpenSchedule;
   public latitude?: number;
   public longtitude?: number;
+  public isOpen?: boolean;
+  public street?: string;
+  public postalCode?: string;
+  public city?: string;
 }
 
 export interface OpenSchedule {
