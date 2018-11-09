@@ -1,4 +1,5 @@
-import { Component, ChangeDetectionStrategy } from "@angular/core";
+import { filter, map, pluck } from "rxjs/operators";
+import { Component } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { AppState } from "../../core/app-state";
 import * as fromRouteAction from "../../core/actions/_route.actions";
@@ -22,18 +23,20 @@ export class YummyHeaderComponent {
   ) {}
 
   ngOnInit() {
-    this.bucketCount$ = this.store.select("bucket").pluck("count");
+    this.bucketCount$ = this.store.select("bucket").pipe(pluck("count"));
     this.store
       .select("_route")
-      .pluck("data")
-      .map((routes: _Route[]) => routes[routes.length - 1])
-      .filter((route: _Route) => route !== undefined)
-      .pluck("name")
-      .map(
-        (route: string) =>
-          route === "initial" ? this.startup.startPage : route
+      .pipe(
+        pluck("data"),
+        map((routes: _Route[]) => routes[routes.length - 1]),
+        filter((route: _Route) => route !== undefined),
+        pluck("name"),
+        map(
+          (route: string) =>
+            route === "initial" ? this.startup.startPage : route
+        )
       )
-      .subscribe((name: string) => (this.routeName = name));
+      .subscribe((route) => this.updateRoute(route));
   }
 
   public switchPage(page: string): void {
@@ -51,8 +54,16 @@ export class YummyHeaderComponent {
   public backOrMenu(): void {
     this.routeName === "map" ||
     this.routeName === "list" ||
-    this.routeName === "code"
+    this.routeName === "code" ||
+    this.routeName === "offers"
       ? this.menuCtrl.toggle()
       : this.store.dispatch(new fromRouteAction.Pop());
+  }
+
+  private updateRoute(route: string): void {
+    console.log('new route', this.routeName, route)
+    this.routeName === 'welcome' 
+      ? setTimeout(() => this.routeName = route, 125)
+      : this.routeName = route;
   }
 }

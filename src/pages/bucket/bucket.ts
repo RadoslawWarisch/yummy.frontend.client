@@ -1,3 +1,5 @@
+
+import {pluck} from 'rxjs/operators';
 import { Component } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 import { Store } from '@ngrx/store';
@@ -20,9 +22,9 @@ export class BucketPage {
   constructor(
     private store: Store<AppState>
   ) {
-    this.offers$ = this.store.select("bucket").pluck("offers");
-    this.price$ = this.store.select("bucket").pluck("price");
-    this.count$ = this.store.select("bucket").pluck("count");
+    this.offers$ = this.store.select("bucket").pipe(pluck("offers"));
+    this.price$ = this.store.select("bucket").pipe(pluck("price"));
+    this.count$ = this.store.select("bucket").pipe(pluck("count"));
   }
 
   public pullDown() {

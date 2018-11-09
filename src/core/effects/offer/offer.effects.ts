@@ -1,3 +1,5 @@
+
+import {map, switchMap, pluck} from 'rxjs/operators';
 import { Injectable } from "@angular/core";
 import { Effect, Actions } from "@ngrx/effects";
 import * as fromActions from "../../actions/offer.actions";
@@ -17,12 +19,12 @@ export class OfferEffects {
 
   @Effect()
   public getOffers$ = this.actions$
-    .ofType(fromActions.FETCH_OFFERS)
-    .pluck("payload")
-    .switchMap((payload: any) => this.offerProvider.getOffers(payload))
-    .map((res: any | HttpErrorResponse) => {
+    .ofType(fromActions.FETCH_OFFERS).pipe(
+    pluck("payload"),
+    switchMap((payload: any) => this.offerProvider.getOffers(payload)),
+    map((res: any | HttpErrorResponse) => {
       return (!(res instanceof HttpErrorResponse) && res.offers)
         ? new fromActions.FetchOffersSucc(res.offers)
         : new fromActions.FetchOffersFail;
-    });
+    }),);
 }

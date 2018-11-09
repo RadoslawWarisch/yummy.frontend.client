@@ -1,3 +1,6 @@
+import { of as observableOf, from as fromPromise, Observable } from "rxjs";
+
+import { filter, pluck, map, pairwise, mergeMap, switchMap } from "rxjs/operators";
 import { Component, ViewChild } from "@angular/core";
 import { SplashScreen } from "@ionic-native/splash-screen";
 import { StatusBar } from "@ionic-native/status-bar";
@@ -8,16 +11,13 @@ import {
   Platform,
   ToastController,
   LoadingController,
-  ModalController,
-  MenuController
+  ModalController
 } from "ionic-angular";
 import { Settings } from "../core/providers/settings/settings";
 import { _Modal, _ModalType } from "../core/models/_modal";
 import { Store } from "@ngrx/store";
 import { AppState } from "../core/app-state";
 import { _Route } from "../core/models/_route";
-import { fromPromise } from "rxjs/observable/fromPromise";
-import { Observable } from "rxjs";
 import { _Loader } from "../core/models/_loader";
 import { _Toast } from "../core/models/_toast";
 import { GeolocationProvider } from "../core/providers/geolocation/geolocation-provider";
@@ -27,7 +27,7 @@ import { Startup } from "./app.startup";
 
 @Component({
   template: ` 
-    <ion-menu [content]="content" swipeEnabled="false">
+    <ion-menu [content]="content" [swipeEnabled]="isSwipeEnabled$ | async">
       <user-panel></user-panel>
     </ion-menu>
     <yummy-header></yummy-header>
@@ -40,6 +40,7 @@ export class YummyApp {
   public toast: any;
   public loader: any;
   public modal: any;
+  public isSwipeEnabled$: Observable<boolean>;
   @ViewChild(Nav)
   private nav: Nav;
 
@@ -63,16 +64,18 @@ export class YummyApp {
     platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      this.geolocationProvider.initWatch();
+      this.subscribeGeo();
       this.subscribeLoader();
       this.subscribeRoute();
       this.subscribeToaster();
       this.subscribeModal();
-      this.geolocationProvider.initWatch();
+      this.subscribeSwipe();
     });
     this.initTranslate();
   }
 
-  initTranslate() {
+  private initTranslate() {
     this.translate.setDefaultLang("pl");
     this.translate.use("pl");
 
@@ -81,83 +84,103 @@ export class YummyApp {
     });
   }
 
-  subscribeGeo(): void {
+  private subscribeSwipe(): void {
+    this.isSwipeEnabled$ = this.store.select("_route").pipe(
+      pluck("data"),
+      map((routes: _Route[]) => routes[routes.length - 1]),
+      map((route: _Route) => route.name !== "slide" && route.name !== "welcome")
+    );
+  }
+
+  private subscribeGeo(): void {
     this.geolocationProvider.geo$
       .asObservable()
       .subscribe((geo: GeolocationItem) => {
         this.store.dispatch(
-          new fromGeolocationActions.Focus({
+          new fromGeolocationActions.Switch({
             data: geo
           })
         );
       });
   }
 
-  subscribeRoute(): void {
+  private subscribeRoute(): void {
     this.store
       .select((state) => state._route.data)
-      .pairwise()
-      .filter(
-        ([prevRoutes, currRoutes]) =>
-          prevRoutes[prevRoutes.length - 1].name !==
-          currRoutes[currRoutes.length - 1].name
+      .pipe(
+        pairwise(),
+        filter(
+          ([prevRoutes, currRoutes]) =>
+            prevRoutes[prevRoutes.length - 1].name !==
+            currRoutes[currRoutes.length - 1].name
+        ),
+        mergeMap(([prevRoutes, currRoutes]) => {
+          return currRoutes.length === 1
+            ? this.setRoot(currRoutes[currRoutes.length - 1])
+            : currRoutes.length < prevRoutes.length
+              ? this.popPage(
+                  prevRoutes[prevRoutes.length - 1].name === "profile" ||
+                    prevRoutes[prevRoutes.length - 1].name === "support" ||
+                    prevRoutes[prevRoutes.length - 1].name === "transactions"
+                )
+              : this.pushPage(currRoutes[currRoutes.length - 1]);
+        })
       )
-      .mergeMap(([prevRoutes, currRoutes]) => {
-        return currRoutes.length === 1
-          ? this.setRoot(currRoutes[currRoutes.length - 1])
-          : currRoutes.length < prevRoutes.length
-            ? this.popPage()
-            : this.pushPage(currRoutes[currRoutes.length - 1]);
-      })
       .subscribe();
   }
 
-  subscribeLoader(): void {
+  private subscribeLoader(): void {
     this.store
       .select((state) => state._loader.data)
-      .pairwise()
-      .mergeMap(([prevLoader, currLoader]) => {
-        return this.handleUIDisplay(
-          prevLoader,
-          currLoader,
-          () => this.showLoader(currLoader),
-          () => this.hideLoader()
-        );
-      })
+      .pipe(
+        pairwise(),
+        mergeMap(([prevLoader, currLoader]) => {
+          return this.handleUIDisplay(
+            prevLoader,
+            currLoader,
+            () => this.showLoader(currLoader),
+            () => this.hideLoader()
+          );
+        })
+      )
       .subscribe();
   }
 
-  subscribeToaster(): void {
+  private subscribeToaster(): void {
     this.store
       .select((state) => state._toast.data)
-      .pairwise()
-      .mergeMap(([prevToast, currToast]) => {
-        return this.handleUIDisplay(
-          prevToast,
-          currToast,
-          () => this.showToast(currToast),
-          () => this.hideToast()
-        );
-      })
+      .pipe(
+        pairwise(),
+        mergeMap(([prevToast, currToast]) => {
+          return this.handleUIDisplay(
+            prevToast,
+            currToast,
+            () => this.showToast(currToast),
+            () => this.hideToast()
+          );
+        })
+      )
       .subscribe();
   }
 
-  subscribeModal(): void {
+  private subscribeModal(): void {
     this.store
       .select((state) => state._modal.data)
-      .pairwise()
-      .mergeMap(([prevModal, currModal]) => {
-        return this.handleUIDisplay(
-          prevModal,
-          currModal,
-          () => this.showModal(currModal),
-          () => this.hideModal()
-        );
-      })
+      .pipe(
+        pairwise(),
+        mergeMap(([prevModal, currModal]) => {
+          return this.handleUIDisplay(
+            prevModal,
+            currModal,
+            () => this.showModal(currModal),
+            () => this.hideModal()
+          );
+        })
+      )
       .subscribe();
   }
 
-  handleUIDisplay(
+  private handleUIDisplay(
     prevState: _Toast | _Loader | _Modal,
     currState: _Toast | _Loader | _Modal,
     shownFn: Function,
@@ -165,32 +188,34 @@ export class YummyApp {
   ): Observable<any> {
     let obs: Observable<any>;
     if (!prevState.isShown && !currState.isShown) {
-      obs = Observable.of(null);
+      obs = observableOf(null);
     } else if (prevState.isShown && !currState.isShown) {
       obs = fromPromise(hideFn());
     } else if (!prevState.isShown && currState.isShown) {
       obs = fromPromise(shownFn());
     } else {
-      obs = fromPromise(hideFn()).switchMap(() => fromPromise(shownFn()));
+      obs = fromPromise(hideFn()).pipe(switchMap(() => fromPromise(shownFn())));
     }
     return obs;
   }
 
-  setRoot(route: _Route): Promise<any> {
+  private setRoot(route: _Route): Promise<any> {
     return this.nav.setRoot(route.name, route.params, {
       animate: false
     });
   }
 
-  pushPage(route: _Route): Promise<any> {
+  private pushPage(route: _Route): Promise<any> {
     return this.nav.push(route.name, route.params);
   }
 
-  popPage(): Promise<any> {
-    return this.nav.pop();
+  private popPage(isSide: boolean = false): Promise<any> {
+    return this.nav.pop({
+      animate: !isSide
+    });
   }
 
-  showToast(toast: _Toast): Promise<any> {
+  private showToast(toast: _Toast): Promise<any> {
     this.toast = this.toastCtrl.create({
       message: toast.label,
       position: "bottom",
@@ -199,26 +224,26 @@ export class YummyApp {
     return this.toast.present();
   }
 
-  hideToast(): Promise<any> {
+  private hideToast(): Promise<any> {
     return this.toast.dismiss();
   }
 
-  showLoader(loader: _Loader): Promise<any> {
+  private showLoader(loader: _Loader): Promise<any> {
     this.loader = this.loaderCtrl.create({
       content: loader.label
     });
     return this.loader.present();
   }
 
-  hideLoader(): Promise<any> {
+  private hideLoader(): Promise<any> {
     return this.loader.dismiss();
   }
 
-  showModal(modal: _Modal): Promise<any> {
+  private showModal(modal: _Modal): Promise<any> {
     return Promise.resolve();
   }
 
-  hideModal(): Promise<any> {
+  private hideModal(): Promise<any> {
     return this.modal.dismiss();
   }
 }

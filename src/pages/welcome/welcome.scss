@@ -1,22 +1,41 @@
 page-welcome {
+  background: white;
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 1;
+  background-size: 100% 100%;
+  background-position: center !important;
+  background: url('../assets/img/welcome.jpg');
+  background-repeat: no-repeat;
+  -ms-background-size: cover;
+  -o-background-size: cover;
+  -moz-background-size: cover;
+  -webkit-background-size: cover; // background-position: 53% 89%;
+  -ms-background-size: cover;
+  // background-size: cover;
+  background-position-y: 90%;
+  .content {
+    background: transparent !important;
+  }
+  .content-ios { 
+    margin-top: 0 !important;
+    .scroll-content {
+      bottom: 0 !important;
+    }
+  }
   .scroll-content {
     display: grid;
     align-content: center;
-    .splash-bg {
-      position: absolute;
-      background: url('../assets/img/welcome.jpg') no-repeat transparent;
-      background-size: cover;
-      height: 100%;
-      width: 100%;
-      z-index: -2;
-      background-repeat: repeat-x;
-      filter: blur(5px);
-    }
     .login {
       display: grid;
       grid-template-rows: repeat(4, auto);
       grid-row-gap: $welcomePadding;
-      width: 80%;
+      width: 90%;
       margin: auto;
       padding: $welcomePadding*2 $welcomePadding;
       border-radius: $welcomeRadius;

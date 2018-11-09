@@ -1,3 +1,5 @@
+
+import {pluck} from 'rxjs/operators';
 import { Component } from "@angular/core";
 import { IonicPage } from "ionic-angular";
 import { Observable } from "rxjs";
@@ -23,8 +25,8 @@ export class ListPage {
   }
 
   private subscribePlaces(): void {
-    this.places$ = this.store.select("place").pluck("data");
-    this.isLoading$ = this.store.select("place").pluck("isFetching");
+    this.places$ = this.store.select("place").pipe(pluck("data"));
+    this.isLoading$ = this.store.select("place").pipe(pluck("isFetching"));
   }
 
   public pullDown(): void {

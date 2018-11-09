@@ -39,4 +39,9 @@ user-panel {
     border-bottom: 1px dotted $tetriary-blank;
     text-transform: uppercase;
   }
+  .versioning {
+    position: absolute;
+    bottom: $headerHeight / 2;
+
+  }
 }

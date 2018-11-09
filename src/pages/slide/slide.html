@@ -1,5 +1,5 @@
 <ion-content>
-  <div class="splash-bg welcome"></div>
+  <div [hidden]="!isLastSlide" class="splash-bg welcome"></div>
   <ion-slides
     (ionSlideDidChange)="slideChanged()"
     [pager]="!isWelcomeSlide">

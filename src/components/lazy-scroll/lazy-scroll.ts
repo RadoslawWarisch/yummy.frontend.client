@@ -1,3 +1,5 @@
+
+import {throttleTime, filter} from 'rxjs/operators';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Subscription, Subject } from 'rxjs';
 
@@ -20,9 +22,9 @@ export class LazyScrollComponent {
   }
 
   ngOnInit(): void {
-    this.pullDownSub = this.pullDown$.asObservable()
-      .filter(() => !this.isLoading)
-      .throttleTime(1500)
+    this.pullDownSub = this.pullDown$.asObservable().pipe(
+      filter(() => !this.isLoading),
+      throttleTime(1500),)
       .subscribe(() => this.pullDown.next());
   }
 

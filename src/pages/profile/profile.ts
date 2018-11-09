@@ -23,10 +23,6 @@ export class ProfilePage {
     this.user$ = this.store.select((state) => state.user.data);
   }
 
-  public detectChanges(key: string, { _value: value }: { _value: string }): void {
-    
-  }
-
   public submit(): void {
     
   }

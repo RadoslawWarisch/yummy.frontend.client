@@ -1,9 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Place } from '../../core/models/place';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../core/app-state';
-import * as fromRouteActions from "../../core/actions/_route.actions";
-import { _Route } from '../../core/models/_route';
+import { LaunchNavigator } from '@ionic-native/launch-navigator';
 
 @Component({
   selector: 'summary-card',
@@ -16,11 +13,17 @@ export class SummaryCardComponent {
   @Input() public restaurant: Place;
 
   constructor(
-    private store: Store<AppState>
+    private launchNavigator: LaunchNavigator
   ) {}
 
   public trackRestaurant(): void {
-    console.log('track restaurant');
+    const { lat, lng } = this.restaurant
+
+    this.launchNavigator.navigate([lat, lng], {}).then(()=>{
+      console.log("launched successfully");
+    }).catch(()=>{
+      console.log("launch failed");
+    })
   }
 
 }

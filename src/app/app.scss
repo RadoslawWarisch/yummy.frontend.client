@@ -5,7 +5,18 @@
 }
 
 .header-ios {
-  top: 10px !important;
+  top: 16px !important;
+}
+
+.content-ios {
+  margin-top: 16px;
+  .scroll-content {
+    padding-top: 0px !important;
+  }
+}
+
+ion-input {
+  -webkit-transform: translateZ(0) !important;
 }
 
 // Buttons Fab Global 
@@ -16,6 +27,10 @@
 }
 
 // Fonts global
+
+div, span, h1, h2, h3, h4, h5, h6 {
+  font-family: 'Ubuntu';
+}
 
 .primary-color {
   color: $primary;
@@ -42,11 +57,11 @@
 }
 
 .light {
-  font-weight: 200;
+  font-family: 'UbuntuLight' !important;
 }
 
 .bold {
-  font-weight: 500;
+  font-family: 'UbuntuBold' !important;
 }
 
 .small {
@@ -66,9 +81,25 @@
 }
 
 .italic {
-  font-style: italic;
+  font-family: 'UbuntuItalic' !important;
 }
 
 .crossed {
   text-decoration: line-through;
+}
+
+.ellipsis-3 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.ellipsis-2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }

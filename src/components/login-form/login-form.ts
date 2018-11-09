@@ -24,7 +24,6 @@ export class LoginFormComponent {
   }
 
   ngOnInit(): void {
-    //this.observeChanges();
     this.store.select((state) => state.loginForm.data);
   }
 
@@ -35,16 +34,6 @@ export class LoginFormComponent {
       password: ["", Validators.required]
     });
   }
-
-  // observeChanges(): void {
-  //   this.form.valueChanges.subscribe((state) => {
-  //     this.dispatchChanges(state);
-  //   });
-  // }
-
-  // dispatchChanges(state: LoginForm): void {
-  //   this.store.dispatch(new UpdateForm({ data: state }));
-  // }
 
   submit(): void {
     this.store.dispatch(new SubmitForm({ data: this.form.value }));

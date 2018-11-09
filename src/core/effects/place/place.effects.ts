@@ -1,3 +1,5 @@
+
+import {map, switchMap, pluck} from 'rxjs/operators';
 import { Injectable } from "@angular/core";
 import { Actions, Effect } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
@@ -18,12 +20,12 @@ export class PlaceEffects {
 
   @Effect()
   public fetchPlaces$ = this.actions$
-    .ofType(fromActions.FETCH_PLACES)
-    .pluck("payload")
-    .switchMap((payload: GetPlacesBody) => this.placeProvider.fetchPlaces(payload))
-    .map((res: any | HttpErrorResponse) => {
+    .ofType(fromActions.FETCH_PLACES).pipe(
+    pluck("payload"),
+    switchMap((payload: GetPlacesBody) => this.placeProvider.fetchPlaces(payload)),
+    map((res: any | HttpErrorResponse) => {
       return (!(res instanceof HttpErrorResponse) && res)
         ? new fromActions.FetchPlacesSucc(res)
         : new fromActions.FetchPlacesFail();
-    });
+    }),);
 }

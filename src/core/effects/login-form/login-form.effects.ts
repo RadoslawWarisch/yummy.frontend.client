@@ -1,3 +1,7 @@
+
+import {of as observableOf,  Observable } from 'rxjs';
+
+import {take, pluck, map, tap, switchMap} from 'rxjs/operators';
 import { Injectable } from "@angular/core";
 import { Actions, Effect } from "@ngrx/effects";
 import { HttpErrorResponse } from "@angular/common/http";
@@ -12,7 +16,6 @@ import { Store } from "@ngrx/store";
 import { AppState } from "../../app-state";
 import { _Route } from "../../models/_route";
 import { LoginProvider } from "../../providers/login-provider/login-provider";
-import { Observable } from "rxjs";
 
 declare let sessionStorage;
 
@@ -26,20 +29,20 @@ export class LoginFormEffects {
 
   @Effect()
   public loginUser$ = this.actions$
-    .ofType(fromActions.SUBMIT_FORM)
-    .pluck("payload")
-    .map(this.checkForFields)
-    .do((payload: LoginFormState | HttpErrorResponse) =>
+    .ofType(fromActions.SUBMIT_FORM).pipe(
+    pluck("payload"),
+    map(this.checkForFields),
+    tap((payload: LoginFormState | HttpErrorResponse) =>
       this.handleSideBefore(payload)
-    )
-    .switchMap(
+    ),
+    switchMap(
       (payload: LoginFormState | HttpErrorResponse) =>
         payload instanceof HttpErrorResponse
-          ? Observable.of(payload)
+          ? observableOf(payload)
           : this.loginProvider.loginUser(payload.data)
-    )
-    .do((res: null | HttpErrorResponse) => this.handleSideAfter(res))
-    .map((res: null | HttpErrorResponse) => this.handleLoginRes(res));
+    ),
+    tap((res: null | HttpErrorResponse) => this.handleSideAfter(res)),
+    map((res: null | HttpErrorResponse) => this.handleLoginRes(res)),);
 
   private checkForFields(
     payload: LoginFormState
@@ -111,9 +114,9 @@ export class LoginFormEffects {
 
   private updateUser(): void {
     this.store
-      .select((state) => state.loginForm)
-      .take(1)
-      .do((res: LoginFormState) => (sessionStorage.__mail = res.data.login))
+      .select((state) => state.loginForm).pipe(
+      take(1),
+      tap((res: LoginFormState) => (sessionStorage.__mail = res.data.login)),)
       .subscribe((data: LoginFormState) => {
         this.store.dispatch(new fromUserActions.FetchUser());
       });

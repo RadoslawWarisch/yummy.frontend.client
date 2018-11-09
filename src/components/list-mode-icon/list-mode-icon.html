@@ -1,8 +1,11 @@
 <ion-icon
   [ngClass]="(mode === 'CART' ||  mode === 'MENU' || mode === 'BACK') ? '' : 'border'"
+  [class.selected]="bckg === 'selected'"
+  [class.red]="bckg === 'red'"
+  [class.gray]="bckg === 'gray'"
   [name]="(mode === 'MAP') ? 'pin' : (mode === 'PLACES') ? 'home' : (mode === 'OFFERS') ? 'restaurant' : (mode === 'CART') ? 'cart' : ''">
   <div
-    [ngClass]="(mode === 'MAP' || mode === 'CART' ||  mode === 'MENU' || mode === 'BACK') ? 'red' : 'gray'"
+    [ngClass]="bckg"
     class="bckg">
   </div>
   <div 

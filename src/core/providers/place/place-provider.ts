@@ -1,7 +1,10 @@
+
+import {of as observableOf,  Observable } from 'rxjs';
+
+import {catchError, map} from 'rxjs/operators';
 import { Injectable } from "@angular/core";
 import { Rest, GetPlacesBody } from "../rest/rest";
 import { HttpErrorResponse } from "@angular/common/http";
-import { Observable } from "rxjs";
 import { Place } from "../../models/place";
 import { round } from "mathjs";
 import {
@@ -16,10 +19,10 @@ export class PlaceProvider {
 
   public fetchPlaces(config: GetPlacesBody) {
     return this.rest
-      .getPlaces(config)
-      .map((res) => res.restaurants)
-      .map(this.parsePlaces)
-      .catch((err: HttpErrorResponse) => Observable.of(err));
+      .getPlaces(config).pipe(
+      map((res) => res.restaurants),
+      map(this.parsePlaces),
+      catchError((err: HttpErrorResponse) => observableOf(err)),);
   }
 
   private parsePlaces(unparsed: Place[]): Place[] {

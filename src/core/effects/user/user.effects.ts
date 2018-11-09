@@ -1,3 +1,5 @@
+
+import {map, switchMap} from 'rxjs/operators';
 import { Injectable } from "@angular/core";
 import { Actions, Effect } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
@@ -18,14 +20,14 @@ export class UserEffects {
 
   @Effect()
   public fetchUser$ = this.actions$
-    .ofType(fromActions.FETCH_USER)
-    .switchMap(() => this.userProvider.fetchUser())
-    .map(
+    .ofType(fromActions.FETCH_USER).pipe(
+    switchMap(() => this.userProvider.fetchUser()),
+    map(
       (res: User | HttpErrorResponse) =>
         res instanceof HttpErrorResponse
           ? new fromActions.FetchUserFail()
           : new fromActions.FetchUserSucc(res)
-    );
+    ),);
 
   // @Effect()
   // submitUser$ = this.actions$

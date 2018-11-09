@@ -1,4 +1,10 @@
 page-slide {
+  .content-ios { 
+    margin-top: 0 !important;
+    .scroll-content {
+      bottom: 0 !important;
+    }
+  }
   .splash-bg {
     position: fixed;
     background-size: cover !important;
@@ -6,19 +12,20 @@ page-slide {
     height: 100%;
     width: 100%;
     z-index: -1;
-    filter: blur(3px);
+    -ms-background-size: cover;
+    -o-background-size: cover;
+    -moz-background-size: cover;
+    -webkit-background-size: cover;
+    background-position: center !important;
     &.welcome {
-      background: url('../assets/img/welcome.jpg') no-repeat transparent;
       z-index: -2;
-      filter: blur(5px);
+      background: url('../assets/img/welcome.jpg');
     }
   }
   .splash-darken {
-    margin-top: -12vh;
-    height: 100vh;
-    width: 100vw;
-    z-index: -1;
     position: absolute;
+    width: 100%;
+    z-index: -1;
     opacity: 0.65;
     background: $tetriary;
   }

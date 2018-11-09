@@ -2,32 +2,39 @@ offer-item {
   position: relative;
   display: grid;
   grid-template-columns: 40vw 1fr 1fr;
+  height: 165px;
   align-items: center;
   box-shadow: $bottomShadow;
-  .item__photo {
-    display: flex;
-    overflow: hidden;
+  margin-bottom: 1px;
+  .photo__placeholder {
     grid-row: 1/4;
-    .photo__placeholder {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      font-size: $fontLogo;
-      color: $primary;
-    }
-    .photo__image {
-      width: 40vw;
-      height: 100%;
-      max-height: 150px;
-      max-width: 225px;
-    }
+    position: absolute;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $primary;
+    background: $tetriary-blank;
+    width: 40vw;
+    height: 100%;
+  }
+  .photo__image {
+    z-index: 2;
+    grid-row: 1/4;
+    position: absolute;
+    flex: 1;
+    width: 40vw;
+    height: 100%;
+    object-fit: cover;
   }
   .item__title, 
   .item__button, 
   .item__order-details, 
   .item__price {
     margin-left: $headerHeight / 4;
+  }
+  .item__order-details {
+    margin-right: $headerHeight / 4;
   }
   .item__title {
     margin-top: $headerHeight / 6;

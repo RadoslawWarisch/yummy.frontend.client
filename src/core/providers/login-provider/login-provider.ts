@@ -1,9 +1,11 @@
+
+import {of as observableOf,  Observable } from 'rxjs';
+
+import {mergeMap, tap, catchError} from 'rxjs/operators';
 import { Injectable } from "@angular/core";
 import { Rest } from "../rest/rest";
 import { Settings } from "../settings/settings";
 import { LoginForm } from "../../models/login-form";
-
-import { Observable } from "rxjs";
 import { LoginUserBody } from "../rest/rest";
 import { HttpErrorResponse } from "@angular/common/http";
 
@@ -17,15 +19,15 @@ export class LoginProvider {
     return (loginForm.isSign
       ? this.rest.createUser(this.parseForm(loginForm))
       : this.rest.loginUser(this.parseForm(loginForm))
-    )
-      .mergeMap(
-        (data) => (loginForm.isSign ? Observable.of(null) : this.saveAuth(data))
-      )
-      .catch((err) => Observable.of(err));
+    ).pipe(
+      mergeMap(
+        (data) => (loginForm.isSign ? observableOf(null) : this.saveAuth(data))
+      ),
+      catchError((err) => observableOf(err)),);
   }
 
   saveAuth({ Authorization }): Observable<void> {
-    return Observable.of(null).do(() => (sessionStorage.__th = Authorization));
+    return observableOf(null).pipe(tap(() => (sessionStorage.__th = Authorization)));
   }
 
   parseForm(loginForm: LoginForm): LoginUserBody {

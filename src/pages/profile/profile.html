@@ -11,17 +11,13 @@
   </div>
   <div class="profile__form">
     <ion-item class="form__item" no-lines>
-      <ion-label class="item__label">numer telefonu</ion-label>
-      <ion-input (ionChange)="detectChanges('phone', $event)" class="item__input" type="tel" placeholder="numer telefonu">{{ (user$ | async)?.phone }}</ion-input>
-    </ion-item>
-    <ion-item class="form__item" no-lines>
-      <ion-label class="item__label">email</ion-label>
-      <ion-input (ionChange)="detectChanges('email', $event)" class="item__input" type="email" placeholder="email">{{ (user$ | async)?.email }}</ion-input>
+      <ion-label class="medium item__label">numer telefonu</ion-label>
+      <ion-input (ionChange)="detectChanges('phone', $event)" class="medium item__input" type="tel" placeholder="numer telefonu">{{ (user$ | async)?.phone }}</ion-input>
     </ion-item>
   </div>
   <button 
     (click)="submit()" 
-    class="form__button bold large" 
+    class="form__button bold medium" 
     ion-button>
     zapisz
   </button>

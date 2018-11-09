@@ -6,14 +6,22 @@ list-mode-icon {
     display: flex;
     justify-content: center;
     align-items: center;
-    color: $primary;
     font-size: $headerHeight / 2.6 !important;
     border-radius: $headerHeight / 3.0;
     width: $headerHeight / 1.5;
     height: $headerHeight / 1.5;
     line-height: $headerHeight / 1.5;
     &.border {
-      border: 2px solid $primary;
+      border-width: 2px;
+      border-style: solid;
+    }
+    &.red, &.gray {
+      color: $primary;
+      border-color: $primary;
+    }
+    &.selected {
+      color: $secondary;
+      border-color: $secondary;
     }
   }
   .bckg {
@@ -26,6 +34,9 @@ list-mode-icon {
       background: $secondary;
     }
     &.gray {
+      background: $tetriary-blank;
+    }
+    &.selected {
       background: $fourth;
     }
   }
@@ -33,7 +44,7 @@ list-mode-icon {
   .bar {
     display: block;
     height: 2px;
-    width: 22px;
+    width: 20px;
     background: $primary;
     margin: 4px auto;
   }

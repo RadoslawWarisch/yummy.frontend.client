@@ -1,9 +1,10 @@
+
+import {pluck} from 'rxjs/operators';
 import { Component } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../core/app-state';
 import * as fromRouteActions from '../../core/actions/_route.actions';
-import * as fromTransactionActions from '../../core/actions/transaction.actions';
 import { Observable } from 'rxjs';
 import { Transaction } from '../../core/models/transaction';
 
@@ -22,22 +23,11 @@ export class TransactionsPage {
     private store: Store<AppState>
   ) {
     this.subscribeTransactions();
-    this.fetchTransactions();
   }
 
   private subscribeTransactions(): void {
-    this.transactions$ = this.store.select("transaction").pluck("data");
-    this.isLoading$ = this.store.select("transaction").pluck("isFetching");
-  }
-
-  private fetchTransactions(): void {
-    this.transactions$.take(1).subscribe((data: Transaction[]) => {
-      if (data.length === 0) {
-        this.store.dispatch(
-          new fromTransactionActions.FetchTransactions({})
-        )
-      }
-    })
+    this.transactions$ = this.store.select("transaction").pipe(pluck("data"));
+    this.isLoading$ = this.store.select("transaction").pipe(pluck("isFetching"));
   }
 
   public pullDown(): void {

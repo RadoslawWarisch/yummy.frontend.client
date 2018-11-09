@@ -35,7 +35,12 @@ export const _routeReducer = (
     case fromActions.POP:
       return {
         ...state,
-        data: [...state.data.slice(0, state.data.length - 1)]
+        data: [...state.data.slice(0, state.data.length - 1)].map(
+          (route: _Route) => ({
+            ...route,
+            name: route.name === "initial" ? "map" : route.name
+          })
+        )
       };
     default:
       return state;

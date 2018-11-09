@@ -20,20 +20,20 @@ export class WelcomePage {
 
   ionViewWillEnter() {
     //TODO Remove on prd
-    if (AppConfig.env === Env.DEV) {
-      this.store.dispatch(new fromFormAction.UpdateForm({
-        data: {
-          login: 'user2@restaurant.com',
-          password: 'user2'
-        }
-      }));
-      this.store.dispatch(new fromFormAction.SubmitForm({
-        data: {
-          login: 'user2@restaurant.com',
-          password: 'user2'
-        }
-      }));
-    }
+    // if (AppConfig.env === Env.DEV) {
+    //   this.store.dispatch(new fromFormAction.UpdateForm({
+    //     data: {
+    //       login: 'user2@restaurant.com',
+    //       password: 'user2'
+    //     }
+    //   }));
+    //   this.store.dispatch(new fromFormAction.SubmitForm({
+    //     data: {
+    //       login: 'user2@restaurant.com',
+    //       password: 'user2'
+    //     }
+    //   }));
+    // }
   }
 
   public switchLoginMode(isLogin: boolean): void {

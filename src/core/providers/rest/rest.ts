@@ -2,9 +2,8 @@ import { Injectable } from "@angular/core";
 import { Api } from "../api/api";
 import { HttpClient } from "@angular/common/http";
 
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { AppConfig } from "../../../app/app.config";
-import { GeolocationItem } from "../../models/geolocation";
 
 export interface LoginUserBody {
   email: string;
@@ -12,7 +11,16 @@ export interface LoginUserBody {
 }
 
 export interface GetPlacesBody {
-  coordinates: GeolocationItem;
+  coordinates: {
+    user: {
+      lat: number,
+      lon: number
+    },
+    focus: {
+      lat: number,
+      lon: number
+    }
+  };
   page: number;
   size: number;
 }
@@ -53,7 +61,7 @@ export class Rest extends Api {
   }
 
   public getUserInfo(): Observable<any> {
-    return this.get(this.parseUrl("userInfo"));
+    return this.get(this.parseUrl("user/info"));
   }
 
   public getPlaces(body: GetPlacesBody): Observable<any> {

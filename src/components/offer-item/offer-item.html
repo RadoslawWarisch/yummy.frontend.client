@@ -1,27 +1,24 @@
+<img 
+  *ngIf="offer?.image"
+  [src]="offer?.image"
+  class="photo__image" 
+/>
 <div
-  class="item__photo">
-  <img 
-    *ngIf="offer?.image"
-    [src]="offer?.image"
-    class="photo__image" 
-  />
-  <div
-    *ngIf="!offer?.image"
-    class="photo__placeholder">
-    <ion-icon
-      name="pizza">
-    </ion-icon>
-  </div>
+  class="photo__placeholder">
+  <ion-icon
+    class="monster"
+    name="pizza">
+  </ion-icon>
 </div>
 <div
   class="item__title">
-  <span class="small bold">
+  <span class="small bold ellipsis-2">
     {{ offer?.name }}
   </span>
 </div>
 <div
   class="item__order-details">
-  <span class="small italic">
+  <span class="small italic ellipsis-3">
     {{ offer?.description }}
   </span>
 </div>

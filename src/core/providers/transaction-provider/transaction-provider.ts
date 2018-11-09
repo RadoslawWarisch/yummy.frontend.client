@@ -1,6 +1,9 @@
+
+import {of as observableOf,  Observable } from 'rxjs';
+
+import {catchError} from 'rxjs/operators';
 import { Injectable } from "@angular/core";
 import { Rest } from "../rest/rest";
-import { Observable } from 'rxjs';
 import { HttpErrorResponse } from "@angular/common/http";
 
 @Injectable()
@@ -10,8 +13,8 @@ export class TransactionsProvider {
 
   getTransactions(): Observable<any> {
     return this.rest
-      .getTransactions()
-      .catch((err: HttpErrorResponse) => Observable.of(err));
+      .getTransactions().pipe(
+      catchError((err: HttpErrorResponse) => observableOf(err)));
   }
 
 }

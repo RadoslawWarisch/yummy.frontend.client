@@ -5,7 +5,7 @@ export class GeolocationItem {
 
   public lat?: number;
   public lng?: number;
+  public zoom?: number;
   public focusLat?: number;
   public focusLng?: number;
-  public zoom?: number;
 }

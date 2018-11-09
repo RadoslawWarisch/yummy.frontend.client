@@ -1,15 +1,20 @@
-import { Component } from '@angular/core';
-import { IonicPage } from 'ionic-angular';
+import { Component } from "@angular/core";
+import { IonicPage } from "ionic-angular";
+import { Store } from "@ngrx/store";
+import { AppState } from "../../core/app-state";
+import * as fromTransactionActions from "../../core/actions/transaction.actions";
 
 @IonicPage({
-  name: 'map'
+  name: "map"
 })
 @Component({
-  selector: 'page-map',
-  templateUrl: 'map.html',
+  selector: "page-map",
+  templateUrl: "map.html"
 })
 export class MapPage {
+  constructor(private store: Store<AppState>) {}
 
-  constructor() {}
-
+  ngOnInit() {
+    this.store.dispatch(new fromTransactionActions.FetchTransactions({}));
+  }
 }

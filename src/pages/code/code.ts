@@ -1,3 +1,5 @@
+
+import {map, pluck} from 'rxjs/operators';
 import { Component } from '@angular/core';
 import { IonicPage, NavParams } from 'ionic-angular';
 import { AppState } from '../../core/app-state';
@@ -26,9 +28,9 @@ export class CodePage {
     const restaurantId: string | number = this.navParams.get('restaurantId');
     this.paymentCode = this.navParams.get('paymentCode');
     this.price = this.navParams.get('price');
-    this.restaurant$ = this.store.select('place')
-      .pluck("data")
-      .map((places: Place[]) => places.find((place: Place) => place.id === restaurantId));
+    this.restaurant$ = this.store.select('place').pipe(
+      pluck("data"),
+      map((places: Place[]) => places.find((place: Place) => place.id === restaurantId)),);
   }
 
 }

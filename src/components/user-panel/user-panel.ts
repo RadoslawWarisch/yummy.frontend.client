@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { User } from '../../core/models/user';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../core/app-state';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { _Route } from '../../core/models/_route';
 import * as fromRouteActions from '../../core/actions/_route.actions';
+import { AppConfig } from '../../app/app.config';
 
 @Component({
   selector: 'user-panel',
@@ -12,7 +13,8 @@ import * as fromRouteActions from '../../core/actions/_route.actions';
 })
 export class UserPanelComponent {
 
-  private user$: Observable<User>;
+  public user$: Observable<User>;
+  public config: any = AppConfig;
 
   constructor(private store: Store<AppState>) {}
 

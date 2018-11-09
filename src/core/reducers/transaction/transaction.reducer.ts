@@ -7,7 +7,6 @@ export interface TransactionState {
   isFetching?: boolean;
 }
 
-//TODO remove mockup
 const initialState: TransactionState = {
   data: [],
   isFetching: false

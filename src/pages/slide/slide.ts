@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../core/app-state';
@@ -16,13 +16,20 @@ import { Slides } from 'ionic-angular';
 export class SlidePage {
   @ViewChild(Slides) slides: Slides;
   public isWelcomeSlide: boolean = false;
+  public isLastSlide: boolean = false;
 
   constructor(
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private el: ElementRef
   ) {}
 
   public slideChanged() {
+    (this.slides.getActiveIndex() === 2) && this.addBckg();
     (this.slides.getActiveIndex() === 3) && this.goToApp();
+  }
+
+  private addBckg(): void {
+    this.isLastSlide = true;
   }
 
   private goToApp(): void {

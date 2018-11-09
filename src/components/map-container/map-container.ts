@@ -1,9 +1,6 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  ApplicationRef
-} from "@angular/core";
-import { Subscription, Subject, Observable } from "rxjs";
+import { take, debounceTime, pluck, filter, mergeMap } from "rxjs/operators";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
+import { Subscription, Subject, Observable, of, fromEvent } from "rxjs";
 import { GeolocationItem } from "../../core/models/geolocation";
 import { Store } from "@ngrx/store";
 import { AppState } from "../../core/app-state";
@@ -11,9 +8,8 @@ import * as fromGeolocationActions from "../../core/actions/geolocation.actions"
 import * as fromRouteActions from "../../core/actions/_route.actions";
 import { Place } from "../../core/models/place";
 import { NavParams, ToastController } from "ionic-angular";
-import { of } from "rxjs/observable/of";
 
-declare let L;
+declare const L, window;
 
 interface MapConfig {
   center: number[];
@@ -23,7 +19,8 @@ interface MapConfig {
 
 @Component({
   selector: "map-container",
-  templateUrl: "map-container.html"
+  templateUrl: "map-container.html",
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MapContainerComponent {
   private map: any;
@@ -32,6 +29,7 @@ export class MapContainerComponent {
   private places: Place[];
   private drag$: Subject<void>;
   private markers: any[];
+  private popups: any[];
   private mapToast: any;
 
   constructor(
@@ -40,6 +38,7 @@ export class MapContainerComponent {
     private toastCtrl: ToastController
   ) {
     this.places = [];
+    this.popups = [];
     this.markers = [];
     this.drag$ = new Subject<void>();
   }
@@ -80,8 +79,10 @@ export class MapContainerComponent {
   private subscribeDrag(): void {
     this.dragSub = this.drag$
       .asObservable()
-      .filter(() => !this.mapToast)
-      .debounceTime(750)
+      .pipe(
+        filter(() => !this.mapToast),
+        debounceTime(750)
+      )
       .subscribe(this.askForSwitch.bind(this));
   }
 
@@ -95,7 +96,8 @@ export class MapContainerComponent {
 
   private initLayer(): void {
     L.tileLayer(
-      "https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager/{z}/{x}/{y}.png",
+      "https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager/{z}/{x}/{y}" +
+        (L.Browser.retina ? "@2x.png" : ".png"),
       {
         attribution:
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
@@ -148,23 +150,25 @@ export class MapContainerComponent {
           focusLat: lat,
           focusLng: lng
         })
-      ).mergeMap(
-        () =>
-          this.store
-            .select("geolocation")
-            .pluck("data")
-            .take(1),
-        (focusGeo, storeGeo) => ({
-          ...storeGeo,
-          ...focusGeo
-        })
+      ).pipe(
+        mergeMap(
+          () =>
+            this.store.select("geolocation").pipe(
+              pluck("data"),
+              take(1)
+            ),
+          (focusGeo, storeGeo) => ({
+            ...storeGeo,
+            ...focusGeo
+          })
+        )
       );
     };
     const getUserPoint = (): Observable<GeolocationItem> =>
-      this.store
-        .select("geolocation")
-        .pluck("data")
-        .take(1);
+      this.store.select("geolocation").pipe(
+        pluck("data"),
+        take(1)
+      );
 
     return focusId ? getPlacePoint() : getUserPoint();
   }
@@ -231,7 +235,7 @@ export class MapContainerComponent {
 
     marker.addTo(this.map);
 
-    const popup: any = this.addPlacePopup({
+    const { popup, markerTarget } = this.addPlacePopup({
       marker,
       place: place.name,
       address: place.address,
@@ -239,44 +243,45 @@ export class MapContainerComponent {
       distance: place.distance
     });
 
-    marker.on("mouseover", () =>
-      this.openPopup({ popup, marker, id: place.id })
+    marker.on("click", () =>
+      this.openPopup({ marker: markerTarget, popup, id: place.id })
     );
     this.markers = [...this.markers, marker];
   }
 
   private addPlacePopup({ marker, place, address, image, distance }): any {
-    const popup = marker
-      .bindPopup(
-        `<div class="map__popup">
-          <div
-            class="item__photo">
-          ${
-            image
-              ? "<img src= " + image + " />"
-              : '<div class="photo__placeholder"><ion-icon name="image"></ion-icon></div>'
-          }
-          </div>
-          <span class="medium center uppercased bold">${place}</span>
-          <br>
-          <span class="small uppercased bold secondary-color">${distance}</span>
-          <br>
-          <span class="small uppercased italic">${address}</span>
-        </div>`
-      )
-      .getPopup();
+    const popup = L.popup().setContent(
+      `<div class="map__popup">
+      <div
+        class="item__photo">
+      ${
+        image
+          ? "<img src= " + image + " />"
+          : '<div class="photo__placeholder"><ion-icon name="image"></ion-icon></div>'
+      }
+      </div>
+      <div class="field title medium uppercased bold">${place}</div>
+      <div class="field tiny">${address}</div>
+      <div class="field tiny">Odległość: <span class="bold secondary-color">${distance}</span></div>
+    </div>`
+    );
+    const markerTarget = marker.bindPopup(popup).getPopup();
 
-    return popup;
+    return { markerTarget, popup };
   }
 
-  private openPopup({ popup, marker, id }): void {
-    marker.openPopup().openPopup();
+  private openPopup({ marker, popup, id }): void {
+    marker.openPopup();
+    this.popups = [...this.popups, popup];
 
-    const { _container: container } = popup;
-
-    container.addEventListener("click", () =>
-      this.handlePopupClick(popup, container, { alt: id })
-    );
+    setTimeout(() => {
+      let sub: Subscription = fromEvent(
+        document.querySelector(".map__popup"),
+        "click"
+      )
+        .pipe(take(1))
+        .subscribe(() => this.handlePopupClick(id, sub));
+    }, 200);
   }
 
   // private removeMarker(id: string) {
@@ -286,12 +291,9 @@ export class MapContainerComponent {
   //   marker.removeFrom(this.map);
   // }
 
-  private handlePopupClick(popup: any, container: any, options: any): void {
-    this.goToPlace(options.alt);
-    container.removeEventListener("click", () =>
-      this.handlePopupClick(popup, container, options)
-    );
-    this.closePopup(popup);
+  private handlePopupClick(id: string, sub: Subscription): void {
+    this.goToPlace(id);
+    sub.unsubscribe();
   }
 
   private goToPlace(id: string): void {
@@ -307,9 +309,5 @@ export class MapContainerComponent {
         }
       })
     );
-  }
-
-  private closePopup(popup: any): void {
-    popup.remove();
   }
 }

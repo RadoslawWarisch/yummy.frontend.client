@@ -36,14 +36,22 @@ yummy-header {
         padding: 0;
         z-index: -1;
         border-radius: 0;
+        background: $secondary;
         &.long {
           width: 18vw;
-          background: $fourth;
+          &.activated {
+            opacity: 1;
+          }
         }
         &.short {
           width: 12vw;
-          background: $secondary;
           z-index: 6;
+          &.activated {
+            opacity: 1;
+          }
+        }
+        &.selected {
+          background: $fourth;
         }
       }
       &.buttons-start {
@@ -52,7 +60,6 @@ yummy-header {
           list-mode-icon {
             margin-left: 9vw;
             position:absolute;
-            
           }
         }
         .short {
@@ -60,7 +67,6 @@ yummy-header {
           list-mode-icon {
             margin-left: 6vw;
             position: absolute;
-            
           }
         }
       }
@@ -89,9 +95,17 @@ yummy-header {
     }
     .bucket__badge {
       position: absolute;
-      top: 5px;
-      right: 5px;
-      background: $fourth;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      left: -$headerHeight / 1.9;
+      height: $headerHeight / 3;
+      width: $headerHeight / 3;
+      border: 1px solid $primary;
+      box-sizing: border-box;
+      border-radius: $headerHeight / 1.5;
+      background: $secondary;
+      color: $primary;
     }
   }
 }

@@ -35,6 +35,7 @@ import { UserPanelComponent } from "../components/user-panel/user-panel";
 import { DirectivesModule } from "../directives/directives.module";
 import { YummyHeaderModule } from "../components/yummy-header/yummy-header.module";
 import { Startup } from "./app.startup";
+import { LaunchNavigator } from "@ionic-native/launch-navigator";
 
 export function startupFactory(startupProvider: Startup): Function {
   return () => startupProvider.init();
@@ -83,6 +84,7 @@ export function provideSettings(storage: Storage) {
     Camera,
     SplashScreen,
     StatusBar,
+    LaunchNavigator,
     { provide: Settings, useFactory: provideSettings, deps: [Storage] },
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     {

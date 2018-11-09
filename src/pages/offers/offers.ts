@@ -1,3 +1,5 @@
+
+import {pluck} from 'rxjs/operators';
 import { Component } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 import { Place } from '../../core/models/place';
@@ -22,8 +24,8 @@ export class OffersPage {
   constructor(
     private store: Store<AppState>
   ) {
-    this.offers$ = this.store.select('offer').pluck('data');
-    this.isLoading$ = this.store.select('offer').pluck('isFetching');
+    this.offers$ = this.store.select('offer').pipe(pluck('data'));
+    this.isLoading$ = this.store.select('offer').pipe(pluck('isFetching'));
   }
 
   ionViewWillEnter() {

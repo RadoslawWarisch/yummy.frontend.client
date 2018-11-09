@@ -14,47 +14,63 @@
         <list-mode-icon [mode]="routeName === 'code' || routeName === 'initial' || routeName === 'map' || routeName === 'list' || routeName === 'offers' || !routeName ? 'MENU' : 'BACK'"></list-mode-icon>
       </button>
       <button 
+        [class.selected]="routeName === 'list'"
         (click)="switchPage('list')"
         class="header-button button-start long" 
         ion-button 
         icon-only 
         round>
-        <list-mode-icon [mode]="'PLACES'"></list-mode-icon>
+        <list-mode-icon 
+          [mode]="'PLACES'" 
+          [bckg]="routeName === 'list' ? 'selected' : 'red'">
+        </list-mode-icon>
       </button>
     </ion-buttons>
     <ion-title>
       <button
+        [class.selected]="routeName === 'map'"
         (click)="switchPage('map')"
         class="header-button title-button"
         ion-button 
         icon-only 
         round>
-        <list-mode-icon [mode]="'MAP'"></list-mode-icon>
+        <list-mode-icon 
+          [mode]="'MAP'" 
+          [bckg]="routeName === 'map' ? 'selected' : 'red'">
+        </list-mode-icon>
       </button>
     </ion-title>
     <ion-buttons
       class="buttons-end"
       end>
       <button 
+        [class.selected]="routeName === 'offers'"
         (click)="switchPage('offers')"
         class="header-button button-end long" 
         ion-button 
         icon-only 
         round>
-        <list-mode-icon [mode]="'OFFERS'"></list-mode-icon>
+        <list-mode-icon 
+          [mode]="'OFFERS'" 
+          [bckg]="routeName === 'offers' ? 'selected' : 'red'">
+        </list-mode-icon>
       </button>
       <button 
+        [class.selected]="routeName === 'bucket'"
         (click)="goToBucket()"
         class="header-button button-end short" 
         ion-button 
         icon-only 
         round>
-        <ion-badge
+        <div
           [hidden]="(bucketCount$ | async) === 0"
-          class="bucket__badge">
+          class="bold small bucket__badge">
           {{ bucketCount$ | async }}
-        </ion-badge>
-        <list-mode-icon [mode]="'CART'"></list-mode-icon>
+        </div>
+        <list-mode-icon 
+          [mode]="'CART'" 
+          [bckg]="routeName === 'bucket' ? 'selected' : 'red'">
+        </list-mode-icon>
       </button>
     </ion-buttons>
   </ion-navbar>

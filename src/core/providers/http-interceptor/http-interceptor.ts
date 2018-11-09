@@ -1,3 +1,7 @@
+
+import {of as observableOf, combineLatest as observableCombineLatest,  Observable } from 'rxjs';
+
+import {tap, mergeMap} from 'rxjs/operators';
 import {
   HttpInterceptor,
   HttpRequest,
@@ -6,33 +10,43 @@ import {
   HttpErrorResponse
 } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
 import { Store } from "@ngrx/store";
 import { AppState } from "../../app-state";
 import * as fromToastActions from "../../actions/_toast.actions";
 import * as fromRouteActions from "../../actions/_route.actions";
 import { _Route } from "../../models/_route";
-import { AppConfig, Env } from "../../../app/app.config";
-import { SubmitForm } from "../../actions/login-form.actions";
 
 declare let sessionStorage;
 
 @Injectable()
 export class HttpInterceptorProvider implements HttpInterceptor {
+  private throttle = (func, limit) => {
+    let inThrottle
+    return function() {
+      const args = arguments
+      const context = this
+      if (!inThrottle) {
+        func.apply(context, args)
+        inThrottle = true
+        setTimeout(() => inThrottle = false, limit)
+      }
+    }
+  }
+
   constructor(private store: Store<AppState>) {}
 
-  intercept(
+  public intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     return this.appendAuth(req, next);
   }
 
-  appendAuth(
+  private appendAuth(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    return this.getHeadersValues().mergeMap(([authToken, login]) => {
+    return this.getHeadersValues().pipe(mergeMap(([authToken, login]) => {
       return next
         .handle(
           req.clone(
@@ -45,17 +59,19 @@ export class HttpInterceptorProvider implements HttpInterceptor {
                 }
               : {}
           )
-        )
-        .do(
+        ).pipe(
+        tap(
           () => {},
           (err: any) => {
-            if (this.checkIfAuthError(err)) this.handleAuthError();
+            if (this.checkIfAuthError(err)) {
+              this.throttle(this.handleAuthError(), 1500);
+            } 
           }
-        );
-    });
+        ));
+    }));
   }
 
-  checkIfAuthError(err: any): boolean {
+  private checkIfAuthError(err: any): boolean {
     if (!err.url) {
       return false;
     } else if (
@@ -70,7 +86,7 @@ export class HttpInterceptorProvider implements HttpInterceptor {
     }
   }
 
-  handleAuthError(): void {
+  private handleAuthError(): void {
     this.store.dispatch(
       new fromToastActions.Show(
         "Błąd autoryzacji, przekierowanie do strony logowania..."
@@ -81,10 +97,10 @@ export class HttpInterceptorProvider implements HttpInterceptor {
     }, 4000);
   }
 
-  getHeadersValues(): Observable<any[]> {
-    return Observable.combineLatest(
-      Observable.of(sessionStorage.__th),
-      Observable.of(sessionStorage.__mail)
+  private getHeadersValues(): Observable<any[]> {
+    return observableCombineLatest(
+      observableOf(sessionStorage.__th),
+      observableOf(sessionStorage.__mail)
     );
   }
 }

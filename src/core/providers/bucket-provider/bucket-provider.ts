@@ -1,8 +1,11 @@
+
+import {of as observableOf,  Observable } from 'rxjs';
+
+import {catchError, map} from 'rxjs/operators';
 import { Injectable } from "@angular/core";
 import { Bucket } from "../../models/bucket";
 import { Offer } from "../../models/offer";
 import { SubmitBucketBody, Rest } from "../rest/rest";
-import { Observable } from "rxjs";
 import { HttpErrorResponse } from "@angular/common/http";
 
 @Injectable()
@@ -127,12 +130,12 @@ export class BucketProvider {
       }))
     }
 
-    return this.rest.submitBucket(body)
-      .map(({ paymentCode }) => ({
+    return this.rest.submitBucket(body).pipe(
+      map(({ paymentCode }) => ({
         paymentCode,
         restaurantId: bucket.restaurantId,
         price: bucket.price
-      }))
-      .catch((err: HttpErrorResponse) => Observable.of(err));
+      })),
+      catchError((err: HttpErrorResponse) => observableOf(err)),);
   }
 }
