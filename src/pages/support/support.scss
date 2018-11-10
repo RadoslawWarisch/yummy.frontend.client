@@ -1,5 +1,6 @@
 page-support {
   .content {
-    top: $headerHeight * 1.4;
+    top: $headerHeight * 2;
+    height: $sideContentHeight;
   }
 }

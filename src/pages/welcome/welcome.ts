@@ -1,10 +1,13 @@
-import { Component } from "@angular/core";
+import { Component, ElementRef } from "@angular/core";
 import { IonicPage } from "ionic-angular";
 import { Store } from "@ngrx/store";
 import { AppState } from "../../core/app-state";
 import * as fromFormAction from "../../core/actions/login-form.actions";
-import { AppConfig, Env } from "../../app/app.config";
 import { LoginForm } from "../../core/models/login-form";
+import { Observable, Subscription } from "rxjs";
+import { AppConfig, Env } from "../../app/app.config";
+
+declare const window: any;
 
 @IonicPage({
   name: "welcome"
@@ -15,26 +18,29 @@ import { LoginForm } from "../../core/models/login-form";
 })
 export class WelcomePage {
   public isLoginMode: boolean = true;
+  public keyboardShowSub: Subscription;
+  public keyboardHideSub: Subscription;
 
-  constructor(private store: Store<AppState>) {}
+  constructor(private store: Store<AppState>, private el: ElementRef) {}
 
   ionViewWillEnter() {
-    //TODO Remove on prd
-    // if (AppConfig.env === Env.DEV) {
-    //   this.store.dispatch(new fromFormAction.UpdateForm({
-    //     data: {
-    //       login: 'user2@restaurant.com',
-    //       password: 'user2'
-    //     }
-    //   }));
-    //   this.store.dispatch(new fromFormAction.SubmitForm({
-    //     data: {
-    //       login: 'user2@restaurant.com',
-    //       password: 'user2'
-    //     }
-    //   }));
-    // }
+    if (AppConfig.env === Env.DEV) {
+      this.store.dispatch(new fromFormAction.UpdateForm({
+        data: {
+          login: 'user2@restaurant.com',
+          password: 'user2'
+        }
+      }));
+      this.store.dispatch(new fromFormAction.SubmitForm({
+        data: {
+          login: 'user2@restaurant.com',
+          password: 'user2'
+        }
+      }));
+    }
   }
+
+  ngOnDestroy() {}
 
   public switchLoginMode(isLogin: boolean): void {
     this.isLoginMode = isLogin;

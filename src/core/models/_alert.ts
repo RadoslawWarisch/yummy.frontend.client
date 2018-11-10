@@ -1,6 +1,13 @@
 export class _Alert {
-  
-  constructor() {}
+  public isShown?: boolean = false;
+  public title: string = "Yummy";
+  public message: string = "Label";
+  public buttons?: string[] = [ "OK" ];
+  public callbacks?: ((value: any) => boolean | void)[] = [ null ];
+
+  constructor(alert?: _Alert) {
+    Object.assign(this, alert);
+  }
   
 }
 

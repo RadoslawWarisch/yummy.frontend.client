@@ -19,12 +19,12 @@ import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { IonicApp, IonicErrorHandler, IonicModule } from "ionic-angular";
 import { ReactiveFormsModule } from "@angular/forms";
+import { Platform } from 'ionic-angular';
 
 import { YummyApp } from "./app.component";
 
 import { StoreModule } from "@ngrx/store";
 import { EffectsModule } from "@ngrx/effects";
-import { LeafletModule } from "@asymmetrik/ngx-leaflet";
 import { Reducers } from "../core/reducers/reducers";
 import { Effects } from "../core/effects/effects";
 import { Settings } from "../core/providers/settings/settings";
@@ -36,6 +36,8 @@ import { DirectivesModule } from "../directives/directives.module";
 import { YummyHeaderModule } from "../components/yummy-header/yummy-header.module";
 import { Startup } from "./app.startup";
 import { LaunchNavigator } from "@ionic-native/launch-navigator";
+import { NativeHttpModule, NativeHttpBackend, NativeHttpFallback } from 'ionic-native-http-connection-backend';
+import { HttpBackend, HttpXhrBackend } from '@angular/common/http';
 
 export function startupFactory(startupProvider: Startup): Function {
   return () => startupProvider.init();
@@ -54,6 +56,7 @@ export function provideSettings(storage: Storage) {
   imports: [
     BrowserModule,
     HttpClientModule,
+    NativeHttpModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -73,7 +76,6 @@ export function provideSettings(storage: Storage) {
     EffectsModule.forRoot(Effects),
     ReactiveFormsModule,
     DirectivesModule,
-    LeafletModule.forRoot(),
     YummyHeaderModule
   ],
   bootstrap: [IonicApp],
@@ -98,6 +100,8 @@ export function provideSettings(storage: Storage) {
       deps: [Startup],
       multi: true
     },
+      {provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
+  
     Startup
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]

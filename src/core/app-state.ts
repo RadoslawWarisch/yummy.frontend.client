@@ -9,8 +9,10 @@ import { UserState } from "./reducers/user/user.reducer";
 import { OfferState } from "./reducers/offer/offer.reducer";
 import { BucketState } from "./reducers/bucket/bucket.reducer";
 import { TransactionState } from "./reducers/transaction/transaction.reducer";
+import { _AlertState } from "./reducers/_alert/_alert.reducer";
 
 export interface AppState {
+  _alert: _AlertState,
   _route: _RouteState,
   _loader: _LoaderState,
   _toast: _ToastState,

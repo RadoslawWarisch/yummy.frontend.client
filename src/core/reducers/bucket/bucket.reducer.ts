@@ -1,7 +1,6 @@
 import { ActionReducer, Action } from "@ngrx/store";
 import { Bucket } from "../../models/Bucket";
 import * as fromAction from "../../actions/bucket.actions";
-import { Offer } from "../../models/offer";
 
 export interface BucketState extends Bucket {};
 

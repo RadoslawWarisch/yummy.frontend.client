@@ -1,6 +1,7 @@
 page-profile {
   .content {
-    top: $headerHeight * 1.4;
+    top: $headerHeight * 2;
+    height: $sideContentHeight;
   }
   .profile__badge {
     display: grid;

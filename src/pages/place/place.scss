@@ -1,8 +1,6 @@
 page-place {
   .content {
     top: $headerHeight;
-  }
-  .scroll-content {
-    margin-bottom: $headerHeight;
+    height: $contentHeight;
   }
 }

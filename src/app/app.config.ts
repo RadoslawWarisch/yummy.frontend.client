@@ -6,7 +6,7 @@ export enum Env {
 
 export const AppConfig = {
   env: Env.DEV,
-  ver: '0.6.0',
+  ver: "0.7.2",
   rest: {
     rootUrl: 'https://yummy-backend.herokuapp.com/yummy/api'
   }

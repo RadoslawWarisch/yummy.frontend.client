@@ -1,8 +1,9 @@
 page-bucket {
   .content {
     top: $headerHeight;
+    height: $contentHeight;
   }
   .scroll-content {
-    margin-bottom: $headerHeight * 3;
+    margin-bottom: $headerHeight * 2;
   }
 }

@@ -1,6 +1,13 @@
 import { of as observableOf, from as fromPromise, Observable } from "rxjs";
 
-import { filter, pluck, map, pairwise, mergeMap, switchMap } from "rxjs/operators";
+import {
+  filter,
+  pluck,
+  map,
+  pairwise,
+  mergeMap,
+  switchMap
+} from "rxjs/operators";
 import { Component, ViewChild } from "@angular/core";
 import { SplashScreen } from "@ionic-native/splash-screen";
 import { StatusBar } from "@ionic-native/status-bar";
@@ -11,7 +18,8 @@ import {
   Platform,
   ToastController,
   LoadingController,
-  ModalController
+  ModalController,
+  AlertController
 } from "ionic-angular";
 import { Settings } from "../core/providers/settings/settings";
 import { _Modal, _ModalType } from "../core/models/_modal";
@@ -24,15 +32,15 @@ import { GeolocationProvider } from "../core/providers/geolocation/geolocation-p
 import * as fromGeolocationActions from "../core/actions/geolocation.actions";
 import { GeolocationItem } from "../core/models/geolocation";
 import { Startup } from "./app.startup";
+import { _Alert } from "../core/models/_alert";
 
 @Component({
-  template: ` 
+  template: `
     <ion-menu [content]="content" [swipeEnabled]="isSwipeEnabled$ | async">
       <user-panel></user-panel>
     </ion-menu>
     <yummy-header></yummy-header>
-    <ion-nav #content [root]="rootPage">
-    </ion-nav>
+    <ion-nav #content [root]="rootPage"> </ion-nav>
   `
 })
 export class YummyApp {
@@ -40,6 +48,7 @@ export class YummyApp {
   public toast: any;
   public loader: any;
   public modal: any;
+  public alert: any;
   public isSwipeEnabled$: Observable<boolean>;
   @ViewChild(Nav)
   private nav: Nav;
@@ -55,12 +64,14 @@ export class YummyApp {
     private toastCtrl: ToastController,
     private loaderCtrl: LoadingController,
     private modalCtrl: ModalController,
+    private alertCtrl: AlertController,
     private geolocationProvider: GeolocationProvider,
     private startup: Startup
   ) {
     this.toast = null;
     this.loader = null;
     this.modal = null;
+    this.alert = null;
     platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
@@ -69,6 +80,7 @@ export class YummyApp {
       this.subscribeLoader();
       this.subscribeRoute();
       this.subscribeToaster();
+      this.subscribeAlert();
       this.subscribeModal();
       this.subscribeSwipe();
     });
@@ -118,12 +130,12 @@ export class YummyApp {
           return currRoutes.length === 1
             ? this.setRoot(currRoutes[currRoutes.length - 1])
             : currRoutes.length < prevRoutes.length
-              ? this.popPage(
-                  prevRoutes[prevRoutes.length - 1].name === "profile" ||
-                    prevRoutes[prevRoutes.length - 1].name === "support" ||
-                    prevRoutes[prevRoutes.length - 1].name === "transactions"
-                )
-              : this.pushPage(currRoutes[currRoutes.length - 1]);
+            ? this.popPage(
+                prevRoutes[prevRoutes.length - 1].name === "profile" ||
+                  prevRoutes[prevRoutes.length - 1].name === "support" ||
+                  prevRoutes[prevRoutes.length - 1].name === "transactions"
+              )
+            : this.pushPage(currRoutes[currRoutes.length - 1]);
         })
       )
       .subscribe();
@@ -163,6 +175,23 @@ export class YummyApp {
       .subscribe();
   }
 
+  private subscribeAlert(): void {
+    this.store
+      .select((state) => state._alert.data)
+      .pipe(
+        pairwise(),
+        mergeMap(([prevAlert, currAlert]) => {
+          return this.handleUIDisplay(
+            prevAlert,
+            currAlert,
+            () => this.showAlert(currAlert),
+            () => this.hideAlert()
+          );
+        })
+      )
+      .subscribe();
+  }
+
   private subscribeModal(): void {
     this.store
       .select((state) => state._modal.data)
@@ -181,8 +210,8 @@ export class YummyApp {
   }
 
   private handleUIDisplay(
-    prevState: _Toast | _Loader | _Modal,
-    currState: _Toast | _Loader | _Modal,
+    prevState: _Toast | _Loader | _Modal | _Alert,
+    currState: _Toast | _Loader | _Modal | _Alert,
     shownFn: Function,
     hideFn: Function
   ): Observable<any> {
@@ -225,7 +254,28 @@ export class YummyApp {
   }
 
   private hideToast(): Promise<any> {
-    return this.toast.dismiss();
+    return this.toast
+      ? this.toast.dismiss().then(() => (this.toast = null))
+      : null;
+  }
+
+  private showAlert(alert: _Alert): Promise<any> {
+    this.alert = this.alertCtrl.create({
+      title: alert.title,
+      message: alert.message,
+      buttons: alert.buttons.map((label: string, index: number) => ({
+        text: label,
+        handler: alert.callbacks[index] ? alert.callbacks[index] : () => null
+      }))
+    });
+
+    return this.alert.present();
+  }
+
+  private hideAlert(): Promise<any> {
+    return this.alert
+      ? this.alert.dismiss().then(() => (this.alert = null))
+      : null;
   }
 
   private showLoader(loader: _Loader): Promise<any> {

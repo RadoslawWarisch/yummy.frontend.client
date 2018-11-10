@@ -1,8 +1,9 @@
-
-import {map, timeout} from 'rxjs/operators';
+import { map, timeout } from "rxjs/operators";
 import { Injectable } from "@angular/core";
 import { Rest } from "../core/providers/rest/rest";
 import { SplashScreen } from "@ionic-native/splash-screen";
+import { Platform } from "ionic-angular";
+import { HTTP } from "@ionic-native/http";
 
 declare const localStorage;
 
@@ -12,7 +13,9 @@ export class Startup {
 
   constructor(
     private rest: Rest,
-    private splash: SplashScreen
+    private splash: SplashScreen,
+    private platform: Platform,
+    private nativeHttp: HTTP
   ) {}
 
   public init(): Promise<void> {
@@ -38,9 +41,11 @@ export class Startup {
 
   private checkBearer(): Promise<boolean> {
     return this.rest
-      .checkBearer().pipe(
-      timeout(1000),
-      map(() => true),)
+      .checkBearer()
+      .pipe(
+        timeout(1000),
+        map(() => true)
+      )
       .toPromise()
       .catch(() => false);
   }

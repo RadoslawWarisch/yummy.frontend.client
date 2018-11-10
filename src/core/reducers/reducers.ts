@@ -9,8 +9,10 @@ import { userReducer } from "./user/user.reducer";
 import { offerReducer } from "./offer/offer.reducer";
 import { bucketReducer } from "./bucket/bucket.reducer";
 import { transactionReducer } from "./transaction/transaction.reducer";
+import { _alertReducer } from "./_alert/_alert.reducer";
 
 export const Reducers = {
+  _alert: _alertReducer,
   _route: _routeReducer,
   _toast: _toastReducer,
   _loader: _loaderReducer,
