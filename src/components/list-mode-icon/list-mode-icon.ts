@@ -19,6 +19,8 @@ export class ListModeIconComponent {
   public mode: ListModeIcon = ListModeIcon.MAP;
   @Input()
   public bckg: string = 'red';
+  @Input()
+  public extBorder?: string | null;
 
   constructor() {}
 

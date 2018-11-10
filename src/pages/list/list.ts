@@ -17,6 +17,7 @@ import { AppState } from "../../core/app-state";
 export class ListPage {
   public places$: Observable<Place[]>;
   public isLoading$: Observable<boolean>;
+  public isExpanded: boolean = false;
 
   constructor(
     private store: Store<AppState>

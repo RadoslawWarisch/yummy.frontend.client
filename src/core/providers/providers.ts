@@ -8,6 +8,7 @@ import { OfferProvider } from './offer-provider/offer-provider';
 import { BucketProvider } from './bucket-provider/bucket-provider';
 import { UserProvider } from './user-provider/user-provider';
 import { TransactionsProvider } from './transaction-provider/transaction-provider';
+import { AnalyticsProvider } from './analytics/analytics';
 
 export const Providers = [
   Api,
@@ -19,5 +20,6 @@ export const Providers = [
   OfferProvider,
   BucketProvider,
   UserProvider,
-  TransactionsProvider
+  TransactionsProvider,
+  AnalyticsProvider
 ]

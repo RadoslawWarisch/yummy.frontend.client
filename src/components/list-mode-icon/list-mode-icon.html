@@ -8,6 +8,11 @@
     [ngClass]="bckg"
     class="bckg">
   </div>
+  <div
+    *ngIf="extBorder"
+    class="ext-border"
+    [ngClass]="extBorder">
+  </div>
   <div 
     [hidden]="!(mode === 'MENU' || mode === 'BACK')"
     [class.active]="mode === 'BACK'"

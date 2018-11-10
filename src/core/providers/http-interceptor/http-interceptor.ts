@@ -1,7 +1,10 @@
+import {
+  of as observableOf,
+  combineLatest as observableCombineLatest,
+  Observable
+} from "rxjs";
 
-import {of as observableOf, combineLatest as observableCombineLatest,  Observable } from 'rxjs';
-
-import {tap, mergeMap} from 'rxjs/operators';
+import { tap, mergeMap } from "rxjs/operators";
 import {
   HttpInterceptor,
   HttpRequest,
@@ -15,25 +18,29 @@ import { AppState } from "../../app-state";
 import * as fromToastActions from "../../actions/_toast.actions";
 import * as fromRouteActions from "../../actions/_route.actions";
 import { _Route } from "../../models/_route";
+import { AnalyticsProvider } from "../analytics/analytics";
 
 declare let sessionStorage;
 
 @Injectable()
 export class HttpInterceptorProvider implements HttpInterceptor {
   private throttle = (func, limit) => {
-    let inThrottle
+    let inThrottle;
     return function() {
-      const args = arguments
-      const context = this
+      const args = arguments;
+      const context = this;
       if (!inThrottle) {
-        func.apply(context, args)
-        inThrottle = true
-        setTimeout(() => inThrottle = false, limit)
+        func.apply(context, args);
+        inThrottle = true;
+        setTimeout(() => (inThrottle = false), limit);
       }
-    }
-  }
+    };
+  };
 
-  constructor(private store: Store<AppState>) {}
+  constructor(
+    private store: Store<AppState>,
+    private analytics: AnalyticsProvider
+  ) {}
 
   public intercept(
     req: HttpRequest<any>,
@@ -46,29 +53,40 @@ export class HttpInterceptorProvider implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    return this.getHeadersValues().pipe(mergeMap(([authToken, login]) => {
-      return next
-        .handle(
-          req.clone(
-            authToken && login && !req.url.includes("login")
-              ? {
-                  setHeaders: {
-                    Authorization: authToken,
-                    Email: login
+    return this.getHeadersValues().pipe(
+      mergeMap(([authToken, login]) => {
+        return next
+          .handle(
+            req.clone(
+              authToken && login && !req.url.includes("login")
+                ? {
+                    setHeaders: {
+                      Authorization: authToken,
+                      Email: login
+                    }
                   }
-                }
-              : {}
+                : {}
+            )
           )
-        ).pipe(
-        tap(
-          () => {},
-          (err: any) => {
-            if (this.checkIfAuthError(err)) {
-              this.throttle(this.handleAuthError(), 1500);
-            } 
-          }
-        ));
-    }));
+          .pipe(
+            tap(
+              () => {},
+              (err: any) => {
+                this.analytics.trackError(
+                  `HTTP Error, name: ${err.name ||
+                    "No name"}, msg: ${err.message ||
+                    "No msg"}, status ${err.error ||
+                    "No status"}, body: ${JSON.stringify(err)}`,
+                  false
+                );
+                if (this.checkIfAuthError(err)) {
+                  this.throttle(this.handleAuthError(), 1500);
+                }
+              }
+            )
+          );
+      })
+    );
   }
 
   private checkIfAuthError(err: any): boolean {

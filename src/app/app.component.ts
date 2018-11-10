@@ -6,7 +6,8 @@ import {
   map,
   pairwise,
   mergeMap,
-  switchMap
+  switchMap,
+  tap
 } from "rxjs/operators";
 import { Component, ViewChild } from "@angular/core";
 import { SplashScreen } from "@ionic-native/splash-screen";
@@ -33,6 +34,7 @@ import * as fromGeolocationActions from "../core/actions/geolocation.actions";
 import { GeolocationItem } from "../core/models/geolocation";
 import { Startup } from "./app.startup";
 import { _Alert } from "../core/models/_alert";
+import { AnalyticsProvider } from "../core/providers/analytics/analytics";
 
 @Component({
   template: `
@@ -66,7 +68,8 @@ export class YummyApp {
     private modalCtrl: ModalController,
     private alertCtrl: AlertController,
     private geolocationProvider: GeolocationProvider,
-    private startup: Startup
+    private startup: Startup,
+    private analytics: AnalyticsProvider
   ) {
     this.toast = null;
     this.loader = null;
@@ -125,6 +128,11 @@ export class YummyApp {
           ([prevRoutes, currRoutes]) =>
             prevRoutes[prevRoutes.length - 1].name !==
             currRoutes[currRoutes.length - 1].name
+        ),
+        tap(([prevRoutes, currRoutes]) =>
+          this.analytics.trackPage(
+            (currRoutes[currRoutes.length - 1] || { name: "map" }).name
+          )
         ),
         mergeMap(([prevRoutes, currRoutes]) => {
           return currRoutes.length === 1

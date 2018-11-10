@@ -4,6 +4,7 @@ import { Rest } from "../core/providers/rest/rest";
 import { SplashScreen } from "@ionic-native/splash-screen";
 import { Platform } from "ionic-angular";
 import { HTTP } from "@ionic-native/http";
+import { AnalyticsProvider } from "../core/providers/analytics/analytics";
 
 declare const localStorage;
 
@@ -14,8 +15,7 @@ export class Startup {
   constructor(
     private rest: Rest,
     private splash: SplashScreen,
-    private platform: Platform,
-    private nativeHttp: HTTP
+    private analytics: AnalyticsProvider
   ) {}
 
   public init(): Promise<void> {
@@ -30,6 +30,7 @@ export class Startup {
           this.startPage = "welcome";
         }
         this.splash.hide();
+        this.analytics.initTracking();
         return Promise.resolve();
       }
     );

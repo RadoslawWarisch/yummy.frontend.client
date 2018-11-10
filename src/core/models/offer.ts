@@ -16,5 +16,6 @@ export class Offer {
   public receiveTimeEnd?: number;
   public startDate?: string;
   public endDate?: string;
+  public isExpanded?: boolean = false;
 }
 

@@ -11,7 +11,10 @@
         ion-button 
         icon-only 
         round>
-        <list-mode-icon [mode]="routeName === 'code' || routeName === 'initial' || routeName === 'map' || routeName === 'list' || routeName === 'offers' || !routeName ? 'MENU' : 'BACK'"></list-mode-icon>
+        <list-mode-icon 
+          [mode]="routeName === 'code' || routeName === 'initial' || routeName === 'map' || routeName === 'list' || routeName === 'offers' || !routeName ? 'MENU' : 'BACK'"
+          [extBorder]="routeName === 'list' ? '' : 'right'">
+        </list-mode-icon>
       </button>
       <button 
         [class.selected]="routeName === 'list'"
@@ -69,7 +72,8 @@
         </div>
         <list-mode-icon 
           [mode]="'CART'" 
-          [bckg]="routeName === 'bucket' ? 'selected' : 'red'">
+          [bckg]="routeName === 'bucket' ? 'selected' : 'red'"
+          [extBorder]="routeName === 'bucket' || routeName === 'offers' ? '' : 'left'">
         </list-mode-icon>
       </button>
     </ion-buttons>

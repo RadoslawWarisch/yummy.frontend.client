@@ -22,13 +22,15 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { _Route } from "../../models/_route";
 import { _Alert } from "../../models/_alert";
 import { Bucket } from "../../models/Bucket";
+import { AnalyticsProvider } from "../../providers/analytics/analytics";
 
 @Injectable()
 export class BucketEffects {
   constructor(
     private actions$: Actions,
     private bucketProvider: BucketProvider,
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private analytics: AnalyticsProvider
   ) {}
 
   @Effect()
@@ -95,6 +97,10 @@ export class BucketEffects {
       (res: any | HttpErrorResponse) =>
         new Promise((resolve) => setTimeout(() => resolve(res), 500))
     ),
+    tap((res: any | HttpErrorResponse) => !(res instanceof HttpErrorResponse) && this.analytics.trackEvent(
+      'Submit Transaction',
+      `TransactionId: ${res.orderId}, Payment Code: ${res.paymentCode}`
+    )),
     map((res: any | HttpErrorResponse) =>
       res instanceof HttpErrorResponse
         ? new fromActions.SubmitBucketFail()

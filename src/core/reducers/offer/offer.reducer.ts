@@ -38,6 +38,14 @@ export const offerReducer: ActionReducer<OfferState> = (
         ...state,
         isFetching: false
       }
+    case fromAction.EXPAND_OFFER:
+      return {
+        ...state,
+        data: state.data.map((offer: Offer) => ({
+          ...offer,
+          isExpanded: offer.id === action.payload
+        }))
+      }
     default:
       return state;
   }

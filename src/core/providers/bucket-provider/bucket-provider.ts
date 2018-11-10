@@ -131,8 +131,9 @@ export class BucketProvider {
     }
 
     return this.rest.submitBucket(body).pipe(
-      map(({ paymentCode }) => ({
+      map(({ paymentCode, orderId }) => ({
         paymentCode,
+        orderId,
         restaurantId: bucket.restaurantId,
         price: bucket.price
       })),

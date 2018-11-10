@@ -18,6 +18,7 @@ import { SlideSecondComponent } from './slide-second/slide-second';
 import { SlideThirdComponent } from './slide-third/slide-third';
 import { ListModeIconComponent } from "./list-mode-icon/list-mode-icon";
 import { TransactionItemComponent } from './transaction-item/transaction-item';
+import { ExpandableComponent } from './expandable/expandable';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,9 @@ import { TransactionItemComponent } from './transaction-item/transaction-item';
     SlideSecondComponent,
     SlideThirdComponent,
     ListModeIconComponent,
-    TransactionItemComponent
+    TransactionItemComponent,
+    ExpandableComponent,
+    ExpandableComponent
   ],
   imports: [
     IonicModule,
@@ -58,7 +61,9 @@ import { TransactionItemComponent } from './transaction-item/transaction-item';
     SlideSecondComponent,
     SlideThirdComponent,
     ListModeIconComponent,
-    TransactionItemComponent
+    TransactionItemComponent,
+    ExpandableComponent,
+    ExpandableComponent
   ]
 })
 export class ComponentsModule {}

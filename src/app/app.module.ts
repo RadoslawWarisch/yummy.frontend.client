@@ -38,6 +38,7 @@ import { Startup } from "./app.startup";
 import { LaunchNavigator } from "@ionic-native/launch-navigator";
 import { NativeHttpModule, NativeHttpBackend, NativeHttpFallback } from 'ionic-native-http-connection-backend';
 import { HttpBackend, HttpXhrBackend } from '@angular/common/http';
+import { GoogleAnalytics } from '@ionic-native/google-analytics';
 
 export function startupFactory(startupProvider: Startup): Function {
   return () => startupProvider.init();
@@ -87,6 +88,7 @@ export function provideSettings(storage: Storage) {
     SplashScreen,
     StatusBar,
     LaunchNavigator,
+    GoogleAnalytics,
     { provide: Settings, useFactory: provideSettings, deps: [Storage] },
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     {
