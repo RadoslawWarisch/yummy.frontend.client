@@ -11,9 +11,12 @@ import {
   templateUrl: "expandable.html"
 })
 export class ExpandableComponent {
-  @ViewChild("expandWrapper", { read: ElementRef }) expandWrapper;
-  @Input("expanded") expanded;
-  @Input("expandHeight") expandHeight;
+  @ViewChild("expandWrapper", { read: ElementRef }) 
+  public expandWrapper: ElementRef;
+  @Input("expanded") 
+  public expanded: boolean;
+  @Input("expandHeight") 
+  public expandHeight: number;
 
   constructor(public renderer: Renderer) {}
 

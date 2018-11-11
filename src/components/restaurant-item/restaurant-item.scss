@@ -2,7 +2,6 @@ restaurant-item {
   display: grid;
   grid-template-rows: 2fr 3fr;
   box-shadow: $bottomShadow;
-  margin-bottom: 1px;
   .item__photo {
     display: flex;
     .photo__placeholder {

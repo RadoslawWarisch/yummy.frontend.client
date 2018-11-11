@@ -1,3 +1,5 @@
+import { Offer } from "./offer";
+
 export class Transaction {
   constructor(
     transaction: Transaction
@@ -8,11 +10,17 @@ export class Transaction {
   public id: string;
   public name: string;
   public status: string;
+  public orderTime: string;
   public orderDate: string;
+  public receiveTime?: string;
+  public receiveDate?: string;
   public price: number;
+  public discount: number;
+  public orderItemList: Offer[];
+  public calculatedPrice?: number;
   public paymentCode: number;
   public state: TransactionStatus;
-  //public isLoaded?: boolean;
+  public isExpanded?: boolean = false;
 }
 
 export enum TransactionStatus {

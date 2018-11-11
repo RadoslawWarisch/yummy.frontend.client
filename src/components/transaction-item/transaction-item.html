@@ -1,8 +1,60 @@
 <div
-  class="transaction__code small uppercased bold">
-  KOD: <span class="secondary-color">{{ transaction?.paymentCode }}</span>
+  (click)="expand()"
+  tappable
+  class="transaction">
+  <div
+    class="transaction__code medium uppercased">
+    <span class="bold">KOD: {{ transaction?.paymentCode }}</span>
+    <span 
+      [ngClass]="transaction?.state === 'PENDING' ? 'secondary-color' : 'tetriary-color'"
+      class="bold">{{ 
+      transaction?.state === 'COMPLETED' 
+        ? "Zakończone" 
+        : transaction?.state === 'PENDING'
+          ? "W trakcie"
+          : "Anulowane"
+    }}</span>
+  </div>
+  <div
+    class="transaction__details">
+    <div
+      class="details__order small light">
+      <span>czas zamówienia:</span>
+      <br>
+      <span>godz: {{ transaction?.orderTime }}</span>
+      <br>
+      <span>{{ transaction?.orderDate }}</span>
+    </div>
+    <div
+      *ngIf="transaction?.state === 'COMPLETED'"
+      class="details__delivery small light">
+      <span>czas odbioru:</span>
+      <br>
+      <span>godz: {{ transaction?.receiveTime }}</span>
+      <br>
+      <span>{{ transaction?.receiveDate }}</span>
+    </div>
+  </div>
+  <div
+    [hidden]="!transaction?.isExpanded"
+    class="transaction__offers">
+    lista produktów:
+    <compact-offer-item
+      *ngFor="let offer of transaction.orderItemList"
+      [offer]="offer">
+    </compact-offer-item>
+  </div>
+  <div
+    class="transaction__price">
+    <span class="secondary-color medium">
+      {{ transaction?.price | currency: "PLN " }}
+    </span>
+    <span  
+      [hidden]="transaction?.isExpanded"
+      class="small italic">
+      Klinkij, aby zobaczyć szczegóły
+    </span>
+  </div>
 </div>
-<div
-  class="transaction__price small bold">
-  {{ transaction?.price | currency: "PLN " }}
-</div>
+
+

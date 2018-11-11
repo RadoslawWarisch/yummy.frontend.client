@@ -1,0 +1,21 @@
+<img 
+  class="offer__image" 
+  [src]="offer?.image" />
+<div
+  class="offer__details">
+  <span class="details__name bold uppercased">
+    {{ offer?.name }}
+  </span>
+  <span class="details__discount small bold">
+    -{{ offer?.discount }}%
+  </span>
+  <div class="details__price">
+    <span class="price__original small crossed">
+      {{ offer?.price | currency: "PLN " }}
+    </span>
+    <br>
+    <span class="price__calculated small bold">
+      {{ offer?.calculatedPrice | currency: "PLN " }}
+    </span>
+  </div>
+</div>

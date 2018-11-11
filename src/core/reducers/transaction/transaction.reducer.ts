@@ -33,6 +33,14 @@ export const transactionReducer: ActionReducer<TransactionState> = (
         ...state,
         isFetching: false
       };
+    case fromAction.EXPAND_TRANSACTION:
+      return {
+        ...state,
+        data: state.data.map((transaction: Transaction) => ({
+          ...transaction,
+          isExpanded: transaction.id === action.payload
+        }))
+      }
     default:
       return state;
   }

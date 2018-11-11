@@ -1,0 +1,24 @@
+compact-offer-item {
+  display: flex;
+  justify-content: space-between;
+  padding: $headerHeight / 12;
+  .offer__image {
+    height: $headerHeight;
+    width: $headerHeight;
+  }
+  .offer__details {
+    display: flex;
+    justify-content: space-between;
+    overflow: hidden;
+  }
+  .details__name,
+  .details__discount,
+  .details__price {
+    padding: $headerHeight / 12;
+  }
+  .details__name {
+    line-height: $headerHeight / 4;
+    height: $headerHeight;
+    overflow: hidden;
+  }
+}

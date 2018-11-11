@@ -1,9 +1,27 @@
 transaction-item {
-  display: grid;
-  width: 100vw;
-  box-shadow: $bottomShadow;
-  padding: $headerHeight / 4;
-  .transaction__code, .transaction__price {
-    padding: $headerHeight / 12 0;
+  .transaction {
+    display: grid;
+    width: 100vw;
+    box-shadow: $bottomShadow;
+    padding: $headerHeight / 4;
+    .transaction__code,
+    .transaction__price,
+    .transaction__details,
+    .transaction__offers {
+      display: flex;
+      justify-content: space-between;
+      padding: $headerHeight / 12 0;
+    }
+    .transaction__details,
+    .transaction__offers {
+      border-bottom: 1px dotted $tetriary;
+    }
+    .transaction__offers {
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+    .transaction__code {
+      border-bottom: 2px dotted $tetriary;
+    }
   }
 }

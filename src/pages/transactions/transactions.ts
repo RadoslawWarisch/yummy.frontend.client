@@ -7,6 +7,7 @@ import { AppState } from '../../core/app-state';
 import * as fromRouteActions from '../../core/actions/_route.actions';
 import { Observable } from 'rxjs';
 import { Transaction } from '../../core/models/transaction';
+import * as fromTransactionActions from "../../core/actions/transaction.actions";
 
 @IonicPage({
   name: 'transactions'
@@ -36,6 +37,10 @@ export class TransactionsPage {
 
   public close(): void {
     this.store.dispatch(new fromRouteActions.Pop());
+  }
+
+  ngOnInit() {
+    //this.store.dispatch(new fromTransactionActions.FetchTransactions({}));
   }
 
 }
