@@ -1,28 +1,50 @@
 <img 
+  (click)="showEmitter.next()"
+  tappable
   *ngIf="offer?.image"
   [src]="offer?.image"
   class="photo__image" 
 />
 <div
+(click)="showEmitter.next()"
+tappable
   class="photo__placeholder">
   <ion-icon
     class="monster"
     name="pizza">
   </ion-icon>
 </div>
+<div 
+  (click)="showEmitter.next()"
+  tappable
+  class="item__badge primary-color">
+  <div
+    class="badge__dates bold small">
+    {{ offer?.startDate }} - {{ offer?.endDate }}
+  </div>
+  <div
+    class="badge__count bold medium">
+    x{{ offer?.count }}
+  </div>
+</div>
 <div
+  (click)="showEmitter.next()"
   class="item__title">
   <span class="small bold ellipsis-2">
     {{ offer?.name }}
   </span>
 </div>
 <div
+  (click)="showEmitter.next()"
+  tappable
   class="item__order-details">
   <span class="small italic ellipsis-3">
     {{ offer?.description }}
   </span>
 </div>
 <div
+  (click)="showEmitter.next()"
+  tappable
   class="item__price">
   <span class="medium bold secondary-color">
     {{ "-" + offer?.discount + "%" }}
@@ -56,7 +78,4 @@
       name="md-close">
     </ion-icon>
   </button>
-</div>
-<div class="item__badge medium center primary-color">
-  {{ offer?.count }}
 </div>

@@ -1,32 +1,37 @@
 side-header {
+  .back-button {
+    display: none !important;
+  }
   .header {
-    height: $headerHeight * 1.4;
+    height: $headerHeight * 1.5;
     background: $primary;
-    border: 0;
+    padding: 0 $headerHeight / 2;
   }
-  .side-header__content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 20px auto;
-    align-items: end;
+  .toolbar {
     padding: $headerHeight / 4 0;
-    margin: $headerHeight / 4 $headerHeight / 2;
-    border-bottom: 1px dotted $tetriary;
-    background: $primary;
+    height: 100%;
   }
-  .content__close {
-    grid-column: 1/3;
+  .toolbar-background {
+    border-bottom: 1px dotted $tetriary !important;
+    background: $primary !important;
+  }
+  .toolbar-content {
     display: flex;
-    justify-content: flex-end;
-    align-items: flex-start;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+  .right__side {
+    display: flex;
+    flex-direction: column;
   }
   .close__button {
+    margin-bottom: -6px;
+    align-self: flex-end;
+    justify-self: flex-end;
     border: 0;
     color: $secondary;
     font-size: $fontLarge;
-    position: absolute;
-    top: $headerHeight / 6.5;
-    right: $headerHeight / 2;
+    position: relative;
     .icon {
       padding: 0;
     }

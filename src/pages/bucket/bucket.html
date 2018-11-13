@@ -9,6 +9,7 @@
     (pullDown)="pullDown()">
     <offer-item
       *ngFor="let offer of offers$ | async"
+      (showEmitter)="showOffer(offer.id)"
       [offer]="offer"
       [isBucket]="true">
     </offer-item>

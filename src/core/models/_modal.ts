@@ -17,5 +17,5 @@ export class _Modal {
 }
 
 export enum _ModalType {
-  SIGN_UP = '[ModalType] Sign Up'
+  OFFER = "offerModal"
 }

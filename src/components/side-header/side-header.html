@@ -1,19 +1,19 @@
-<div class="side-header">
-  <div class="side-header__content">
+<ion-header>
+  <ion-navbar>
+    <img [src]="iconPath" /> 
     <div
-      class="content__close">
-      <button 
-        (click)="closeEmitter.next()"
-        class="close__button"
-        outline
-        ion-button
-        icon-only>
-        <ion-icon
-          name="md-close">
-        </ion-icon>
-      </button>
+      class="right__side">
+        <button
+          (click)="closeEmitter.next()"
+          class="close__button"
+          outline
+          ion-button
+          icon-only>
+          <ion-icon name="md-close"> </ion-icon>
+        </button>
+        <span class="right medium bold">
+          {{ label }}
+        </span>
     </div>
-    <img [src]="iconPath" />
-    <span class="right medium bold">{{ label }}</span>
-  </div>
-</div>
+  </ion-navbar>
+</ion-header>

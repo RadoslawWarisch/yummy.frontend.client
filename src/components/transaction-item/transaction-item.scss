@@ -19,6 +19,7 @@ transaction-item {
     .transaction__offers {
       flex-direction: column;
       justify-content: flex-start;
+      transition: 0.2s linear;
     }
     .transaction__code {
       border-bottom: 2px dotted $tetriary;

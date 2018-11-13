@@ -102,6 +102,12 @@ export class LoginFormEffects {
           this.store.dispatch(new fromToastActions.Show("Proszę, uzupełnij wszystkie pola."));
           break;
         }
+        case 0: {
+          this.store.dispatch(new fromToastActions.Show(
+            "Brak połączenia z internetem. Proszę, sprawdź połączenie i spróbuj jeszcze raz."
+          ));
+          break;
+        }
         default: {
           this.store.dispatch(new fromToastActions.Show(
             "Wprowadzone hasło jest nieprawidłowe. Proszę, spróbuj jeszcze raz."

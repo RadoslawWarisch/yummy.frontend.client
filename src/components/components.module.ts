@@ -21,6 +21,8 @@ import { TransactionItemComponent } from './transaction-item/transaction-item';
 import { ExpandableComponent } from './expandable/expandable';
 import { CompactOfferItemComponent } from './compact-offer-item/compact-offer-item';
 import { ExpandableOfferItemComponent } from './expandable-offer-item/expandable-offer-item';
+import { OfferModalItemComponent } from './offer-modal-item/offer-modal-item';
+import { OfferModalButtonComponent } from './offer-modal-button/offer-modal-button';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,9 @@ import { ExpandableOfferItemComponent } from './expandable-offer-item/expandable
     ExpandableComponent,
     ExpandableComponent,
     CompactOfferItemComponent,
-    ExpandableOfferItemComponent
+    ExpandableOfferItemComponent,
+    OfferModalItemComponent,
+    OfferModalButtonComponent
   ],
   imports: [
     IonicModule,
@@ -69,7 +73,9 @@ import { ExpandableOfferItemComponent } from './expandable-offer-item/expandable
     ExpandableComponent,
     ExpandableComponent,
     CompactOfferItemComponent,
-    ExpandableOfferItemComponent
+    ExpandableOfferItemComponent,
+    OfferModalItemComponent,
+    OfferModalButtonComponent
   ]
 })
 export class ComponentsModule {}

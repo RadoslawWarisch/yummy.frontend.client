@@ -1,7 +1,7 @@
 
-import {of as observableOf,  Observable } from 'rxjs';
+import {of as observableOf,  Observable, of, throwError } from 'rxjs';
 
-import {catchError, map} from 'rxjs/operators';
+import {catchError, map, switchMap} from 'rxjs/operators';
 import { Injectable } from "@angular/core";
 import { Bucket } from "../../models/bucket";
 import { Offer } from "../../models/offer";
@@ -131,6 +131,7 @@ export class BucketProvider {
     }
 
     return this.rest.submitBucket(body).pipe(
+      switchMap(this.catchOverloadedBucket),
       map(({ paymentCode, orderId }) => ({
         paymentCode,
         orderId,
@@ -138,5 +139,18 @@ export class BucketProvider {
         price: bucket.price
       })),
       catchError((err: HttpErrorResponse) => observableOf(err)),);
+  }
+
+  private catchOverloadedBucket(res: any): Observable<any> {
+    return res.difference && res.difference > 0
+      ? throwError(new HttpErrorResponse({
+        status: -1,
+        statusText: JSON.stringify({
+          name: res.offer.name,
+          id: res.offer.id,
+          diff: res.difference
+        })
+      }))
+      : of(res);
   }
 }

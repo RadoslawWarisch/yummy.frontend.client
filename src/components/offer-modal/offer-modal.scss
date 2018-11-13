@@ -1,0 +1,25 @@
+offer-modal {
+  .modal__close-button {
+    margin-right: $headerHeight / 8;
+    float: right;
+    height: $headerHeight;
+    border: 0;
+  }
+  .content {
+    top: $headerHeight;
+    height: $contentHeight;
+  }
+  .slide-zoom {
+    align-self: start;
+  }
+  offer-modal-button {
+    position: fixed;
+    bottom: $headerHeight / 2;
+    &.left {
+      left: 0;
+    }
+    &.right {
+      right: 0;
+    }
+  }
+}

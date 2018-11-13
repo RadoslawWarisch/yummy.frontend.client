@@ -4,13 +4,14 @@
   background-color: #fff;
 }
 
-.header-ios {
+.header-ios, .side-header, .modal__close-button {
   top: 16px !important;
 }
 
 .content-ios {
   margin-top: 16px;
   .scroll-content {
+    padding-top: 16 !important;
     padding-bottom: 16px !important;
   }
 }

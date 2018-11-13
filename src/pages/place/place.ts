@@ -8,6 +8,8 @@ import { Offer } from '../../core/models/offer';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../core/app-state';
 import * as fromOfferActions from '../../core/actions/offer.actions';
+import * as fromModalActions from '../../core/actions/_modal.actions';
+import { _ModalType } from '../../core/models/_modal';
 
 @IonicPage({
   name: 'place'
@@ -40,6 +42,24 @@ export class PlacePage {
 
   public pullDown(): void {
     console.log('pull up')
+  }
+
+  public showOffer(offerId: string): void {
+    this.store.dispatch(
+      new fromModalActions.Show({
+        mode: _ModalType.OFFER,
+        meta: {
+          offerId: offerId,
+          isBucket: false
+        }
+      })
+    );
+  }
+
+  ionViewWillLeave(): void {
+    this.store.dispatch(
+      new fromModalActions.Hide()
+    );
   }
 
 }

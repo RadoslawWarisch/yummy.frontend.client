@@ -7,7 +7,8 @@ export interface BucketState extends Bucket {};
 const initialState: BucketState = new Bucket({
   offers: [],
   count: 0,
-  price: 0
+  price: 0,
+  restaurantId: ""
 })
 
 

@@ -294,14 +294,20 @@ export class YummyApp {
   }
 
   private hideLoader(): Promise<any> {
-    return this.loader.dismiss();
+    return this.loader
+      ? this.loader.dismiss().then(() => (this.loader = null))
+      : null;
   }
 
   private showModal(modal: _Modal): Promise<any> {
-    return Promise.resolve();
+    this.modal = this.modalCtrl.create(modal.mode, modal.meta);
+
+    return this.modal.present();
   }
 
   private hideModal(): Promise<any> {
-    return this.modal.dismiss();
+    return this.modal
+      ? this.modal.dismiss().then(() => (this.modal = null))
+      : null;
   }
 }

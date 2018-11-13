@@ -1,0 +1,34 @@
+<button
+  (click)="close()"
+  class="modal__close-button"
+  outline
+  ion-button
+  icon-only>
+  <ion-icon name="md-close"> </ion-icon>
+</button>
+<ion-content>
+  <ion-slides
+    (ionSlideDidChange)="slideChanged()">
+    <ion-slide
+      *ngFor="let offer of offers$ | async">
+      <offer-modal-item
+        [offer]="offer"
+        [isBucket]="isBucket"
+        (addEmitter)="addToBucket($event)"
+        (removeEmitter)="removeFromBucket($event)">
+      </offer-modal-item>
+    </ion-slide>
+  </ion-slides>
+  <offer-modal-button
+    *ngIf="(currentSlide$ | async) > 0"
+    (click)="slidePrev()"
+    [image]="prevImage"
+    class="left">
+  </offer-modal-button>
+  <offer-modal-button
+    *ngIf="((currentSlide$ | async) < ((offers$ | async)?.length - 1)) && ((offers$ | async)?.length > 1)"
+    (click)="slideNext()"
+    [image]="nextImage"
+    class="right">
+  </offer-modal-button>
+</ion-content>

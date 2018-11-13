@@ -5,6 +5,8 @@ import { Store } from "@ngrx/store";
 import { AppState } from "../../core/app-state";
 import { Observable } from "rxjs";
 import { Offer } from "../../core/models/offer";
+import * as fromModalActions from '../../core/actions/_modal.actions';
+import { _ModalType } from "../../core/models/_modal";
 
 @IonicPage({
   name: "bucket"
@@ -26,5 +28,23 @@ export class BucketPage {
 
   public pullDown() {
     console.log("pullDown");
+  }
+
+  public showOffer(offerId: string): void {
+    this.store.dispatch(
+      new fromModalActions.Show({
+        mode: _ModalType.OFFER,
+        meta: {
+          offerId: offerId,
+          isBucket: true
+        }
+      })
+    );
+  }
+
+  ionViewWillLeave(): void {
+    this.store.dispatch(
+      new fromModalActions.Hide()
+    );
   }
 }

@@ -1,0 +1,48 @@
+<div 
+  class="offer__photo">
+  <img *ngIf="offer?.image" [src]="offer?.image" class="photo__image" />
+  <div class="photo__placeholder">
+    <ion-icon class="monster" name="pizza"> </ion-icon>
+  </div>
+</div>
+<div class="offer__title">
+  <div class="title__name medium bold uppercased">{{ offer?.name }}</div>
+  <div class="title__count medium bold">x{{ offer?.count }}</div>
+  <div class="title__date small light">
+    dostępne <br />{{ offer?.startDate }} - {{ offer?.endDate }}
+  </div>
+</div>
+<div class="offer__description small">
+  opis: <br />
+  {{ offer?.description }}
+</div>
+<div class="offer__price">
+  <div class="price__discount">
+    promocja: <br />
+    <span class="medium bold secondary-color">-{{ offer?.discount }}%</span>
+  </div>
+  <div class="price__calculated">
+    cena: <br />
+    <span class="small crossed light">{{
+      offer?.price | currency: "PLN "
+    }}</span>
+    <br />
+    <span class="medium bold">{{
+      offer?.calculatedPrice | currency: "PLN "
+    }}</span>
+  </div>
+  <button 
+    (click)="addEmitter.next(offer)"
+    *ngIf="!isBucket" 
+    class="button__fab" 
+    ion-fab>
+    <ion-icon name="cart"> </ion-icon>
+  </button>
+  <button 
+    (click)="removeEmitter.next(offer.id)"
+    *ngIf="isBucket" 
+    class="button__fab" 
+    ion-fab>
+    <ion-icon name="md-close"> </ion-icon>
+  </button>
+</div>

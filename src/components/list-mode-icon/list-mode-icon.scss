@@ -50,9 +50,11 @@ list-mode-icon {
     border-top: 2px solid $primary;
     &.left {
       transform: rotateZ(-135deg);
+      right: -$headerHeight / 6;
     }
     &.right {
       transform: rotateZ(45deg);
+      left: -$headerHeight / 6;
     }
   }
   .bar {

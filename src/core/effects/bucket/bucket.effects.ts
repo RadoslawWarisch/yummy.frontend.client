@@ -2,7 +2,8 @@ import {
   of as observableOf,
   combineLatest as observableCombineLatest,
   Observable,
-  of
+  of,
+  Subscription
 } from "rxjs";
 
 import { mergeMap, tap, take, map, switchMap, pluck } from "rxjs/operators";
@@ -90,17 +91,22 @@ export class BucketEffects {
     tap(() => this.store.dispatch(new fromLoaderActions.Hide())),
     tap((res: any | HttpErrorResponse) =>
       res instanceof HttpErrorResponse
-        ? this.handleSideFail()
+        ? this.handleSideFail(res)
         : this.handleSideSuccess(res)
     ),
-    mergeMap(
-      (res: any | HttpErrorResponse) =>
-        new Promise((resolve) => setTimeout(() => resolve(res), 500))
+    mergeMap((res: any | HttpErrorResponse) =>
+      res instanceof HttpErrorResponse
+        ? of(res)
+        : new Promise((resolve) => setTimeout(() => resolve(res), 500))
     ),
-    tap((res: any | HttpErrorResponse) => !(res instanceof HttpErrorResponse) && this.analytics.trackEvent(
-      'Submit Transaction',
-      `TransactionId: ${res.orderId}, Payment Code: ${res.paymentCode}`
-    )),
+    tap(
+      (res: any | HttpErrorResponse) =>
+        !(res instanceof HttpErrorResponse) &&
+        this.analytics.trackEvent(
+          "Submit Transaction",
+          `TransactionId: ${res.orderId}, Payment Code: ${res.paymentCode}`
+        )
+    ),
     map((res: any | HttpErrorResponse) =>
       res instanceof HttpErrorResponse
         ? new fromActions.SubmitBucketFail()
@@ -121,19 +127,74 @@ export class BucketEffects {
     this.store.dispatch(new fromTransactionActions.FetchTransactions({}));
   }
 
-  private handleSideFail(): void {
-    new fromToastActions.Show(
-      "Nie udało się zrealizować zamówienia. Proszę, sprawdź dostęp do internetu i spróbuj jeszcze raz."
+  private handleSideFail(res: HttpErrorResponse): void {
+    console.log("side fail", res);
+    res.status !== -1
+      ? new fromToastActions.Show(
+          "Nie udało się zrealizować zamówienia. Proszę, sprawdź dostęp do internetu i spróbuj jeszcze raz."
+        )
+      : this.handleOverload(res);
+  }
+
+  private handleOverload(res: HttpErrorResponse): void {
+    const { id, name, diff } = JSON.parse(res.statusText);
+
+    this.store.dispatch(new fromTransactionActions.FetchTransactions({}));
+
+    this.store.dispatch(
+      new fromAlertActions.Show(
+        new _Alert({
+          isShown: true,
+          title: "Brak Produktu",
+          message: `Niestety, w restauracji brakuje ${diff} ${
+            diff === 1 ? "sztuki" : "sztuk"
+          } dania: "${name}". Czy chcesz automatycznie dokonać zamówienia ze zmniejszoną liczbą produktów?`,
+          buttons: [
+            "Tak, chcę automatycznie zredukować liczbę produktów",
+            "Nie, chcę jeszcze zmienić zamówienie"
+          ],
+          callbacks: [
+            () => this.reduceBucket(id, diff, true),
+            () => this.reduceBucket(id, diff, false)
+          ]
+        })
+      )
     );
+  }
+
+  private reduceBucket(id: string, diff: number, repeat: boolean): void {
+    const getUpdatedBucket = (bucket: Bucket): Bucket => ({
+      ...bucket,
+      offers: bucket.offers
+        .filter((offer: Offer) => offer.id !== id || offer.count > diff)
+        .map((offer: Offer) =>
+          offer.id !== id
+            ? offer
+            : {
+                ...offer,
+                count: offer.count - diff
+              }
+        )
+    });
+
+    const sub: Subscription = this.store
+      .select("bucket").pipe(take(1))
+      .subscribe((bucket: Bucket) => {
+        sub && sub.unsubscribe();
+        this.store.dispatch(
+          new fromActions.UpdateBucket(getUpdatedBucket(bucket))
+        );
+        repeat && this.store.dispatch(
+          new fromActions.SubmitBucket()
+        );
+      });
   }
 
   private handleRestaurantSwitch(
     offer: Offer,
     bucket: Bucket
   ): Observable<any | HttpErrorResponse> {
-    return (!bucket.restaurantId ||
-      offer.restaurantId === bucket.restaurantId) &&
-      offer.name !== "Kebab"
+    return !bucket.restaurantId || offer.restaurantId === bucket.restaurantId
       ? of([offer, bucket])
       : new Observable((observer) => {
           this.store.dispatch(

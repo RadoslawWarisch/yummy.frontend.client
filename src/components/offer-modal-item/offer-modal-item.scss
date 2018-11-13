@@ -1,0 +1,68 @@
+offer-modal-item {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  .offer__photo,
+  .offer__title,
+  .offer__description,
+  .offer__price {
+    width: 90vw;
+    margin: auto;
+  }
+  .offer__title,
+  .offer__description,
+  .offer__price {
+    border-bottom: 1px dotted $tetriary;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: $headerHeight / 8;
+  }
+  .title__name {
+    flex: 2;
+  }
+  .title__count {
+    flex: 1;
+  }
+  .title__date {
+    flex: 2;
+  }
+  .offer__photo {
+    height: auto;
+    min-height: 150px;
+    display: block;
+    position: relative;
+  }
+  .photo__placeholder {
+    height: 150px;
+    width: 100%;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $primary;
+    background: $tetriary-blank;
+    top: 0;
+    left: 0;
+  }
+  .photo__image {
+    height: 100%;
+    width: 100%;
+    align-self: flex-start;
+    z-index: 2;
+    position: absolute;
+    flex: 1;
+    object-fit: cover;
+    top: 0;
+    left: 0;
+  }
+  .button__fab {
+    background: $primary;
+    color: $secondary;
+    box-shadow: $roundShadow;
+  }
+  .offer__description {
+    text-align: left;
+  }
+}
