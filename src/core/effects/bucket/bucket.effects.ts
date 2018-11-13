@@ -128,11 +128,18 @@ export class BucketEffects {
   }
 
   private handleSideFail(res: HttpErrorResponse): void {
-    console.log("side fail", res);
-    res.status !== -1
-      ? this.store.dispatch(new fromToastActions.Show(
-          "Nie udało się zrealizować zamówienia. Proszę, sprawdź dostęp do internetu i spróbuj jeszcze raz."
-        ))
+    res.status === 0
+      ? this.store.dispatch(
+          new fromToastActions.Show(
+            "Nie udało się zrealizować zamówienia. Proszę, sprawdź dostęp do internetu i spróbuj jeszcze raz."
+          )
+        )
+      : res.status !== -1
+      ? this.store.dispatch(
+          new fromToastActions.Show(
+            "Nie udało się zrealizować zamówienia. Proszę, spróbuj później."
+          )
+        )
       : this.handleOverload(res);
   }
 
@@ -178,15 +185,14 @@ export class BucketEffects {
     });
 
     const sub: Subscription = this.store
-      .select("bucket").pipe(take(1))
+      .select("bucket")
+      .pipe(take(1))
       .subscribe((bucket: Bucket) => {
         sub && sub.unsubscribe();
         this.store.dispatch(
           new fromActions.UpdateBucket(getUpdatedBucket(bucket))
         );
-        repeat && this.store.dispatch(
-          new fromActions.SubmitBucket()
-        );
+        repeat && this.store.dispatch(new fromActions.SubmitBucket());
       });
   }
 
