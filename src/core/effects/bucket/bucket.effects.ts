@@ -130,9 +130,9 @@ export class BucketEffects {
   private handleSideFail(res: HttpErrorResponse): void {
     console.log("side fail", res);
     res.status !== -1
-      ? new fromToastActions.Show(
+      ? this.store.dispatch(new fromToastActions.Show(
           "Nie udało się zrealizować zamówienia. Proszę, sprawdź dostęp do internetu i spróbuj jeszcze raz."
-        )
+        ))
       : this.handleOverload(res);
   }
 
