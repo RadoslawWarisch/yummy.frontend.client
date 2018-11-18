@@ -4,6 +4,9 @@
   [iconPath]="'assets/icon/transaction.svg'">
 </side-header>
 <ion-content>
+  <no-items
+    *ngIf="(offers$ | async)?.length === 0 && !(isLoading$ | async)">
+  </no-items>
   <lazy-scroll
     [isLoading]="isLoading$ | async"
     (pullDown)="pullDown()">

@@ -1,6 +1,6 @@
 {
 	"name": "yummy.frontend",
-	"version": "0.7.5",
+	"version": "1.0.0-beta",
 	"author": "Yummy App - Client Side",
 	"private": true,
 	"scripts": {

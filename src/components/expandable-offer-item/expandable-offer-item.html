@@ -1,4 +1,84 @@
-<!-- Generated template for the ExpandableOfferItemComponent component -->
-<div>
-  {{text}}
+<div
+  class="item__photo-badge">
+  <img 
+    (click)="expandEmitter.next()"
+    tappable
+    *ngIf="offer?.image"
+    [src]="offer?.image"
+    class="photo__image" 
+  />
+  <div
+    (click)="expandEmitter.next()"
+    tappable
+    class="photo__placeholder">
+    <ion-icon
+      class="monster"
+      name="pizza">
+    </ion-icon>
+  </div>
+  <div 
+    (click)="expandEmitter.next()"
+    tappable
+    class="item__badge primary-color">
+    <div
+      class="badge__dates bold small">
+      {{ offer?.startDate }} - {{ offer?.endDate }}
+    </div>
+    <div
+      class="badge__count bold small">
+      x{{ offer?.count }}
+    </div>
+  </div>
+</div>
+<div
+  class="item__description">
+  <div
+    class="description__offer">
+    <div
+      class="offer__name small">
+      <span class="uppercased bold ellipsis-2">{{ offer?.name }}</span>
+    </div>
+    <div
+      class="offer__discount small">
+      <br>
+      <span class="bold secondary-color">
+        -{{ offer?.discount }}%
+      </span>
+    </div>
+    <div
+      class="offer__price small">
+      <span class="crossed">
+        {{ offer?.price | currency: "PLN " }}
+      </span>
+      <br>
+      <span class="bold">
+        {{ offer?.calculatedPrice | currency: "PLN " }}
+      </span>
+    </div>
+  </div>
+  <div
+    class="description__place">
+    <div
+      class="place__name small">
+      <span class="uppercased bold">{{ offer?.place?.name }}</span>
+    </div>
+    <div
+      class="place__distance small">
+      <span>odległość:</span>
+      <br>
+      <span class="bold">{{ offer?.place?.distance }}</span>
+    </div>
+  </div>
+</div>
+<div
+  class="item__button">
+  <button 
+    (click)="addToBucket()"
+    *ngIf="!isBucket"
+    class="button__fab" 
+    ion-fab>
+    <ion-icon 
+      name="cart">
+    </ion-icon>
+  </button>
 </div>

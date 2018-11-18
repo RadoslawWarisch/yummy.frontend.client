@@ -6,15 +6,53 @@
   </div>
 </div>
 <div class="offer__title">
-  <div class="title__name medium bold uppercased">{{ offer?.name }}</div>
-  <div class="title__count medium bold">x{{ offer?.count }}</div>
-  <div class="title__date small light">
+  <div class="title__name medium bold uppercased left">
+    {{ offer?.name }}
+  </div>
+  <div class="title__count medium bold">
+    x{{ offer?.count }}
+  </div>
+  <div class="title__date small light right">
     dostępne <br />{{ offer?.startDate }} - {{ offer?.endDate }}
   </div>
 </div>
 <div class="offer__description small">
   opis: <br />
   {{ offer?.description }}
+</div>
+<div 
+  *ngIf="offer?.place && !isBucket"
+  class="offer__place">
+  <div
+    class="place__name small left">
+    <span class="secondary-color">restauracja:</span>
+    <br>
+    <span class="uppercased bold"> 
+      {{ offer?.place?.name }}
+    </span>
+    <br>
+    <span class="italic"> 
+      {{ offer?.place?.address }}
+    </span>
+  </div>
+  <div
+    class="place__distance small">
+    <br>
+    <span>
+      odległość:
+    </span>
+    <br>
+    <span class="bold">
+      {{ offer?.place?.distance }}
+    </span>
+  </div>
+  <div
+    class="place__misc small right">
+    <br>
+    <span class="bold">
+      {{ offer?.place?.isOpen ? 'OTWARTE' : 'ZAMKNIĘTE' }}
+    </span>
+  </div>
 </div>
 <div class="offer__price">
   <div class="price__discount">

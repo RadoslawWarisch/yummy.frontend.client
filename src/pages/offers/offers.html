@@ -9,10 +9,11 @@
     </ion-item>
     <offer-item
       *ngFor="let offer of offers$ | async"
+      (showEmitter)="showOffer(offer.id)"
       [offer]="offer">
     </offer-item>
     <no-items
-      *ngIf="(offers$ | async).length === 0 && !(isLoading$ | async)">
+      *ngIf="(offers$ | async)?.length === 0 && !(isLoading$ | async)">
     </no-items>
   </lazy-scroll>
 </ion-content>

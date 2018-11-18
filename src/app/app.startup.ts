@@ -44,7 +44,7 @@ export class Startup {
     return this.rest
       .checkBearer()
       .pipe(
-        timeout(1000),
+        timeout(3000),
         map(() => true)
       )
       .toPromise()

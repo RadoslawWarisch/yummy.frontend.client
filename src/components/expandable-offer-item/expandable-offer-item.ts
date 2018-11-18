@@ -1,22 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Offer } from '../../core/models/offer';
 
-/**
- * Generated class for the ExpandableOfferItemComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
 @Component({
   selector: 'expandable-offer-item',
   templateUrl: 'expandable-offer-item.html'
 })
 export class ExpandableOfferItemComponent {
 
-  text: string;
+  @Input()
+  public offer: Offer;
+  @Output()
+  public expandEmitter: EventEmitter<void>;
 
   constructor() {
-    console.log('Hello ExpandableOfferItemComponent Component');
-    this.text = 'Hello World';
+    this.expandEmitter = new EventEmitter<void>();
   }
 
 }

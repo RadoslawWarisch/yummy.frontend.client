@@ -2,7 +2,7 @@ offer-item {
   position: relative;
   display: grid;
   grid-template-columns: 40vw 1fr 1fr;
-  height: $headerHeight * 2.5;
+  height: $headerHeight * 2.65;
   align-items: center;
   box-shadow: $bottomShadow;
   .photo__placeholder {
@@ -37,11 +37,21 @@ offer-item {
   .item__order-details {
     margin-right: $headerHeight / 4;
   }
+  .order-details__place {
+    display: flex;
+    justify-content: space-between;
+  }
   .item__title {
     margin-top: $headerHeight / 6;
+    padding-bottom: $headerHeight / 6;
     grid-column: 2/4;
     border-bottom: 1px dotted black;
     width: 75%;
+    &.free-item {
+      margin-top: $headerHeight / 12;
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
   }
   .item__button {
     margin-bottom: $headerHeight / 6;
@@ -49,11 +59,17 @@ offer-item {
     justify-content: center;
     grid-column: 3/4;
     grid-row: 3/4;
+    padding-left: $headerHeight / 6;
   }
   .item__order-details, .item__price {
     max-height: 80px;
-    overflow: hidden;
     text-overflow: ellipsis;
+    &.free-item {
+      margin-top: $headerHeight / 6;
+      padding-bottom: $headerHeight / 6;
+      border-bottom: 1px dotted black;
+      order: -1;
+    }
   }
   .item__order-details {
     grid-column: 2/4;

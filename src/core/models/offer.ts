@@ -1,3 +1,5 @@
+import { Place } from "./place";
+
 export class Offer {
   constructor(offer: Offer) {
     Object.assign(this, offer);
@@ -17,5 +19,6 @@ export class Offer {
   public startDate?: string;
   public endDate?: string;
   public isExpanded?: boolean = false;
+  public place?: Place;
 }
 

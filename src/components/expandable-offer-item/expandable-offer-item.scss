@@ -1,3 +1,68 @@
 expandable-offer-item {
-
+  position: relative;
+  display: grid;
+  grid-template-columns: 30vw 1fr auto;
+  height: $headerHeight * 1.5;
+  box-shadow: $bottomShadow;
+  .photo__placeholder {
+    align-self: flex-start;
+    grid-row: 1/4;
+    position: absolute;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $primary;
+    background: $tetriary-blank;
+    width: 30vw;
+    height: 100%;
+  }
+  .photo__image {
+    align-self: flex-start;
+    z-index: 2;
+    grid-row: 1/4;
+    position: absolute;
+    flex: 1;
+    width: 30vw;
+    height: 100%;
+    object-fit: cover;
+  }
+  .item__badge {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    z-index: 3;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 30vw;
+    height: 28px;
+    background: $secondary;
+  }
+  .badge__count, .badge__dates {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    padding: 0 $headerHeight / 12;
+  }
+  .description__offer {
+    border-bottom: 1px dotted $tetriary;
+    max-height: 60%;
+  }
+  .description__offer, .description__place {
+    display: flex;
+    justify-content: space-between;
+    padding: $headerHeight / 12;
+    margin: $headerHeight / 12;
+  }
+  .item__button {
+    padding: $headerHeight / 6;
+    justify-self: center;
+    align-self: center;
+  }
+  .button__fab {
+    background: $primary;
+    color: $secondary;
+    box-shadow: $roundShadow;
+  }
 }

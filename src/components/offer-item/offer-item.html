@@ -29,18 +29,51 @@ tappable
 </div>
 <div
   (click)="showEmitter.next()"
-  class="item__title">
+  class="item__title"
+  [ngClass]="offer?.place && !isBucket ? 'free-item' : ''">
   <span class="small bold ellipsis-2">
     {{ offer?.name }}
   </span>
 </div>
 <div
-  (click)="showEmitter.next()"
-  tappable
-  class="item__order-details">
-  <span class="small italic ellipsis-3">
+  class="item__order-details"
+  [ngClass]="offer?.place && !isBucket ? 'free-item' : ''">
+  <span 
+    tappable
+    (click)="showEmitter.next()"
+    *ngIf="!offer?.place || isBucket"
+    class="small italic ellipsis-3">
     {{ offer?.description }}
   </span>
+  <div
+    class="order-details__place small"
+    *ngIf="offer?.place && !isBucket">
+    <div
+      tappable
+      (click)="showEmitter.next()"
+      class="place__title">
+      <span class="secondary-color">
+        restauracja:
+      </span>
+      <br>
+      <span class="bold uppercased">
+        {{ offer?.place?.name }}
+      </span>
+      <br>
+      odległość: <span class="bold">{{ offer?.place?.distance }}</span>
+    </div>
+    <div
+      class="place__desc">
+      <button 
+        (click)="goToPlace()"
+        class="button__fab" 
+        ion-fab>
+        <ion-icon 
+          name="home">
+        </ion-icon>
+      </button>
+    </div>
+  </div>
 </div>
 <div
   (click)="showEmitter.next()"

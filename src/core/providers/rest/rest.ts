@@ -68,6 +68,10 @@ export class Rest extends Api {
     return this.post(this.parseUrl("restaurants/nearest"), body);
   }
 
+  public getSinglePlace(id: string): Observable<any> {
+    return this.get(this.parseUrl(`restaurant?id=${id}`));
+  }
+
   public getOffers(id: string): Observable<any> {
     return this.get(this.parseUrl(`offers${id ? "?id=" + id : ''}`));
   }

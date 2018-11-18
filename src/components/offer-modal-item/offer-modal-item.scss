@@ -6,12 +6,14 @@ offer-modal-item {
   .offer__photo,
   .offer__title,
   .offer__description,
-  .offer__price {
+  .offer__price,
+  .offer__place {
     width: 90vw;
     margin: auto;
   }
   .offer__title,
   .offer__description,
+  .offer__place,
   .offer__price {
     border-bottom: 1px dotted $tetriary;
     display: flex;

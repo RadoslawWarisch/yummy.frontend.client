@@ -3,6 +3,7 @@ import { Offer } from '../../core/models/offer';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../core/app-state';
 import * as fromBucketActions from '../../core/actions/bucket.actions';
+import * as fromRouteAction from '../../core/actions/_route.actions';
 
 @Component({
   selector: 'offer-item',
@@ -22,6 +23,8 @@ export class OfferItemComponent {
     this.showEmitter = new EventEmitter<void>();
   }
 
+  ngOnInit() {}
+
   public addToBucket(): void {
     this.store.dispatch(
       new fromBucketActions.AddToBucket(this.offer)
@@ -32,6 +35,15 @@ export class OfferItemComponent {
     this.store.dispatch(
       new fromBucketActions.RemoveFromBucket(this.offer.id)
     );
+  }
+
+  public goToPlace(): void {
+    this.store.dispatch(new fromRouteAction.Push({
+      name: "place",
+      params: {
+        place: this.offer.place
+      }
+    }));
   }
 
 }

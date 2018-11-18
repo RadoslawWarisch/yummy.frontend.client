@@ -9,7 +9,6 @@ compact-offer-item {
   .offer__details {
     display: flex;
     justify-content: space-between;
-    overflow: hidden;
   }
   .details__name,
   .details__discount,
@@ -19,6 +18,6 @@ compact-offer-item {
   .details__name {
     line-height: $headerHeight / 4;
     height: $headerHeight;
-    overflow: visible;
+    overflow: hidden
   }
 }
