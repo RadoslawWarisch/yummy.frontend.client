@@ -19,7 +19,7 @@ import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { IonicApp, IonicErrorHandler, IonicModule } from "ionic-angular";
 import { ReactiveFormsModule } from "@angular/forms";
-import { Platform } from 'ionic-angular';
+import { Platform } from "ionic-angular";
 
 import { YummyApp } from "./app.component";
 
@@ -36,9 +36,28 @@ import { DirectivesModule } from "../directives/directives.module";
 import { YummyHeaderModule } from "../components/yummy-header/yummy-header.module";
 import { Startup } from "./app.startup";
 import { LaunchNavigator } from "@ionic-native/launch-navigator";
-import { NativeHttpModule, NativeHttpBackend, NativeHttpFallback } from 'ionic-native-http-connection-backend';
-import { HttpBackend, HttpXhrBackend } from '@angular/common/http';
-import { GoogleAnalytics } from '@ionic-native/google-analytics';
+import {
+  NativeHttpModule,
+  NativeHttpBackend,
+  NativeHttpFallback
+} from "ionic-native-http-connection-backend";
+import { HttpBackend, HttpXhrBackend } from "@angular/common/http";
+import { GoogleAnalytics } from "@ionic-native/google-analytics";
+
+declare const navigator;
+
+export const iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+
+export let Backend = [];
+
+if (iOS) {
+  //alert('ios')
+  Backend = [{
+    provide: HttpBackend,
+    useClass: NativeHttpFallback,
+    deps: [Platform, NativeHttpBackend, HttpXhrBackend]
+  }];
+}
 
 export function startupFactory(startupProvider: Startup): Function {
   return () => startupProvider.init();
@@ -102,8 +121,7 @@ export function provideSettings(storage: Storage) {
       deps: [Startup],
       multi: true
     },
-      {provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
-  
+    ...Backend,
     Startup
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]

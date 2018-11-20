@@ -9,10 +9,10 @@ const initialState: any = {
   data: new _Toast()
 };
 
-export const _toastReducer = (
+export function _toastReducer(
   state: _ToastState = initialState,
   action: fromActions._ToastActions
-) => {
+) {
   switch (action.type) {
     case fromActions.SHOW:
       return {
@@ -27,4 +27,4 @@ export const _toastReducer = (
     default:
       return state;
   }
-};
+}

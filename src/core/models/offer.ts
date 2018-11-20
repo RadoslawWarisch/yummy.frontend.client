@@ -20,5 +20,6 @@ export class Offer {
   public endDate?: string;
   public isExpanded?: boolean = false;
   public place?: Place;
+  public imgError?: boolean;
 }
 

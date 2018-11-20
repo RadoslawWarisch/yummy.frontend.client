@@ -4,8 +4,14 @@
   background-color: #fff;
 }
 
-.header-ios, .side-header, .modal__close-button {
+.header-ios, .side-header {
   top: 16px !important;
+}
+
+.ios {
+  .modal__close-button {
+    top: 16px !important;
+  }
 }
 
 .content-ios {

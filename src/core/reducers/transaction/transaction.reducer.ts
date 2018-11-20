@@ -12,16 +12,16 @@ const initialState: TransactionState = {
   isFetching: false
 };
 
-export const transactionReducer: ActionReducer<TransactionState> = (
+export function transactionReducer (
   state: TransactionState = initialState,
   action: Action | any
-) => {
+) {
   switch (action.type) {
     case fromAction.FETCH_TRANSACTIONS:
-      return {
+      return ({
         ...state,
         isFetching: true
-      };
+      });
     case fromAction.FETCH_TRANSACTIONS_SUCC:
       return {
         ...state,

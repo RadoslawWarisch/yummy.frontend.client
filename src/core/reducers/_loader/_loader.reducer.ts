@@ -9,10 +9,10 @@ const initialState: any = {
   data: new _Loader()
 };
 
-export const _loaderReducer = (
+export function _loaderReducer(
   state: _LoaderState = initialState,
   action: fromActions._LoaderActions
-) => {
+) {
   switch (action.type) {
     case fromActions.SHOW:
       return { 

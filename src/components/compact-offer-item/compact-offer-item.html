@@ -1,6 +1,9 @@
 <img 
+  *ngIf="offer?.image && !offer?.imgError"
   class="offer__image" 
-  [src]="offer?.image" />
+  [src]="offer?.image" 
+  (error)="offer.imgError"
+>
 <div
   class="offer__details">
   <span class="details__name bold uppercased">

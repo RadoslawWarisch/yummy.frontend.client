@@ -4,7 +4,12 @@
 </ion-icon>
 <div
   class="modal-button__avatar">
-  <img class="avatar__image" [src]="image" />
+  <img 
+    *ngIf="image && !imgError"
+    class="avatar__image" 
+    [src]="image" 
+    (error)="imgError"
+  />
   <ion-icon 
     class="avatar__placeholder monster"
     name="pizza">

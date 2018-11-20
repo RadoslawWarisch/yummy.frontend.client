@@ -23,6 +23,7 @@ export class Place extends GeolocationItem {
   public street?: string;
   public postalCode?: string;
   public city?: string;
+  public imgError?: boolean;
 }
 
 export interface OpenSchedule {

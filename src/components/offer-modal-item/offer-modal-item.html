@@ -1,6 +1,11 @@
 <div 
   class="offer__photo">
-  <img *ngIf="offer?.image" [src]="offer?.image" class="photo__image" />
+  <img 
+    *ngIf="offer?.image && !offer?.imgError" 
+    [src]="offer?.image" 
+    class="photo__image"
+    (error)="offer.imgError" 
+  />
   <div class="photo__placeholder">
     <ion-icon class="monster" name="pizza"> </ion-icon>
   </div>

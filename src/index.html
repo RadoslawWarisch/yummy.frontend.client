@@ -30,6 +30,13 @@
     }
   </script>-->
 
+  <script>
+    window.onerror = function (message, url, line) {
+    alert(message + '\n' + url + ': ' + line + '\n' + navigator.userAgent);
+    console.log(message, url, line, navigator.userAgent);
+    }
+  </script>
+
   <link href="build/main.css" rel="stylesheet">
 
 </head>

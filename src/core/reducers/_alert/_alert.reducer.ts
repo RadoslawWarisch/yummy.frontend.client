@@ -9,10 +9,10 @@ const initialState: any = {
   data: new _Alert()
 };
 
-export const _alertReducer = (
+export function _alertReducer (
   state: _AlertState = initialState,
   action: fromActions._AlertActions
-) => {
+) {
   switch (action.type) {
     case fromActions.SHOW:
       return { 

@@ -1,9 +1,10 @@
 <img 
   (click)="showEmitter.next()"
   tappable
-  *ngIf="offer?.image"
+  *ngIf="offer?.image && !offer?.imgError"
   [src]="offer?.image"
   class="photo__image" 
+  (error)="offer.imgError"
 />
 <div
 (click)="showEmitter.next()"

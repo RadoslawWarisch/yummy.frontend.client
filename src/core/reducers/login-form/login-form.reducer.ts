@@ -9,14 +9,14 @@ const initialState: any = {
   data: new LoginForm({})
 };
 
-export const loginFormReducer = (
+export function loginFormReducer(
   state: LoginFormState = initialState,
   action: fromActions.LoginFormActions
-) => {
+) {
   switch (action.type) {
     case fromActions.UPDATE_FORM:
-      return { 
-        ...state, 
+      return {
+        ...state,
         ...action.payload
       };
     case fromActions.SUBMIT_FORM_SUCC:
@@ -24,4 +24,4 @@ export const loginFormReducer = (
     default:
       return state;
   }
-};
+}

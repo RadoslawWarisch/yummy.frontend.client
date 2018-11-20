@@ -10,6 +10,7 @@ export class OfferModalButtonComponent {
   public image: string;
   @Input()
   public float: 'right' | 'left';
+  public imgError?: boolean;
 
   constructor() {}
 

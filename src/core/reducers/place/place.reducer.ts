@@ -12,10 +12,10 @@ const initialState: PlaceState = {
   isFetching: false
 };
 
-export const placeReducer: ActionReducer<PlaceState> = (
+export function placeReducer(
   state: PlaceState = initialState,
   action: Action | any
-) => {
+) {
   switch (action.type) {
     case fromAction.FETCH_PLACES:
       return {
@@ -36,4 +36,4 @@ export const placeReducer: ActionReducer<PlaceState> = (
     default:
       return state;
   }
-};
+}

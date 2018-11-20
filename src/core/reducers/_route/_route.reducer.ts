@@ -11,10 +11,10 @@ const initialState: any = {
   data: [new _Route()]
 };
 
-export const _routeReducer = (
+export function _routeReducer(
   state: _RouteState = initialState,
   action: fromActions._RouteActions | any
-) => {
+) {
   switch (action.type) {
     case fromActions.ROOT:
       return {
@@ -45,4 +45,4 @@ export const _routeReducer = (
     default:
       return state;
   }
-};
+}

@@ -2,7 +2,7 @@ import { GeolocationItem } from "../../models/geolocation";
 import * as fromActions from "../../actions/geolocation.actions";
 
 export interface GeolocationState {
-  data: GeolocationItem
+  data: GeolocationItem;
 }
 
 const initialState: any = {
@@ -15,17 +15,10 @@ const initialState: any = {
   })
 };
 
-export const geolocationReducer = (
+export function geolocationReducer(
   state: GeolocationState = initialState,
   action: fromActions.GeolocationActions
-) => {
-  // console.log('action', state.data, (action as any).payload.data, {
-  //   ...state,
-  //   data: {
-  //     ...state.data,
-  //     ...(action as any).payload.data
-  //   }
-  // });
+) {
   switch (action.type) {
     case fromActions.FOCUS_SUCC:
       return {
@@ -46,4 +39,4 @@ export const geolocationReducer = (
     default:
       return state;
   }
-};
+}

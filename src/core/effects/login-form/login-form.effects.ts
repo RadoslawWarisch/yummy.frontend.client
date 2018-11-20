@@ -1,7 +1,6 @@
+import { of as observableOf, Observable } from "rxjs";
 
-import {of as observableOf,  Observable } from 'rxjs';
-
-import {take, pluck, map, tap, switchMap} from 'rxjs/operators';
+import { take, pluck, map, tap, switchMap } from "rxjs/operators";
 import { Injectable } from "@angular/core";
 import { Actions, Effect } from "@ngrx/effects";
 import { HttpErrorResponse } from "@angular/common/http";
@@ -28,21 +27,20 @@ export class LoginFormEffects {
   ) {}
 
   @Effect()
-  public loginUser$ = this.actions$
-    .ofType(fromActions.SUBMIT_FORM).pipe(
+  public loginUser$ = this.actions$.ofType(fromActions.SUBMIT_FORM).pipe(
     pluck("payload"),
     map(this.checkForFields),
     tap((payload: LoginFormState | HttpErrorResponse) =>
       this.handleSideBefore(payload)
     ),
-    switchMap(
-      (payload: LoginFormState | HttpErrorResponse) =>
-        payload instanceof HttpErrorResponse
-          ? observableOf(payload)
-          : this.loginProvider.loginUser(payload.data)
+    switchMap((payload: LoginFormState | HttpErrorResponse) =>
+      payload instanceof HttpErrorResponse
+        ? observableOf(payload)
+        : this.loginProvider.loginUser(payload.data)
     ),
     tap((res: null | HttpErrorResponse) => this.handleSideAfter(res)),
-    map((res: null | HttpErrorResponse) => this.handleLoginRes(res)),);
+    map((res: null | HttpErrorResponse) => this.handleLoginRes(res))
+  );
 
   private checkForFields(
     payload: LoginFormState
@@ -64,11 +62,11 @@ export class LoginFormEffects {
       (isSign && (!login || !password || !passwordConfirm))
     ) {
       return new HttpErrorResponse({
-        status: -1
+        status: -11
       });
     } else {
       return new HttpErrorResponse({
-        status: -2
+        status: -22
       });
     }
   }
@@ -87,31 +85,33 @@ export class LoginFormEffects {
   }
 
   private handleSideAfter(res: null | HttpErrorResponse): void {
+    console.log(res);
+    this.store.dispatch(new fromLoaderActions.Hide());
     if (!(res instanceof HttpErrorResponse)) {
-      this.store.dispatch(new fromLoaderActions.Hide());
       this.updateUser();
       this.store.dispatch(new fromRouteActions.Push(new _Route("map")));
     } else {
-      res.status > -1 && this.store.dispatch(new fromLoaderActions.Hide());
       switch (res.status) {
-        case -2: {
-          this.store.dispatch(new fromToastActions.Show("Proszę, sprawdź czy hasła są prawidłowe."));
+        case -22: {
+          this.store.dispatch(
+            new fromToastActions.Show(
+              "Proszę, sprawdź czy hasła są prawidłowe."
+            )
+          );
           break;
         }
-        case -1: {
-          this.store.dispatch(new fromToastActions.Show("Proszę, uzupełnij wszystkie pola."));
-          break;
-        }
-        case 0: {
-          this.store.dispatch(new fromToastActions.Show(
-            "Brak połączenia z internetem. Proszę, sprawdź połączenie i spróbuj jeszcze raz."
-          ));
+        case -11: {
+          this.store.dispatch(
+            new fromToastActions.Show("Proszę, uzupełnij wszystkie pola.")
+          );
           break;
         }
         default: {
-          this.store.dispatch(new fromToastActions.Show(
-            "Wprowadzone hasło jest nieprawidłowe. Proszę, spróbuj jeszcze raz."
-          ));
+          this.store.dispatch(
+            new fromToastActions.Show(
+              "Brak połączenia z internetem. Proszę, sprawdź połączenie i spróbuj jeszcze raz."
+            )
+          );
           break;
         }
       }
@@ -120,9 +120,11 @@ export class LoginFormEffects {
 
   private updateUser(): void {
     this.store
-      .select((state) => state.loginForm).pipe(
-      take(1),
-      tap((res: LoginFormState) => (sessionStorage.__mail = res.data.login)),)
+      .select((state) => state.loginForm)
+      .pipe(
+        take(1),
+        tap((res: LoginFormState) => (sessionStorage.__mail = res.data.login))
+      )
       .subscribe((data: LoginFormState) => {
         this.store.dispatch(new fromUserActions.FetchUser());
       });

@@ -3,10 +3,9 @@ import { Injectable } from "@angular/core";
 import { Rest } from "../core/providers/rest/rest";
 import { SplashScreen } from "@ionic-native/splash-screen";
 import { Platform } from "ionic-angular";
-import { HTTP } from "@ionic-native/http";
 import { AnalyticsProvider } from "../core/providers/analytics/analytics";
 
-declare const localStorage;
+declare const localStorage, window;
 
 @Injectable()
 export class Startup {
@@ -15,12 +14,14 @@ export class Startup {
   constructor(
     private rest: Rest,
     private splash: SplashScreen,
-    private analytics: AnalyticsProvider
+    private analytics: AnalyticsProvider,
+    private platform: Platform
   ) {}
 
   public init(): Promise<void> {
-    return Promise.all([this.checkIsDemoDone(), this.checkBearer()]).then(
-      ([isDemoDone, isBearer]) => {
+    return Promise.resolve(true)//this.waitForPlatform()
+      .then(() => Promise.all([this.checkIsDemoDone(), this.checkBearer()]))
+      .then(([isDemoDone, isBearer]) => {
         if (!isDemoDone) {
           this.startPage = "slide";
           localStorage.setItem("isDemoDone", "true");
@@ -32,8 +33,13 @@ export class Startup {
         this.splash.hide();
         this.analytics.initTracking();
         return Promise.resolve();
-      }
-    );
+      });
+  }
+
+  private waitForPlatform(): Promise<void> {
+    return window.cordova
+      ? Promise.race([this.ready(), this.platform.ready()])
+      : Promise.resolve(null);
   }
 
   private checkIsDemoDone(): Promise<boolean> {
@@ -49,5 +55,11 @@ export class Startup {
       )
       .toPromise()
       .catch(() => false);
+  }
+
+  private ready(): Promise<void> {
+    return new Promise((resolve: () => null) => {
+      document.addEventListener("deviceready", resolve, false);
+    });
   }
 }

@@ -3,9 +3,10 @@
   (click)="goToPlace()"
   class="item__photo">
   <img 
-    *ngIf="restaurant?.image"
+    *ngIf="restaurant?.image && !restaurant?.imgError"
     [src]="restaurant?.image"
     class="photo__image" 
+    (error)="restaurant.imgError"
   />
   <div
     *ngIf="!restaurant?.image"

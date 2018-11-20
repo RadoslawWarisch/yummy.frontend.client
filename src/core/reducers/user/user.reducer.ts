@@ -7,21 +7,21 @@ export interface UserState {
 
 const initialState: any = {
   data: new User({
-    login: 'test@yummy.com'
+    login: "test@yummy.com"
   })
 };
 
-export const userReducer = (
+export function userReducer(
   state: UserState = initialState,
   action: fromActions.UserActions
-) => {
+) {
   switch (action.type) {
     case fromActions.FETCH_USER_SUCC:
       return {
         ...state,
         data: action.payload
-      }
+      };
     default:
       return state;
   }
-};
+}
