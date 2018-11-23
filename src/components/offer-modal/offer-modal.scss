@@ -9,12 +9,15 @@ offer-modal {
     top: $headerHeight;
     height: $contentHeight;
   }
+  .scroll-content {
+    bottom: $headerHeight;
+  }
   .slide-zoom {
     align-self: start;
   }
   offer-modal-button {
     position: fixed;
-    bottom: $headerHeight / 2;
+    bottom: 0;
     &.left {
       left: 0;
     }

@@ -4,6 +4,7 @@ import { Rest } from "../core/providers/rest/rest";
 import { SplashScreen } from "@ionic-native/splash-screen";
 import { Platform } from "ionic-angular";
 import { AnalyticsProvider } from "../core/providers/analytics/analytics";
+import { HTTP } from "@ionic-native/http";
 
 declare const localStorage, window;
 
@@ -15,11 +16,12 @@ export class Startup {
     private rest: Rest,
     private splash: SplashScreen,
     private analytics: AnalyticsProvider,
-    private platform: Platform
+    private platform: Platform,
+    private http: HTTP
   ) {}
 
   public init(): Promise<void> {
-    return Promise.resolve(true)//this.waitForPlatform()
+    return this.waitForPlatform()
       .then(() => Promise.all([this.checkIsDemoDone(), this.checkBearer()]))
       .then(([isDemoDone, isBearer]) => {
         if (!isDemoDone) {

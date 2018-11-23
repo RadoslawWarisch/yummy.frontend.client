@@ -5,7 +5,7 @@
   <div></div>
   <div
     class="badge__info">
-    <span class="small bold">{{ (user$ | async)?.login }}</span>
+    <span class="small bold">{{ (user$ | async)?.login || (user$ | async)?.email }}</span>
   </div>
 </div>
 <div

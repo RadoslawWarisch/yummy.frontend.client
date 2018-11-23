@@ -61,7 +61,6 @@ export class YummyHeaderComponent {
   }
 
   private updateRoute(route: string): void {
-    console.log('new route', this.routeName, route)
     this.routeName === 'welcome' 
       ? setTimeout(() => this.routeName = route, 125)
       : this.routeName = route;

@@ -1,6 +1,6 @@
-import { of as observableOf, Observable } from "rxjs";
+import { of as observableOf } from "rxjs";
 
-import { take, pluck, map, tap, switchMap } from "rxjs/operators";
+import { pluck, map, tap, switchMap } from "rxjs/operators";
 import { Injectable } from "@angular/core";
 import { Actions, Effect } from "@ngrx/effects";
 import { HttpErrorResponse } from "@angular/common/http";
@@ -15,8 +15,6 @@ import { Store } from "@ngrx/store";
 import { AppState } from "../../app-state";
 import { _Route } from "../../models/_route";
 import { LoginProvider } from "../../providers/login-provider/login-provider";
-
-declare let sessionStorage;
 
 @Injectable()
 export class LoginFormEffects {
@@ -85,10 +83,8 @@ export class LoginFormEffects {
   }
 
   private handleSideAfter(res: null | HttpErrorResponse): void {
-    console.log(res);
     this.store.dispatch(new fromLoaderActions.Hide());
     if (!(res instanceof HttpErrorResponse)) {
-      this.updateUser();
       this.store.dispatch(new fromRouteActions.Push(new _Route("map")));
     } else {
       switch (res.status) {
@@ -116,17 +112,5 @@ export class LoginFormEffects {
         }
       }
     }
-  }
-
-  private updateUser(): void {
-    this.store
-      .select((state) => state.loginForm)
-      .pipe(
-        take(1),
-        tap((res: LoginFormState) => (sessionStorage.__mail = res.data.login))
-      )
-      .subscribe((data: LoginFormState) => {
-        this.store.dispatch(new fromUserActions.FetchUser());
-      });
   }
 }

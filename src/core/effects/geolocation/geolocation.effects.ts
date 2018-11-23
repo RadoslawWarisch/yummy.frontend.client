@@ -29,11 +29,11 @@ export class GeolocationEffects {
           coordinates: {
             user: {
               lat: payload.data.lat,
-              lon: payload.data.lng
+              lng: payload.data.lng
             },
             focus: {
               lat: payload.data.focusLat,
-              lon: payload.data.focusLng
+              lng: payload.data.focusLng
             }
           },
           page: 0,

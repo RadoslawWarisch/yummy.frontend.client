@@ -1,14 +1,10 @@
-import { Component, ElementRef } from "@angular/core";
+import { Component } from "@angular/core";
 import { IonicPage } from "ionic-angular";
 import { Store } from "@ngrx/store";
 import { AppState } from "../../core/app-state";
 import * as fromFormAction from "../../core/actions/login-form.actions";
 import { LoginForm } from "../../core/models/login-form";
-import { Observable, Subscription } from "rxjs";
 import { AppConfig, Env } from "../../app/app.config";
-import * as fromLoaderActions from "../../core/actions/_loader.actions";
-import * as fromToastActions from "../../core/actions/_toast.actions";
-import { Rest } from "../../core/providers/rest/rest";
 
 declare const window: any;
 
@@ -21,10 +17,8 @@ declare const window: any;
 })
 export class WelcomePage {
   public isLoginMode: boolean = true;
-  public keyboardShowSub: Subscription;
-  public keyboardHideSub: Subscription;
 
-  constructor(private store: Store<AppState>, private rest: Rest) {}
+  constructor(private store: Store<AppState>) {}
 
   ionViewWillEnter() {
     // if (AppConfig.env === Env.DEV) {

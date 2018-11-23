@@ -8,6 +8,7 @@
 </button>
 <ion-content>
   <ion-slides
+    (on-init)="slideToSelected()"
     (ionSlideDidChange)="slideChanged()">
     <ion-slide
       *ngFor="let offer of offers$ | async">
@@ -19,16 +20,16 @@
       </offer-modal-item>
     </ion-slide>
   </ion-slides>
-  <offer-modal-button
-    *ngIf="(currentSlide$ | async) > 0"
-    (click)="slidePrev()"
-    [image]="prevImage"
-    class="left">
-  </offer-modal-button>
-  <offer-modal-button
-    *ngIf="((currentSlide$ | async) < ((offers$ | async)?.length - 1)) && ((offers$ | async)?.length > 1)"
-    (click)="slideNext()"
-    [image]="nextImage"
-    class="right">
-  </offer-modal-button>
 </ion-content>
+<offer-modal-button
+  *ngIf="(currentSlide$ | async) > 0"
+  (click)="slidePrev()"
+  [image]="prevImage"
+  class="left">
+</offer-modal-button>
+<offer-modal-button
+  *ngIf="((currentSlide$ | async) < ((offers$ | async)?.length - 1)) && ((offers$ | async)?.length > 1)"
+  (click)="slideNext()"
+  [image]="nextImage"
+  class="right">
+</offer-modal-button>

@@ -2,7 +2,7 @@ offer-item {
   position: relative;
   display: grid;
   grid-template-columns: 40vw 1fr 1fr;
-  height: $headerHeight * 2.65;
+  height: $headerHeight * 2.9;
   align-items: center;
   box-shadow: $bottomShadow;
   .photo__placeholder {

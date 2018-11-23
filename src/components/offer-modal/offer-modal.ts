@@ -41,9 +41,9 @@ export class OfferModalComponent {
     this.currentSlide$ = new BehaviorSubject<number>(-1);
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void {HTMLElement
     this.initCollection();
-    this.slideToSelected();
+
   }
 
   ngOnDestroy(): void {
@@ -57,7 +57,7 @@ export class OfferModalComponent {
       : this.store.select("offer").pipe(pluck("data"));
   }
 
-  private slideToSelected(): void {
+  public slideToSelected(): void {
     const sub: Subscription = this.offers$
       .pipe(
         take(1),
@@ -111,6 +111,10 @@ export class OfferModalComponent {
       nextImage: index !== offers.length - 1 ? offers[index + 1].image : null,
       prevImage: index !== 0 ? offers[index - 1].image : null
     };
+  }
+
+  public slideWillChange(): void {
+    console.log('slide will change', this.slides.getActiveIndex());
   }
 
   public slideChanged(): void {

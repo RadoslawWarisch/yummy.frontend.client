@@ -22,6 +22,10 @@
   }
 }
 
+.header-md::after {
+  display: none;
+}
+
 ion-input {
   -webkit-transform: translateZ(0) !important;
 }

@@ -20,7 +20,7 @@ import * as fromRouteActions from "../../actions/_route.actions";
 import { _Route } from "../../models/_route";
 import { AnalyticsProvider } from "../analytics/analytics";
 
-declare let sessionStorage;
+declare let localStorage;
 
 @Injectable()
 export class HttpInterceptorProvider implements HttpInterceptor {
@@ -117,8 +117,8 @@ export class HttpInterceptorProvider implements HttpInterceptor {
 
   private getHeadersValues(): Observable<any[]> {
     return observableCombineLatest(
-      observableOf(sessionStorage.__th),
-      observableOf(sessionStorage.__mail)
+      observableOf(localStorage.__th),
+      observableOf(localStorage.__mail)
     );
   }
 }

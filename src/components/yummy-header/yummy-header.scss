@@ -1,6 +1,7 @@
 yummy-header {
   .header {
     height: $headerHeight;
+    box-shadow: $bottomShadow;
     .toolbar {
       height: $headerHeight;
       padding: 4px 0;

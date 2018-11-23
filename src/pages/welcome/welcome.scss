@@ -21,12 +21,17 @@ page-welcome {
   background-position-y: 90%;
   .content {
     background: transparent !important;
-  }
-  .content-ios { 
-    margin-top: 0 !important;
     .scroll-content {
       bottom: 0 !important;
     }
+  }
+  .content-md {
+    .scroll-content {
+      padding-bottom: 0 !important;
+    }
+  }
+  .content-ios { 
+    margin-top: 0 !important;
   }
   .scroll-content {
     display: grid;

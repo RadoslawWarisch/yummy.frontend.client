@@ -14,11 +14,11 @@ export interface GetPlacesBody {
   coordinates: {
     user: {
       lat: number,
-      lon: number
+      lng: number
     },
     focus: {
       lat: number,
-      lon: number
+      lng: number
     }
   };
   page: number;
