@@ -1,8 +1,10 @@
 restaurant-item {
+  height: $headerHeight * 3.5;
   display: grid;
-  grid-template-rows: 2fr 3fr;
+  grid-template-rows: $headerHeight * 1.5 $headerHeight * 2;
   box-shadow: $bottomShadow;
   .item__photo {
+    height: $headerHeight * 1.5;
     display: flex;
     .photo__placeholder {
       flex: 1;
@@ -13,15 +15,21 @@ restaurant-item {
       font-size: $fontLogo;
       color: $primary;
     }
+    .photo__image {
+      flex: 1;
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
   }
   .item__meta {
-    padding: $headerHeight / 8 $headerHeight / 2;
+    padding: $headerHeight / 16 $headerHeight / 2;
     display: grid;
     justify-content: center;
     grid-template-rows: 1fr 1fr;
     grid-template-columns: 2fr 1fr 1fr;
     div {
-      padding: $headerHeight / 8 0;
+      padding: $headerHeight / 16 0;
     }
   }
   .meta__title, 

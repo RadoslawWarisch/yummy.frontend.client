@@ -30,6 +30,11 @@ map-container {
         border-top-left-radius: 24px;
         border-top-right-radius: 24px;
       }
+      img {
+        border-top-left-radius: 24px;
+        border-top-right-radius: 24px;
+        flex: 1;
+      }
     }
     .title {
       border-bottom: 1px dotted $tetriary;

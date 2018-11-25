@@ -9,7 +9,8 @@
 		"build": "ionic-app-scripts build",
 		"lint": "ionic-app-scripts lint",
 		"ionic:build": "ionic-app-scripts build",
-		"ionic:serve": "ionic-app-scripts serve"
+		"ionic:serve": "ionic-app-scripts serve",
+		"sign:andro": "jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore yummy.keystore ./platforms/android/app/build/outputs/apk/debug/app-debug.apk yummy && /Users/radoslawwarisch/Library/Android/sdk/build-tools/27.0.3/zipalign -p 4 ./platforms/android/app/build/outputs/apk/debug/app-debug.apk ./Yummy!Beta.apk"
 	},
 	"dependencies": {
 		"@angular/cli": "6.0.3",

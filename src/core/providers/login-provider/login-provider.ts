@@ -1,6 +1,6 @@
 import { of as observableOf, Observable } from "rxjs";
 
-import { mergeMap, tap, catchError } from "rxjs/operators";
+import { tap, catchError, switchMap } from "rxjs/operators";
 import { Injectable } from "@angular/core";
 import { Rest } from "../rest/rest";
 import { LoginForm } from "../../models/login-form";
@@ -16,12 +16,11 @@ export class LoginProvider {
   loginUser(loginForm: LoginForm): Observable<string | HttpErrorResponse> {
     return (loginForm.isSign
       ? this.rest.createUser(this.parseForm(loginForm))
-      : this.rest.loginUser(this.parseForm(loginForm))
+      : observableOf(null)
     ).pipe(
-      mergeMap((data) =>
-        loginForm.isSign ? observableOf(null) : this.saveAuth(data)
-      ),
-      mergeMap(() => this.saveEmail(loginForm as any)),
+      switchMap(() => this.rest.loginUser(this.parseForm(loginForm))),
+      switchMap((data) => this.saveAuth(data)),
+      switchMap(() => this.saveEmail(loginForm as any)),
       catchError((err) => observableOf(err))
     );
   }
